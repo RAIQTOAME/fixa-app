@@ -1,0 +1,372 @@
+const SUPABASE_KEY = 'sb_publishable__DTqJhrL96laE3R7Y-nNYg_Gxl_yrL4';
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fixa — Building & Facilities Maintenance</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen">
+  <div id="app" class="max-w-6xl mx-auto p-4 md:p-6">
+    <!-- Header & Language Switcher -->
+    <header class="bg-white border border-slate-200 rounded-2xl p-4 md:p-5 shadow-sm flex flex-wrap items-center justify-between gap-4 mb-6">
+      <div>
+        <div class="flex items-center gap-2">
+          <span class="inline-flex items-center justify-center w-9 h-9 rounded-xl bg-blue-600 text-white font-bold text-lg">F</span>
+          <h1 id="t-app-name" class="text-xl md:text-2xl font-bold text-slate-900">Fixa</h1>
+        </div>
+        <p id="t-subtitle" class="text-sm text-slate-500 mt-1">Building & Facilities Maintenance Platform</p>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <label id="t-lang-label" for="langSelect" class="text-sm font-medium text-slate-600">Language:</label>
+        <select id="langSelect" class="border border-slate-300 rounded-xl px-3 py-2 text-sm bg-white font-medium focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <option value="en">English (EN)</option>
+          <option value="he">עברית (HE)</option>
+          <option value="ar">العربية (AR)</option>
+          <option value="ru">Русский (RU)</option>
+          <option value="es">Español (ES)</option>
+          <option value="fr">Français (FR)</option>
+          <option value="it">Italiano (IT)</option>
+          <option value="de">Deutsch (DE)</option>
+        </select>
+        <button onclick="loadAllData()" class="px-3 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium transition">
+          <span id="t-refresh">Refresh</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Status Banner -->
+    <div id="statusBanner" class="mb-6 text-sm rounded-xl px-4 py-3 bg-blue-50 text-blue-800 border border-blue-200">
+      Connecting to Supabase...
+    </div>
+
+    <!-- Summary Cards -->
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+      <div class="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm">
+        <div id="t-card-assets" class="text-xs uppercase tracking-wider text-slate-500 font-semibold">Assets</div>
+        <div id="count-assets" class="text-2xl font-bold mt-1 text-slate-900">0</div>
+      </div>
+      <div class="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm">
+        <div id="t-card-wo" class="text-xs uppercase tracking-wider text-slate-500 font-semibold">Work Orders</div>
+        <div id="count-wo" class="text-2xl font-bold mt-1 text-slate-900">0</div>
+      </div>
+      <div class="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm">
+        <div id="t-card-pm" class="text-xs uppercase tracking-wider text-slate-500 font-semibold">Preventive Maintenance</div>
+        <div id="count-pm" class="text-2xl font-bold mt-1 text-slate-900">0</div>
+      </div>
+    </section>
+
+    <!-- Work Orders Section -->
+    <section class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm mb-6">
+      <h2 id="t-sec-wo" class="text-lg font-bold mb-4">Work Orders</h2>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm border-collapse">
+          <thead>
+            <tr class="border-b border-slate-200 text-slate-500">
+              <th id="th-wo-num" class="py-2 px-3 text-start">Code</th>
+              <th id="th-wo-title" class="py-2 px-3 text-start">Title</th>
+              <th id="th-wo-site" class="py-2 px-3 text-start">Site</th>
+              <th id="th-wo-prio" class="py-2 px-3 text-start">Priority</th>
+              <th id="th-wo-status" class="py-2 px-3 text-start">Status</th>
+            </tr>
+          </thead>
+          <tbody id="woTableBody" class="divide-y divide-slate-100"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Assets & PM Grid -->
+    <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
+        <h2 id="t-sec-assets" class="text-lg font-bold mb-4">Assets & Systems</h2>
+        <ul id="assetsList" class="space-y-3 text-sm"></ul>
+      </div>
+
+      <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
+        <h2 id="t-sec-pm" class="text-lg font-bold mb-4">Preventive Maintenance</h2>
+        <ul id="pmList" class="space-y-3 text-sm"></ul>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const SUPABASE_URL = 'https://hwceiwauyukjzmawluvp.supabase.co';
+    const SUPABASE_KEY = 'YOUR_PUBLISHABLE_KEY_HERE';
+
+    const RTL_LANGS = ['he', 'ar'];
+
+    const TRANSLATIONS = {
+      en: {
+        appName: 'Fixa',
+        subtitle: 'Building & Facilities Maintenance Platform',
+        langLabel: 'Language:',
+        refresh: 'Refresh',
+        cardAssets: 'Assets',
+        cardWo: 'Work Orders',
+        cardPm: 'Preventive Maintenance',
+        secWo: 'Work Orders',
+        secAssets: 'Assets & Systems',
+        secPm: 'Preventive Maintenance',
+        thCode: 'Code',
+        thTitle: 'Title',
+        thSite: 'Site',
+        thPriority: 'Priority',
+        thStatus: 'Status',
+        connected: 'Connected to Supabase successfully.',
+        keyMissing: 'Please replace YOUR_PUBLISHABLE_KEY_HERE in index.html with your Supabase Publishable key.',
+        loadError: 'Could not load data from Supabase: '
+      },
+      he: {
+        appName: 'Fixa',
+        subtitle: 'מערכת לניהול ותחזוקת מבנים ומתקנים',
+        langLabel: 'שפה:',
+        refresh: 'רענן',
+        cardAssets: 'נכסים ומערכות',
+        cardWo: 'קריאות שירות',
+        cardPm: 'תחזוקה מונעת',
+        secWo: 'קריאות שירות',
+        secAssets: 'נכסים ומערכות',
+        secPm: 'תחזוקה מונעת',
+        thCode: 'קוד',
+        thTitle: 'כותרת',
+        thSite: 'אתר',
+        thPriority: 'עדיפות',
+        thStatus: 'סטטוס',
+        connected: 'החיבור ל-Supabase בוצע בהצלחה.',
+        keyMissing: 'יש להחליף את YOUR_PUBLISHABLE_KEY_HERE בקובץ index.html במפתח הציבורי מ-Supabase.',
+        loadError: 'שגיאה בטעינת הנתונים מ-Supabase: '
+      },
+      ar: {
+        appName: 'Fixa',
+        subtitle: 'منصة إدارة وصيانة المباني والمرافق',
+        langLabel: 'اللغة:',
+        refresh: 'تحديث',
+        cardAssets: 'الأصول والمعدات',
+        cardWo: 'أوامر العمل',
+        cardPm: 'الصيانة الوقائية',
+        secWo: 'أوامر العمل',
+        secAssets: 'الأصول والمعدات',
+        secPm: 'الصيانة الوقائية',
+        thCode: 'الرمز',
+        thTitle: 'العنوان',
+        thSite: 'الموقع',
+        thPriority: 'الأولوية',
+        thStatus: 'الحالة',
+        connected: 'تم الاتصال بقاعدة بيانات Supabase بنجاح.',
+        keyMissing: 'يرجى استبدال YOUR_PUBLISHABLE_KEY_HERE في ملف index.html بمفتاح Publishable الخاص بـ Supabase.',
+        loadError: 'تعذر تحميل البيانات من Supabase: '
+      },
+      ru: {
+        appName: 'Fixa',
+        subtitle: 'Платформа технического обслуживания зданий и объектов',
+        langLabel: 'Язык:',
+        refresh: 'Обновить',
+        cardAssets: 'Активы',
+        cardWo: 'Заявки на работы',
+        cardPm: 'Плановое ТО',
+        secWo: 'Заявки на работы',
+        secAssets: 'Активы и системы',
+        secPm: 'Плановое ТО',
+        thCode: 'Код',
+        thTitle: 'Название',
+        thSite: 'Объект',
+        thPriority: 'Приоритет',
+        thStatus: 'Статус',
+        connected: 'Подключение к Supabase выполнено.',
+        keyMissing: 'Замените YOUR_PUBLISHABLE_KEY_HERE в index.html на ваш ключ Publishable из Supabase.',
+        loadError: 'Ошибка загрузки данных из Supabase: '
+      },
+      es: {
+        appName: 'Fixa',
+        subtitle: 'Plataforma de mantenimiento de edificios e instalaciones',
+        langLabel: 'Idioma:',
+        refresh: 'Actualizar',
+        cardAssets: 'Activos',
+        cardWo: 'Órdenes de trabajo',
+        cardPm: 'Mantenimiento preventivo',
+        secWo: 'Órdenes de trabajo',
+        secAssets: 'Activos y sistemas',
+        secPm: 'Mantenimiento preventivo',
+        thCode: 'Código',
+        thTitle: 'Título',
+        thSite: 'Sitio',
+        thPriority: 'Prioridad',
+        thStatus: 'Estado',
+        connected: 'Conectado a Supabase correctamente.',
+        keyMissing: 'Reemplaza YOUR_PUBLISHABLE_KEY_HERE en index.html con tu clave Publishable de Supabase.',
+        loadError: 'Error al cargar datos desde Supabase: '
+      },
+      fr: {
+        appName: 'Fixa',
+        subtitle: 'Plateforme de maintenance des bâtiments et équipements',
+        langLabel: 'Langue :',
+        refresh: 'Actualiser',
+        cardAssets: 'Équipements',
+        cardWo: 'Ordres de travail',
+        cardPm: 'Maintenance préventive',
+        secWo: 'Ordres de travail',
+        secAssets: 'Équipements et systèmes',
+        secPm: 'Maintenance préventive',
+        thCode: 'Code',
+        thTitle: 'Titre',
+        thSite: 'Site',
+        thPriority: 'Priorité',
+        thStatus: 'Statut',
+        connected: 'Connexion à Supabase réussie.',
+        keyMissing: 'Remplacez YOUR_PUBLISHABLE_KEY_HERE dans index.html par votre clé Publishable Supabase.',
+        loadError: 'Impossible de charger les données depuis Supabase : '
+      },
+      it: {
+        appName: 'Fixa',
+        subtitle: 'Piattaforma di manutenzione edifici e impianti',
+        langLabel: 'Lingua:',
+        refresh: 'Aggiorna',
+        cardAssets: 'Asset',
+        cardWo: 'Ordini di lavoro',
+        cardPm: 'Manutenzione preventiva',
+        secWo: 'Ordini di lavoro',
+        secAssets: 'Asset e sistemi',
+        secPm: 'Manutenzione preventiva',
+        thCode: 'Codice',
+        thTitle: 'Titolo',
+        thSite: 'Sito',
+        thPriority: 'Priorità',
+        thStatus: 'Stato',
+        connected: 'Connessione a Supabase riuscita.',
+        keyMissing: 'Sostituisci YOUR_PUBLISHABLE_KEY_HERE in index.html con la tua chiave Publishable di Supabase.',
+        loadError: 'Errore nel caricamento dati da Supabase: '
+      },
+      de: {
+        appName: 'Fixa',
+        subtitle: 'Plattform für Gebäude- und Anlagenwartung',
+        langLabel: 'Sprache:',
+        refresh: 'Aktualisieren',
+        cardAssets: 'Anlagen',
+        cardWo: 'Arbeitsaufträge',
+        cardPm: 'Vorbeugende Wartung',
+        secWo: 'Arbeitsaufträge',
+        secAssets: 'Anlagen & Systeme',
+        secPm: 'Vorbeugende Wartung',
+        thCode: 'Code',
+        thTitle: 'Titel',
+        thSite: 'Standort',
+        thPriority: 'Priorität',
+        thStatus: 'Status',
+        connected: 'Erfolgreich mit Supabase verbunden.',
+        keyMissing: 'Ersetzen Sie YOUR_PUBLISHABLE_KEY_HERE in index.html durch Ihren Supabase Publishable Key.',
+        loadError: 'Fehler beim Laden der Daten aus Supabase: '
+      }
+    };
+
+    let currentLang = 'en';
+
+    function applyLanguage(lang) {
+      currentLang = TRANSLATIONS[lang] ? lang : 'en';
+      const t = TRANSLATIONS[currentLang];
+      const isRtl = RTL_LANGS.includes(currentLang);
+
+      document.documentElement.lang = currentLang;
+      document.documentElement.dir = isRtl ? 'rtl' : 'ltr';
+      document.getElementById('langSelect').value = currentLang;
+
+      document.getElementById('t-app-name').textContent = t.appName;
+      document.getElementById('t-subtitle').textContent = t.subtitle;
+      document.getElementById('t-lang-label').textContent = t.langLabel;
+      document.getElementById('t-refresh').textContent = t.refresh;
+      document.getElementById('t-card-assets').textContent = t.cardAssets;
+      document.getElementById('t-card-wo').textContent = t.cardWo;
+      document.getElementById('t-card-pm').textContent = t.cardPm;
+      document.getElementById('t-sec-wo').textContent = t.secWo;
+      document.getElementById('t-sec-assets').textContent = t.secAssets;
+      document.getElementById('t-sec-pm').textContent = t.secPm;
+      document.getElementById('th-wo-num').textContent = t.thCode;
+      document.getElementById('th-wo-title').textContent = t.thTitle;
+      document.getElementById('th-wo-site').textContent = t.thSite;
+      document.getElementById('th-wo-prio').textContent = t.thPriority;
+      document.getElementById('th-wo-status').textContent = t.thStatus;
+    }
+
+    document.getElementById('langSelect').addEventListener('change', (e) => {
+      applyLanguage(e.target.value);
+    });
+
+    async function loadAllData() {
+      const t = TRANSLATIONS[currentLang];
+      const banner = document.getElementById('statusBanner');
+
+      if (!SUPABASE_KEY || SUPABASE_KEY === 'YOUR_PUBLISHABLE_KEY_HERE') {
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-amber-50 text-amber-800 border border-amber-200';
+        banner.textContent = t.keyMissing;
+        return;
+      }
+
+      const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+      try {
+        const [assetsRes, woRes, pmRes] = await Promise.all([
+          client.from('assets').select('*').order('asset_code', { ascending: true }),
+          client.from('work_orders').select('*').order('created_at', { ascending: false }),
+          client.from('preventive_maintenance').select('*').order('next_due_at', { ascending: true })
+        ]);
+
+        if (assetsRes.error) throw assetsRes.error;
+        if (woRes.error) throw woRes.error;
+        if (pmRes.error) throw pmRes.error;
+
+        const assets = assetsRes.data || [];
+        const workOrders = woRes.data || [];
+        const pmListData = pmRes.data || [];
+
+        document.getElementById('count-assets').textContent = assets.length;
+        document.getElementById('count-wo').textContent = workOrders.length;
+        document.getElementById('count-pm').textContent = pmListData.length;
+
+        const woBody = document.getElementById('woTableBody');
+        woBody.innerHTML = workOrders.map(wo => `
+          <tr>
+            <td class="py-2.5 px-3 font-medium">${wo.wo_number || ''}</td>
+            <td class="py-2.5 px-3">${wo.title || ''}</td>
+            <td class="py-2.5 px-3">${wo.site_name || ''}</td>
+            <td class="py-2.5 px-3">${wo.priority || ''}</td>
+            <td class="py-2.5 px-3"><span class="px-2 py-1 rounded-full text-xs bg-slate-100">${wo.status || ''}</span></td>
+          </tr>
+        `).join('');
+
+        const assetsListEl = document.getElementById('assetsList');
+        assetsListEl.innerHTML = assets.map(a => `
+          <li class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between gap-2">
+            <div>
+              <div class="font-semibold">${a.name || ''} <span class="text-xs text-slate-500">(${a.asset_code || ''})</span></div>
+              <div class="text-xs text-slate-500">${a.site_name || ''} • ${a.category || ''}</div>
+            </div>
+            <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">${a.status || ''}</span>
+          </li>
+        `).join('');
+
+        const pmListEl = document.getElementById('pmList');
+        pmListEl.innerHTML = pmListData.map(pm => `
+          <li class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between gap-2">
+            <div>
+              <div class="font-semibold">${pm.title || ''} <span class="text-xs text-slate-500">(${pm.pm_code || ''})</span></div>
+              <div class="text-xs text-slate-500">${pm.site_name || ''} • ${pm.frequency || ''}</div>
+            </div>
+            <span class="text-xs text-slate-600">${pm.assigned_technician || ''}</span>
+          </li>
+        `).join('');
+
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-emerald-50 text-emerald-800 border border-emerald-200';
+        banner.textContent = t.connected;
+      } catch (err) {
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-red-50 text-red-800 border border-red-200';
+        banner.textContent = t.loadError + (err.message || err);
+      }
+    }
+
+    applyLanguage('en');
+    loadAllData();
+  </script>
+</body>
+</html>
