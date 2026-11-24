@@ -159,6 +159,8 @@
         woCreateError: 'Could not add work order: ',
         woStatusUpdated: 'Work order status updated successfully.',
         woStatusError: 'Could not update status: ',
+        assetStatusUpdated: 'Asset status updated successfully.',
+        assetStatusError: 'Could not update asset status: ',
         secWo: 'Work Orders',
         secAssets: 'Assets & Systems',
         secPm: 'Preventive Maintenance',
@@ -187,6 +189,8 @@
         woCreateError: 'שגיאה בהוספת קריאת השירות: ',
         woStatusUpdated: 'סטטוס קריאת השירות עודכן בהצלחה.',
         woStatusError: 'שגיאה בעדכון הסטטוס: ',
+        assetStatusUpdated: 'סטטוס הנכס עודכן בהצלחה.',
+        assetStatusError: 'שגיאה בעדכון סטטוס הנכס: ',
         secWo: 'קריאות שירות',
         secAssets: 'נכסים ומערכות',
         secPm: 'תחזוקה מונעת',
@@ -215,6 +219,8 @@
         woCreateError: 'تعذر إضافة أمر العمل: ',
         woStatusUpdated: 'تم تحديث حالة أمر العمل بنجاح.',
         woStatusError: 'تعذر تحديث الحالة: ',
+        assetStatusUpdated: 'تم تحديث حالة الأصل بنجاح.',
+        assetStatusError: 'تعذر تحديث حالة الأصل: ',
         secWo: 'أوامر العمل',
         secAssets: 'الأصول والمعدات',
         secPm: 'الصيانة الوقائية',
@@ -243,6 +249,8 @@
         woCreateError: 'Ошибка добавления заявки: ',
         woStatusUpdated: 'Статус заявки обновлён.',
         woStatusError: 'Ошибка обновления статуса: ',
+        assetStatusUpdated: 'Статус актива обновлён.',
+        assetStatusError: 'Ошибка обновления статуса актива: ',
         secWo: 'Заявки на работы',
         secAssets: 'Активы и системы',
         secPm: 'Плановое ТО',
@@ -271,6 +279,8 @@
         woCreateError: 'Error al agregar la orden de trabajo: ',
         woStatusUpdated: 'Estado de la orden actualizado.',
         woStatusError: 'Error al actualizar el estado: ',
+        assetStatusUpdated: 'Estado del activo actualizado.',
+        assetStatusError: 'Error al actualizar el estado del activo: ',
         secWo: 'Órdenes de trabajo',
         secAssets: 'Activos y sistemas',
         secPm: 'Mantenimiento preventivo',
@@ -299,6 +309,8 @@
         woCreateError: 'Impossible d’ajouter l’ordre de travail : ',
         woStatusUpdated: 'Statut de l’ordre mis à jour.',
         woStatusError: 'Impossible de mettre à jour le statut : ',
+        assetStatusUpdated: 'Statut de l’équipement mis à jour.',
+        assetStatusError: 'Impossible de mettre à jour le statut de l’équipement : ',
         secWo: 'Ordres de travail',
         secAssets: 'Équipements et systèmes',
         secPm: 'Maintenance préventive',
@@ -327,6 +339,8 @@
         woCreateError: 'Impossibile aggiungere l’ordine di lavoro: ',
         woStatusUpdated: 'Stato dell’ordine aggiornato.',
         woStatusError: 'Impossibile aggiornare lo stato: ',
+        assetStatusUpdated: 'Stato dell’asset aggiornato.',
+        assetStatusError: 'Impossibile aggiornare lo stato dell’asset: ',
         secWo: 'Ordini di lavoro',
         secAssets: 'Asset e sistemi',
         secPm: 'Manutenzione preventiva',
@@ -355,6 +369,8 @@
         woCreateError: 'Arbeitsauftrag konnte nicht hinzugefügt werden: ',
         woStatusUpdated: 'Status des Arbeitsauftrags aktualisiert.',
         woStatusError: 'Status konnte nicht aktualisiert werden: ',
+        assetStatusUpdated: 'Status der Anlage aktualisiert.',
+        assetStatusError: 'Status der Anlage konnte nicht aktualisiert werden: ',
         secWo: 'Arbeitsaufträge',
         secAssets: 'Anlagen & Systeme',
         secPm: 'Vorbeugende Wartung',
@@ -505,234 +521,3 @@
 
     function normalizeStatusKey(status) {
       const raw = String(status || '').trim().toLowerCase();
-      if (raw === 'תקין' || raw === 'operational') return 'תקין';
-      if (raw === 'דורש בדיקה' || raw === 'needs inspection') return 'דורש בדיקה';
-      return 'בטיפול';
-    }
-
-    function getLocalizedField(record, field, lang) {
-      if (!record) return '';
-      const localizedKey = `${field}_${lang}`;
-      const localizedVal = record[localizedKey];
-      if (typeof localizedVal === 'string' && localizedVal.trim() !== '') {
-        return localizedVal;
-      }
-      return record[field] || '';
-    }
-
-    let currentLang = 'en';
-
-    function applyLanguage(lang) {
-      currentLang = TRANSLATIONS[lang] ? lang : 'en';
-      const t = TRANSLATIONS[currentLang];
-      const isRtl = RTL_LANGS.includes(currentLang);
-
-      document.documentElement.lang = currentLang;
-      document.documentElement.dir = isRtl ? 'rtl' : 'ltr';
-      document.getElementById('langSelect').value = currentLang;
-
-      document.getElementById('t-app-name').textContent = t.appName;
-      document.getElementById('t-subtitle').textContent = t.subtitle;
-      document.getElementById('t-lang-label').textContent = t.langLabel;
-      document.getElementById('t-refresh').textContent = t.refresh;
-      document.getElementById('t-card-assets').textContent = t.cardAssets;
-      document.getElementById('t-card-wo').textContent = t.cardWo;
-      document.getElementById('t-card-pm').textContent = t.cardPm;
-
-      document.getElementById('t-form-wo-title').textContent = t.formWoTitle;
-      document.getElementById('lbl-wo-code').textContent = t.thCode;
-      document.getElementById('lbl-wo-title').textContent = t.thTitle;
-      document.getElementById('lbl-wo-site').textContent = t.thSite;
-      document.getElementById('lbl-wo-prio').textContent = t.thPriority;
-      document.getElementById('lbl-wo-status').textContent = t.thStatus;
-      document.getElementById('btn-wo-submit').textContent = t.btnWoSubmit;
-      document.getElementById('woTitleInput').placeholder = t.phWoTitle;
-      document.getElementById('woSiteInput').placeholder = t.phWoSite;
-
-      document.getElementById('opt-prio-low').textContent = translateDbValue('נמוך', PRIORITY_MAP, currentLang);
-      document.getElementById('opt-prio-med').textContent = translateDbValue('בינוני', PRIORITY_MAP, currentLang);
-      document.getElementById('opt-prio-high').textContent = translateDbValue('גבוה', PRIORITY_MAP, currentLang);
-
-      document.getElementById('opt-st-prog').textContent = translateDbValue('בטיפול', STATUS_MAP, currentLang);
-      document.getElementById('opt-st-insp').textContent = translateDbValue('דורש בדיקה', STATUS_MAP, currentLang);
-      document.getElementById('opt-st-ok').textContent = translateDbValue('תקין', STATUS_MAP, currentLang);
-
-      document.getElementById('t-sec-wo').textContent = t.secWo;
-      document.getElementById('t-sec-assets').textContent = t.secAssets;
-      document.getElementById('t-sec-pm').textContent = t.secPm;
-      document.getElementById('th-wo-num').textContent = t.thCode;
-      document.getElementById('th-wo-title').textContent = t.thTitle;
-      document.getElementById('th-wo-site').textContent = t.thSite;
-      document.getElementById('th-wo-prio').textContent = t.thPriority;
-      document.getElementById('th-wo-status').textContent = t.thStatus;
-    }
-
-    document.getElementById('langSelect').addEventListener('change', (e) => {
-      applyLanguage(e.target.value);
-      loadAllData();
-    });
-
-    async function createWorkOrder(event) {
-      event.preventDefault();
-      const t = TRANSLATIONS[currentLang];
-      const banner = document.getElementById('statusBanner');
-
-      if (!SUPABASE_KEY || SUPABASE_KEY === 'YOUR_PUBLISHABLE_KEY_HERE') {
-        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-amber-50 text-amber-800 border border-amber-200';
-        banner.textContent = t.keyMissing;
-        return;
-      }
-
-      const wo_number = document.getElementById('woCodeInput').value.trim();
-      const title = document.getElementById('woTitleInput').value.trim();
-      const site_name = document.getElementById('woSiteInput').value.trim();
-      const priority = document.getElementById('woPrioritySelect').value;
-      const status = document.getElementById('woStatusSelect').value;
-
-      if (!wo_number || !title || !site_name) return;
-
-      const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-      try {
-        const { error } = await client.from('work_orders').insert([
-          { wo_number, title, site_name, priority, status }
-        ]);
-
-        if (error) throw error;
-
-        document.getElementById('woForm').reset();
-        await loadAllData();
-
-        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-emerald-50 text-emerald-800 border border-emerald-200';
-        banner.textContent = t.woCreated;
-      } catch (err) {
-        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-red-50 text-red-800 border border-red-200';
-        banner.textContent = t.woCreateError + (err.message || err);
-      }
-    }
-
-    async function updateWorkOrderStatus(woId, woNumber, newStatus) {
-      const t = TRANSLATIONS[currentLang];
-      const banner = document.getElementById('statusBanner');
-
-      if (!SUPABASE_KEY || SUPABASE_KEY === 'YOUR_PUBLISHABLE_KEY_HERE') {
-        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-amber-50 text-amber-800 border border-amber-200';
-        banner.textContent = t.keyMissing;
-        return;
-      }
-
-      const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-      try {
-        let query = client.from('work_orders').update({ status: newStatus });
-        if (woId) {
-          query = query.eq('id', woId);
-        } else {
-          query = query.eq('wo_number', woNumber);
-        }
-
-        const { error } = await query;
-        if (error) throw error;
-
-        await loadAllData();
-
-        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-emerald-50 text-emerald-800 border border-emerald-200';
-        banner.textContent = t.woStatusUpdated;
-      } catch (err) {
-        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-red-50 text-red-800 border border-red-200';
-        banner.textContent = t.woStatusError + (err.message || err);
-      }
-    }
-
-    async function loadAllData() {
-      const t = TRANSLATIONS[currentLang];
-      const banner = document.getElementById('statusBanner');
-
-      if (!SUPABASE_KEY || SUPABASE_KEY === 'YOUR_PUBLISHABLE_KEY_HERE') {
-        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-amber-50 text-amber-800 border border-amber-200';
-        banner.textContent = t.keyMissing;
-        return;
-      }
-
-      const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-      try {
-        const [assetsRes, woRes, pmRes] = await Promise.all([
-          client.from('assets').select('*').order('asset_code', { ascending: true }),
-          client.from('work_orders').select('*').order('created_at', { ascending: false }),
-          client.from('preventive_maintenance').select('*').order('next_due_at', { ascending: true })
-        ]);
-
-        if (assetsRes.error) throw assetsRes.error;
-        if (woRes.error) throw woRes.error;
-        if (pmRes.error) throw pmRes.error;
-
-        const assets = assetsRes.data || [];
-        const workOrders = woRes.data || [];
-        const pmListData = pmRes.data || [];
-
-        document.getElementById('count-assets').textContent = assets.length;
-        document.getElementById('count-wo').textContent = workOrders.length;
-        document.getElementById('count-pm').textContent = pmListData.length;
-
-        const woBody = document.getElementById('woTableBody');
-        woBody.innerHTML = workOrders.map(wo => {
-          const currentStatus = normalizeStatusKey(wo.status);
-          const safeId = wo.id ? `'${String(wo.id).replace(/'/g, "\\'")}'` : 'null';
-          const safeNum = `'${String(wo.wo_number || '').replace(/'/g, "\\'")}'`;
-
-          return `
-            <tr>
-              <td class="py-2.5 px-3 font-medium">${wo.wo_number || ''}</td>
-              <td class="py-2.5 px-3">${getLocalizedField(wo, 'title', currentLang)}</td>
-              <td class="py-2.5 px-3">${getLocalizedField(wo, 'site_name', currentLang)}</td>
-              <td class="py-2.5 px-3">${translateDbValue(wo.priority, PRIORITY_MAP, currentLang)}</td>
-              <td class="py-2.5 px-3">
-                <select
-                  onchange="updateWorkOrderStatus(${safeId}, ${safeNum}, this.value)"
-                  class="px-2.5 py-1 rounded-full text-xs font-medium bg-slate-100 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
-                >
-                  <option value="בטיפול" ${currentStatus === 'בטיפול' ? 'selected' : ''}>${translateDbValue('בטיפול', STATUS_MAP, currentLang)}</option>
-                  <option value="דורש בדיקה" ${currentStatus === 'דורש בדיקה' ? 'selected' : ''}>${translateDbValue('דורש בדיקה', STATUS_MAP, currentLang)}</option>
-                  <option value="תקין" ${currentStatus === 'תקין' ? 'selected' : ''}>${translateDbValue('תקין', STATUS_MAP, currentLang)}</option>
-                </select>
-              </td>
-            </tr>
-          `;
-        }).join('');
-
-        const assetsListEl = document.getElementById('assetsList');
-        assetsListEl.innerHTML = assets.map(a => `
-          <li class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between gap-2">
-            <div>
-              <div class="font-semibold">${getLocalizedField(a, 'name', currentLang)} <span class="text-xs text-slate-500">(${a.asset_code || ''})</span></div>
-              <div class="text-xs text-slate-500">${getLocalizedField(a, 'site_name', currentLang)} • ${getLocalizedField(a, 'category', currentLang)}</div>
-            </div>
-            <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">${translateDbValue(a.status, STATUS_MAP, currentLang)}</span>
-          </li>
-        `).join('');
-
-        const pmListEl = document.getElementById('pmList');
-        pmListEl.innerHTML = pmListData.map(pm => `
-          <li class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between gap-2">
-            <div>
-              <div class="font-semibold">${getLocalizedField(pm, 'title', currentLang)} <span class="text-xs text-slate-500">(${pm.pm_code || ''})</span></div>
-              <div class="text-xs text-slate-500">${getLocalizedField(pm, 'site_name', currentLang)} • ${getLocalizedField(pm, 'frequency', currentLang)}</div>
-            </div>
-            <span class="text-xs text-slate-600">${getLocalizedField(pm, 'assigned_technician', currentLang)}</span>
-          </li>
-        `).join('');
-
-        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-emerald-50 text-emerald-800 border border-emerald-200';
-        banner.textContent = t.connected;
-      } catch (err) {
-        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-red-50 text-red-800 border border-red-200';
-        banner.textContent = t.loadError + (err.message || err);
-      }
-    }
-
-    applyLanguage('en');
-    loadAllData();
-  </script>
-</body>
-</html>
