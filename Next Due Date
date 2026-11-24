@@ -325,6 +325,39 @@
           </select>
         </div>
 
+        <!-- Direct Translation Fields for Edit Work Order (EN / AR) -->
+        <div class="lg:col-span-6 pt-2 border-t border-amber-200/80">
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+            <span id="edit-wo-trans-hint" class="text-xs font-medium text-amber-900/80">Direct EN / AR translations:</span>
+            <button
+              id="edit-wo-copy-btn"
+              type="button"
+              onclick="copyEditWoFieldsToTranslations()"
+              class="px-2.5 py-1 rounded-lg bg-white hover:bg-amber-100 text-amber-900 border border-amber-300 text-xs font-medium transition"
+            >
+              Copy to EN & AR
+            </button>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+            <div>
+              <label id="edit-wo-lbl-title-en" for="editWoTitleEnInput" class="block text-xs text-slate-600 mb-1">Title (EN)</label>
+              <input id="editWoTitleEnInput" type="text" class="w-full border border-amber-200 rounded-xl px-3 py-1.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-amber-500" />
+            </div>
+            <div>
+              <label id="edit-wo-lbl-site-en" for="editWoSiteEnInput" class="block text-xs text-slate-600 mb-1">Site (EN)</label>
+              <input id="editWoSiteEnInput" type="text" class="w-full border border-amber-200 rounded-xl px-3 py-1.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-amber-500" />
+            </div>
+            <div>
+              <label id="edit-wo-lbl-title-ar" for="editWoTitleArInput" class="block text-xs text-slate-600 mb-1">Title (AR)</label>
+              <input id="editWoTitleArInput" type="text" dir="rtl" class="w-full border border-amber-200 rounded-xl px-3 py-1.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-amber-500" />
+            </div>
+            <div>
+              <label id="edit-wo-lbl-site-ar" for="editWoSiteArInput" class="block text-xs text-slate-600 mb-1">Site (AR)</label>
+              <input id="editWoSiteArInput" type="text" dir="rtl" class="w-full border border-amber-200 rounded-xl px-3 py-1.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-amber-500" />
+            </div>
+          </div>
+        </div>
+
         <div class="lg:col-span-6 flex justify-end gap-2 mt-1">
           <button id="btn-wo-cancel" type="button" onclick="closeEditWorkOrder()" class="px-4 py-2 rounded-xl bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 text-sm font-medium transition">
             Cancel
@@ -370,6 +403,39 @@
             <option id="edit-ast-opt-insp" value="דורש בדיקה">Needs Inspection</option>
             <option id="edit-ast-opt-prog" value="בטיפול">In Progress</option>
           </select>
+        </div>
+
+        <!-- Direct Translation Fields for Edit Asset (EN / AR) -->
+        <div class="lg:col-span-6 pt-2 border-t border-blue-200/80">
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+            <span id="edit-ast-trans-hint" class="text-xs font-medium text-blue-900/80">Direct EN / AR translations for name & site:</span>
+            <button
+              id="edit-ast-copy-btn"
+              type="button"
+              onclick="copyEditAssetFieldsToTranslations()"
+              class="px-2.5 py-1 rounded-lg bg-white hover:bg-blue-100 text-blue-900 border border-blue-300 text-xs font-medium transition"
+            >
+              Copy to EN & AR
+            </button>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+            <div>
+              <label id="edit-ast-lbl-name-en" for="editAssetNameEnInput" class="block text-xs text-slate-600 mb-1">Name (EN)</label>
+              <input id="editAssetNameEnInput" type="text" class="w-full border border-blue-200 rounded-xl px-3 py-1.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            </div>
+            <div>
+              <label id="edit-ast-lbl-site-en" for="editAssetSiteEnInput" class="block text-xs text-slate-600 mb-1">Site (EN)</label>
+              <input id="editAssetSiteEnInput" type="text" class="w-full border border-blue-200 rounded-xl px-3 py-1.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            </div>
+            <div>
+              <label id="edit-ast-lbl-name-ar" for="editAssetNameArInput" class="block text-xs text-slate-600 mb-1">Name (AR)</label>
+              <input id="editAssetNameArInput" type="text" dir="rtl" class="w-full border border-blue-200 rounded-xl px-3 py-1.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            </div>
+            <div>
+              <label id="edit-ast-lbl-site-ar" for="editAssetSiteArInput" class="block text-xs text-slate-600 mb-1">Site (AR)</label>
+              <input id="editAssetSiteArInput" type="text" dir="rtl" class="w-full border border-blue-200 rounded-xl px-3 py-1.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            </div>
+          </div>
         </div>
 
         <div class="lg:col-span-6 flex justify-end gap-2 mt-1">
@@ -420,7 +486,40 @@
           <input id="editPmNextDueInput" type="datetime-local" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500" />
         </div>
 
-        <div class="lg:col-span-4 flex justify-end gap-2 mt-1">
+        <!-- Direct Translation Fields for Edit PM (EN / AR) -->
+        <div class="lg:col-span-6 pt-2 border-t border-indigo-200/80">
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+            <span id="edit-pm-trans-hint" class="text-xs font-medium text-indigo-900/80">Direct EN / AR translations for title & site:</span>
+            <button
+              id="edit-pm-copy-btn"
+              type="button"
+              onclick="copyEditPmFieldsToTranslations()"
+              class="px-2.5 py-1 rounded-lg bg-white hover:bg-indigo-100 text-indigo-900 border border-indigo-300 text-xs font-medium transition"
+            >
+              Copy to EN & AR
+            </button>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+            <div>
+              <label id="edit-pm-lbl-title-en" for="editPmTitleEnInput" class="block text-xs text-slate-600 mb-1">Title (EN)</label>
+              <input id="editPmTitleEnInput" type="text" class="w-full border border-indigo-200 rounded-xl px-3 py-1.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+            </div>
+            <div>
+              <label id="edit-pm-lbl-site-en" for="editPmSiteEnInput" class="block text-xs text-slate-600 mb-1">Site (EN)</label>
+              <input id="editPmSiteEnInput" type="text" class="w-full border border-indigo-200 rounded-xl px-3 py-1.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+            </div>
+            <div>
+              <label id="edit-pm-lbl-title-ar" for="editPmTitleArInput" class="block text-xs text-slate-600 mb-1">Title (AR)</label>
+              <input id="editPmTitleArInput" type="text" dir="rtl" class="w-full border border-indigo-200 rounded-xl px-3 py-1.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+            </div>
+            <div>
+              <label id="edit-pm-lbl-site-ar" for="editPmSiteArInput" class="block text-xs text-slate-600 mb-1">Site (AR)</label>
+              <input id="editPmSiteArInput" type="text" dir="rtl" class="w-full border border-indigo-200 rounded-xl px-3 py-1.5 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-6 flex justify-end gap-2 mt-1">
           <button id="btn-pm-cancel" type="button" onclick="closeEditPm()" class="px-4 py-2 rounded-xl bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 text-sm font-medium transition">
             Cancel
           </button>
@@ -591,6 +690,9 @@
         phWoTitle: 'e.g. Replace circuit breaker',
         phWoSite: 'e.g. Logistics Center - Modiin',
         optionalTransHint: 'Optional EN / AR translations (auto-filled for active language if left blank):',
+        directTransHint: 'Direct EN / AR translations:',
+        directAssetTransHint: 'Direct EN / AR translations for name & site:',
+        directPmTransHint: 'Direct EN / AR translations for title & site:',
         btnCopyToLangs: 'Copy to EN & AR',
         lblTitleEn: 'Title (EN)',
         lblSiteEn: 'Site (EN)',
@@ -689,6 +791,9 @@
         phWoTitle: 'למשל: החלפת מפסק ראשי',
         phWoSite: 'למשל: מרכז לוגיסטי - מודיעין',
         optionalTransHint: 'תרגומים אופציונליים ל-EN / AR (מושלמים אוטומטית לשפה הפעילה אם יישארו ריקים):',
+        directTransHint: 'עריכה ישירה של תרגומי EN / AR:',
+        directAssetTransHint: 'עריכה ישירה של תרגומי EN / AR עבור שם ואתר:',
+        directPmTransHint: 'עריכה ישירה של תרגומי EN / AR עבור כותרת ואתר:',
         btnCopyToLangs: 'העתק ל-EN ו-AR',
         lblTitleEn: 'כותרת (EN)',
         lblSiteEn: 'אתר (EN)',
@@ -787,6 +892,9 @@
         phWoTitle: 'مثال: استبدال قاطع كهربائي',
         phWoSite: 'مثال: المركز اللوجستي - موديعين',
         optionalTransHint: 'ترجمات اختيارية لـ EN / AR (تُملأ تلقائياً للغة الحالية إذا تُركت فارغة):',
+        directTransHint: 'تعديل مباشر لترجمات EN / AR:',
+        directAssetTransHint: 'تعديل مباشر لترجمات EN / AR للاسم والموقع:',
+        directPmTransHint: 'تعديل مباشر لترجمات EN / AR للعنوان والموقع:',
         btnCopyToLangs: 'نسخ إلى EN و AR',
         lblTitleEn: 'العنوان (EN)',
         lblSiteEn: 'الموقع (EN)',
@@ -885,6 +993,9 @@
         phWoTitle: 'Например: Замена автомата защиты',
         phWoSite: 'Например: Логистический центр',
         optionalTransHint: 'Необязательные переводы EN / AR (заполняются автоматически для текущего языка):',
+        directTransHint: 'Прямое редактирование переводов EN / AR:',
+        directAssetTransHint: 'Прямое редактирование переводов EN / AR для названия и объекта:',
+        directPmTransHint: 'Прямое редактирование переводов EN / AR для названия и объекта:',
         btnCopyToLangs: 'Копировать в EN и AR',
         lblTitleEn: 'Название (EN)',
         lblSiteEn: 'Объект (EN)',
@@ -983,6 +1094,9 @@
         phWoTitle: 'Ej.: Reemplazar interruptor',
         phWoSite: 'Ej.: Centro Logístico',
         optionalTransHint: 'Traducciones EN / AR opcionales (se autocompletan para el idioma activo si se dejan vacías):',
+        directTransHint: 'Edición directa de traducciones EN / AR:',
+        directAssetTransHint: 'Edición directa de traducciones EN / AR para nombre y sitio:',
+        directPmTransHint: 'Edición directa de traducciones EN / AR para título y sitio:',
         btnCopyToLangs: 'Copiar a EN y AR',
         lblTitleEn: 'Título (EN)',
         lblSiteEn: 'Sitio (EN)',
@@ -1081,6 +1195,9 @@
         phWoTitle: 'Ex. : Remplacer le disjoncteur',
         phWoSite: 'Ex. : Centre logistique',
         optionalTransHint: 'Traductions EN / AR optionnelles (remplies automatiquement pour la langue active si vides) :',
+        directTransHint: 'Édition directe des traductions EN / AR :',
+        directAssetTransHint: 'Édition directe des traductions EN / AR pour le nom et le site :',
+        directPmTransHint: 'Édition directe des traductions EN / AR pour le titre et le site :',
         btnCopyToLangs: 'Copier vers EN et AR',
         lblTitleEn: 'Titre (EN)',
         lblSiteEn: 'Site (EN)',
@@ -1179,6 +1296,9 @@
         phWoTitle: 'Es.: Sostituzione interruttore',
         phWoSite: 'Es.: Centro logistico',
         optionalTransHint: 'Traduzioni EN / AR opzionali (compilate per la lingua attiva se lasciate vuote):',
+        directTransHint: 'Modifica diretta traduzioni EN / AR:',
+        directAssetTransHint: 'Modifica diretta traduzioni EN / AR per nome e sito:',
+        directPmTransHint: 'Modifica diretta traduzioni EN / AR per titolo e sito:',
         btnCopyToLangs: 'Copia su EN e AR',
         lblTitleEn: 'Titolo (EN)',
         lblSiteEn: 'Sito (EN)',
@@ -1277,6 +1397,9 @@
         phWoTitle: 'Z. B.: Schutzschalter tauschen',
         phWoSite: 'Z. B.: Logistikzentrum',
         optionalTransHint: 'Optionale EN / AR Übersetzungen (bei aktiver Sprache automatisch ausgefüllt, wenn leer):',
+        directTransHint: 'Direkte EN / AR Übersetzungen:',
+        directAssetTransHint: 'Direkte EN / AR Übersetzungen für Name & Standort:',
+        directPmTransHint: 'Direkte EN / AR Übersetzungen für Titel & Standort:',
         btnCopyToLangs: 'In EN & AR kopieren',
         lblTitleEn: 'Titel (EN)',
         lblSiteEn: 'Standort (EN)',
@@ -1620,6 +1743,48 @@
       }
     }
 
+    function copyEditWoFieldsToTranslations() {
+      const title = document.getElementById('editWoTitleInput').value.trim();
+      const site = document.getElementById('editWoSiteInput').value.trim();
+
+      if (title) {
+        document.getElementById('editWoTitleEnInput').value = title;
+        document.getElementById('editWoTitleArInput').value = title;
+      }
+      if (site) {
+        document.getElementById('editWoSiteEnInput').value = site;
+        document.getElementById('editWoSiteArInput').value = site;
+      }
+    }
+
+    function copyEditAssetFieldsToTranslations() {
+      const name = document.getElementById('editAssetNameInput').value.trim();
+      const site = document.getElementById('editAssetSiteInput').value.trim();
+
+      if (name) {
+        document.getElementById('editAssetNameEnInput').value = name;
+        document.getElementById('editAssetNameArInput').value = name;
+      }
+      if (site) {
+        document.getElementById('editAssetSiteEnInput').value = site;
+        document.getElementById('editAssetSiteArInput').value = site;
+      }
+    }
+
+    function copyEditPmFieldsToTranslations() {
+      const title = document.getElementById('editPmTitleInput').value.trim();
+      const site = document.getElementById('editPmSiteInput').value.trim();
+
+      if (title) {
+        document.getElementById('editPmTitleEnInput').value = title;
+        document.getElementById('editPmTitleArInput').value = title;
+      }
+      if (site) {
+        document.getElementById('editPmSiteEnInput').value = site;
+        document.getElementById('editPmSiteArInput').value = site;
+      }
+    }
+
     let currentLang = 'en';
     let cachedWorkOrders = [];
     let cachedAssets = [];
@@ -1738,6 +1903,12 @@
       document.getElementById('edit-lbl-site').textContent = t.thSite;
       document.getElementById('edit-lbl-prio').textContent = t.thPriority;
       document.getElementById('edit-lbl-status').textContent = t.thStatus;
+      document.getElementById('edit-wo-trans-hint').textContent = t.directTransHint;
+      document.getElementById('edit-wo-copy-btn').textContent = t.btnCopyToLangs;
+      document.getElementById('edit-wo-lbl-title-en').textContent = t.lblTitleEn;
+      document.getElementById('edit-wo-lbl-site-en').textContent = t.lblSiteEn;
+      document.getElementById('edit-wo-lbl-title-ar').textContent = t.lblTitleAr;
+      document.getElementById('edit-wo-lbl-site-ar').textContent = t.lblSiteAr;
       document.getElementById('btn-wo-save').textContent = t.btnWoSave;
       document.getElementById('btn-wo-cancel').textContent = t.btnWoCancel;
 
@@ -1755,6 +1926,12 @@
       document.getElementById('edit-ast-lbl-site').textContent = t.thSite;
       document.getElementById('edit-ast-lbl-cat').textContent = t.lblAssetCategory;
       document.getElementById('edit-ast-lbl-status').textContent = t.thStatus;
+      document.getElementById('edit-ast-trans-hint').textContent = t.directAssetTransHint;
+      document.getElementById('edit-ast-copy-btn').textContent = t.btnCopyToLangs;
+      document.getElementById('edit-ast-lbl-name-en').textContent = t.lblNameEn;
+      document.getElementById('edit-ast-lbl-site-en').textContent = t.lblSiteEn;
+      document.getElementById('edit-ast-lbl-name-ar').textContent = t.lblNameAr;
+      document.getElementById('edit-ast-lbl-site-ar').textContent = t.lblSiteAr;
       document.getElementById('btn-ast-save').textContent = t.btnWoSave;
       document.getElementById('btn-ast-cancel').textContent = t.btnWoCancel;
 
@@ -1769,6 +1946,12 @@
       document.getElementById('edit-pm-lbl-freq').textContent = t.lblPmFrequency;
       document.getElementById('edit-pm-lbl-tech').textContent = t.lblPmTech;
       document.getElementById('edit-pm-lbl-due').textContent = t.lblPmNextDue;
+      document.getElementById('edit-pm-trans-hint').textContent = t.directPmTransHint;
+      document.getElementById('edit-pm-copy-btn').textContent = t.btnCopyToLangs;
+      document.getElementById('edit-pm-lbl-title-en').textContent = t.lblTitleEn;
+      document.getElementById('edit-pm-lbl-site-en').textContent = t.lblSiteEn;
+      document.getElementById('edit-pm-lbl-title-ar').textContent = t.lblTitleAr;
+      document.getElementById('edit-pm-lbl-site-ar').textContent = t.lblSiteAr;
       document.getElementById('btn-pm-save').textContent = t.btnWoSave;
       document.getElementById('btn-pm-cancel').textContent = t.btnWoCancel;
 
@@ -2118,6 +2301,11 @@
       document.getElementById('editAssetCategoryInput').value = getLocalizedField(asset, 'category', currentLang) || asset.category || '';
       document.getElementById('editAssetStatusSelect').value = normalizeStatusKey(asset.status);
 
+      document.getElementById('editAssetNameEnInput').value = asset.name_en || '';
+      document.getElementById('editAssetSiteEnInput').value = asset.site_name_en || '';
+      document.getElementById('editAssetNameArInput').value = asset.name_ar || '';
+      document.getElementById('editAssetSiteArInput').value = asset.site_name_ar || '';
+
       const section = document.getElementById('editAssetSection');
       section.classList.remove('hidden');
       section.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -2147,10 +2335,32 @@
       const category = document.getElementById('editAssetCategoryInput').value.trim();
       const status = document.getElementById('editAssetStatusSelect').value;
 
+      const nameEnVal = document.getElementById('editAssetNameEnInput').value.trim();
+      const siteEnVal = document.getElementById('editAssetSiteEnInput').value.trim();
+      const nameArVal = document.getElementById('editAssetNameArInput').value.trim();
+      const siteArVal = document.getElementById('editAssetSiteArInput').value.trim();
+
       if (!asset_code || !name || !site_name || !category) return;
 
-      const updatePayload = { asset_code, name, site_name, category, status };
-      if (currentLang !== 'he' && TRANSLATIONS[currentLang]) {
+      const updatePayload = {
+        asset_code,
+        name,
+        site_name,
+        category,
+        status,
+        name_en: nameEnVal || null,
+        site_name_en: siteEnVal || null,
+        name_ar: nameArVal || null,
+        site_name_ar: siteArVal || null
+      };
+
+      if (currentLang === 'en') {
+        updatePayload.name_en = nameEnVal || name;
+        updatePayload.site_name_en = siteEnVal || site_name;
+      } else if (currentLang === 'ar') {
+        updatePayload.name_ar = nameArVal || name;
+        updatePayload.site_name_ar = siteArVal || site_name;
+      } else if (currentLang !== 'he' && TRANSLATIONS[currentLang]) {
         updatePayload[`name_${currentLang}`] = name;
         updatePayload[`site_name_${currentLang}`] = site_name;
       }
@@ -2232,6 +2442,11 @@
       document.getElementById('editPmTechInput').value = getLocalizedField(pm, 'assigned_technician', currentLang) || pm.assigned_technician || '';
       document.getElementById('editPmNextDueInput').value = toDatetimeLocalValue(pm.next_due_at);
 
+      document.getElementById('editPmTitleEnInput').value = pm.title_en || '';
+      document.getElementById('editPmSiteEnInput').value = pm.site_name_en || '';
+      document.getElementById('editPmTitleArInput').value = pm.title_ar || '';
+      document.getElementById('editPmSiteArInput').value = pm.site_name_ar || '';
+
       const section = document.getElementById('editPmSection');
       section.classList.remove('hidden');
       section.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -2262,9 +2477,25 @@
       const assigned_technician = document.getElementById('editPmTechInput').value.trim();
       const nextDueLocal = document.getElementById('editPmNextDueInput').value;
 
+      const titleEnVal = document.getElementById('editPmTitleEnInput').value.trim();
+      const siteEnVal = document.getElementById('editPmSiteEnInput').value.trim();
+      const titleArVal = document.getElementById('editPmTitleArInput').value.trim();
+      const siteArVal = document.getElementById('editPmSiteArInput').value.trim();
+
       if (!pm_code || !title || !site_name || !frequency || !assigned_technician) return;
 
-      const updatePayload = { pm_code, title, site_name, frequency, assigned_technician };
+      const updatePayload = {
+        pm_code,
+        title,
+        site_name,
+        frequency,
+        assigned_technician,
+        title_en: titleEnVal || null,
+        site_name_en: siteEnVal || null,
+        title_ar: titleArVal || null,
+        site_name_ar: siteArVal || null
+      };
+
       if (nextDueLocal) {
         const parsed = new Date(nextDueLocal);
         if (!Number.isNaN(parsed.getTime())) {
@@ -2272,7 +2503,13 @@
         }
       }
 
-      if (currentLang !== 'he' && TRANSLATIONS[currentLang]) {
+      if (currentLang === 'en') {
+        updatePayload.title_en = titleEnVal || title;
+        updatePayload.site_name_en = siteEnVal || site_name;
+      } else if (currentLang === 'ar') {
+        updatePayload.title_ar = titleArVal || title;
+        updatePayload.site_name_ar = siteArVal || site_name;
+      } else if (currentLang !== 'he' && TRANSLATIONS[currentLang]) {
         updatePayload[`title_${currentLang}`] = title;
         updatePayload[`site_name_${currentLang}`] = site_name;
       }
@@ -2513,6 +2750,11 @@
       document.getElementById('editWoPrioritySelect').value = normalizePriorityKey(wo.priority);
       document.getElementById('editWoStatusSelect').value = normalizeStatusKey(wo.status);
 
+      document.getElementById('editWoTitleEnInput').value = wo.title_en || '';
+      document.getElementById('editWoSiteEnInput').value = wo.site_name_en || '';
+      document.getElementById('editWoTitleArInput').value = wo.title_ar || '';
+      document.getElementById('editWoSiteArInput').value = wo.site_name_ar || '';
+
       const section = document.getElementById('editWoSection');
       section.classList.remove('hidden');
       section.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -2542,10 +2784,32 @@
       const priority = document.getElementById('editWoPrioritySelect').value;
       const status = document.getElementById('editWoStatusSelect').value;
 
+      const titleEnVal = document.getElementById('editWoTitleEnInput').value.trim();
+      const siteEnVal = document.getElementById('editWoSiteEnInput').value.trim();
+      const titleArVal = document.getElementById('editWoTitleArInput').value.trim();
+      const siteArVal = document.getElementById('editWoSiteArInput').value.trim();
+
       if (!wo_number || !title || !site_name) return;
 
-      const updatePayload = { wo_number, title, site_name, priority, status };
-      if (currentLang !== 'he' && TRANSLATIONS[currentLang]) {
+      const updatePayload = {
+        wo_number,
+        title,
+        site_name,
+        priority,
+        status,
+        title_en: titleEnVal || null,
+        site_name_en: siteEnVal || null,
+        title_ar: titleArVal || null,
+        site_name_ar: siteArVal || null
+      };
+
+      if (currentLang === 'en') {
+        updatePayload.title_en = titleEnVal || title;
+        updatePayload.site_name_en = siteEnVal || site_name;
+      } else if (currentLang === 'ar') {
+        updatePayload.title_ar = titleArVal || title;
+        updatePayload.site_name_ar = siteArVal || site_name;
+      } else if (currentLang !== 'he' && TRANSLATIONS[currentLang]) {
         updatePayload[`title_${currentLang}`] = title;
         updatePayload[`site_name_${currentLang}`] = site_name;
       }
