@@ -382,4 +382,2263 @@
     <section id="editPmSection" class="hidden bg-indigo-50/60 border border-indigo-300 rounded-2xl p-5 shadow-sm mb-6">
       <h2 id="t-edit-pm-title" class="text-lg font-bold mb-4 text-indigo-950">Edit Preventive Maintenance</h2>
       <form id="editPmForm" onsubmit="savePmEdit(event)" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-3 items-end">
-        <input
+        <input id="editPmId" type="hidden" />
+        <input id="editPmOriginalCode" type="hidden" />
+
+        <div>
+          <label id="edit-pm-lbl-code" for="editPmCodeInput" class="block text-xs font-semibold text-slate-700 mb-1">Code</label>
+          <input id="editPmCodeInput" type="text" required class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+        </div>
+
+        <div class="lg:col-span-2">
+          <label id="edit-pm-lbl-title" for="editPmTitleInput" class="block text-xs font-semibold text-slate-700 mb-1">Title</label>
+          <input id="editPmTitleInput" type="text" required class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+        </div>
+
+        <div>
+          <label id="edit-pm-lbl-site" for="editPmSiteInput" class="block text-xs font-semibold text-slate-700 mb-1">Site</label>
+          <input id="editPmSiteInput" type="text" required class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+        </div>
+
+        <div>
+          <label id="edit-pm-lbl-freq" for="editPmFrequencyInput" class="block text-xs font-semibold text-slate-700 mb-1">Frequency</label>
+          <input id="editPmFrequencyInput" type="text" required class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+        </div>
+
+        <div>
+          <label id="edit-pm-lbl-tech" for="editPmTechInput" class="block text-xs font-semibold text-slate-700 mb-1">Technician</label>
+          <input id="editPmTechInput" type="text" required class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+        </div>
+
+        <div class="lg:col-span-6 flex justify-end gap-2 mt-1">
+          <button id="btn-pm-cancel" type="button" onclick="closeEditPm()" class="px-4 py-2 rounded-xl bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 text-sm font-medium transition">
+            Cancel
+          </button>
+          <button id="btn-pm-save" type="submit" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium transition">
+            Save Changes
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Work Orders Section -->
+    <section class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm mb-6">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+        <h2 id="t-sec-wo" class="text-lg font-bold">Work Orders</h2>
+        <span id="woFilteredCount" class="text-xs font-medium text-slate-500"></span>
+      </div>
+
+      <!-- Work Orders Search & Filter Controls -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3 mb-4">
+        <div class="lg:col-span-2">
+          <input
+            id="woSearchInput"
+            type="text"
+            oninput="renderWorkOrders()"
+            class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
+        <div>
+          <select
+            id="woFilterPriority"
+            onchange="renderWorkOrders()"
+            class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option id="flt-wo-prio-all" value="ALL">All Priorities</option>
+            <option id="flt-wo-prio-high" value="גבוה">High</option>
+            <option id="flt-wo-prio-med" value="בינוני">Medium</option>
+            <option id="flt-wo-prio-low" value="נמוך">Low</option>
+          </select>
+        </div>
+
+        <div>
+          <select
+            id="woFilterStatus"
+            onchange="renderWorkOrders()"
+            class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option id="flt-wo-st-all" value="ALL">All Statuses</option>
+            <option id="flt-wo-st-prog" value="בטיפול">In Progress</option>
+            <option id="flt-wo-st-insp" value="דורש בדיקה">Needs Inspection</option>
+            <option id="flt-wo-st-ok" value="תקין">Operational</option>
+          </select>
+        </div>
+
+        <div>
+          <button
+            id="btn-wo-reset-filters"
+            type="button"
+            onclick="resetWorkOrderFilters()"
+            class="w-full px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 text-sm font-medium transition"
+          >
+            Reset Filters
+          </button>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm border-collapse">
+          <thead>
+            <tr class="border-b border-slate-200 text-slate-500">
+              <th id="th-wo-num" class="py-2 px-3 text-start">Code</th>
+              <th id="th-wo-title" class="py-2 px-3 text-start">Title</th>
+              <th id="th-wo-site" class="py-2 px-3 text-start">Site</th>
+              <th id="th-wo-prio" class="py-2 px-3 text-start">Priority</th>
+              <th id="th-wo-status" class="py-2 px-3 text-start">Status</th>
+              <th id="th-wo-actions" class="py-2 px-3 text-start">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="woTableBody" class="divide-y divide-slate-100"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Assets & PM Grid -->
+    <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+          <h2 id="t-sec-assets" class="text-lg font-bold">Assets & Systems</h2>
+          <span id="assetsFilteredCount" class="text-xs font-medium text-slate-500"></span>
+        </div>
+
+        <!-- Assets Search & Filter Controls -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-4">
+          <div class="sm:col-span-2">
+            <input
+              id="assetSearchInput"
+              type="text"
+              oninput="renderAssets()"
+              class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+          <div>
+            <select
+              id="assetFilterStatus"
+              onchange="renderAssets()"
+              class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option id="flt-ast-st-all" value="ALL">All Statuses</option>
+              <option id="flt-ast-st-ok" value="תקין">Operational</option>
+              <option id="flt-ast-st-insp" value="דורש בדיקה">Needs Inspection</option>
+              <option id="flt-ast-st-prog" value="בטיפול">In Progress</option>
+            </select>
+          </div>
+        </div>
+
+        <ul id="assetsList" class="space-y-3 text-sm"></ul>
+      </div>
+
+      <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+          <h2 id="t-sec-pm" class="text-lg font-bold">Preventive Maintenance</h2>
+          <span id="pmFilteredCount" class="text-xs font-medium text-slate-500"></span>
+        </div>
+
+        <!-- PM Search & Filter Controls -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-4">
+          <div class="sm:col-span-2">
+            <input
+              id="pmSearchInput"
+              type="text"
+              oninput="renderPmList()"
+              class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+          <div>
+            <select
+              id="pmFilterFreq"
+              onchange="renderPmList()"
+              class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option id="flt-pm-freq-all" value="ALL">All Frequencies</option>
+            </select>
+          </div>
+        </div>
+
+        <ul id="pmList" class="space-y-3 text-sm"></ul>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const SUPABASE_URL = 'https://hwceiwauyukjzmawluvp.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable__DTqJhrL96laE3R7Y-nNYg_Gxl_yrL4';
+
+    const RTL_LANGS = ['he', 'ar'];
+
+    const TRANSLATIONS = {
+      en: {
+        appName: 'Fixa',
+        subtitle: 'Building & Facilities Maintenance Platform',
+        langLabel: 'Language:',
+        refresh: 'Refresh',
+        cardAssets: 'Assets',
+        cardWo: 'Work Orders',
+        cardPm: 'Preventive Maintenance',
+        formWoTitle: 'New Work Order',
+        btnWoSubmit: 'Add Work Order',
+        phWoTitle: 'e.g. Replace circuit breaker',
+        phWoSite: 'e.g. Logistics Center - Modiin',
+        optionalTransHint: 'Optional EN / AR translations (auto-filled for active language if left blank):',
+        btnCopyToLangs: 'Copy to EN & AR',
+        lblTitleEn: 'Title (EN)',
+        lblSiteEn: 'Site (EN)',
+        lblTitleAr: 'Title (AR)',
+        lblSiteAr: 'Site (AR)',
+        formAssetTitle: 'New Asset',
+        btnAssetSubmit: 'Add Asset',
+        lblAssetName: 'Name',
+        lblAssetCategory: 'Category',
+        phAssetName: 'e.g. Backup Generator 500kVA',
+        phAssetSite: 'e.g. Logistics Center - Modiin',
+        phAssetCategory: 'e.g. Power & Generators',
+        astTransHint: 'Optional EN / AR translations for name & site (auto-filled for active language if left blank):',
+        lblNameEn: 'Name (EN)',
+        lblNameAr: 'Name (AR)',
+        assetCreated: 'Asset added successfully.',
+        assetCreateError: 'Could not add asset: ',
+        editAssetTitle: 'Edit Asset',
+        assetUpdated: 'Asset updated successfully.',
+        assetUpdateError: 'Could not update asset: ',
+        confirmDeleteAsset: 'Are you sure you want to delete this asset?',
+        assetDeleted: 'Asset deleted successfully.',
+        assetDeleteError: 'Could not delete asset: ',
+        formPmTitle: 'New Preventive Maintenance',
+        btnPmSubmit: 'Add PM',
+        lblPmFrequency: 'Frequency',
+        lblPmTech: 'Technician',
+        phPmTitle: 'e.g. Quarterly HVAC filter inspection',
+        phPmSite: 'e.g. Logistics Center - Modiin',
+        phPmFrequency: 'e.g. Quarterly',
+        phPmTech: 'e.g. Daniel Levi',
+        pmTransHint: 'Optional EN / AR translations for title & site (auto-filled for active language if left blank):',
+        pmCreated: 'Preventive maintenance added successfully.',
+        pmCreateError: 'Could not add preventive maintenance: ',
+        editPmTitle: 'Edit Preventive Maintenance',
+        pmUpdated: 'Preventive maintenance updated successfully.',
+        pmUpdateError: 'Could not update preventive maintenance: ',
+        confirmDeletePm: 'Are you sure you want to delete this preventive maintenance item?',
+        pmDeleted: 'Preventive maintenance deleted successfully.',
+        pmDeleteError: 'Could not delete preventive maintenance: ',
+        woCreated: 'Work order added successfully.',
+        woCreateError: 'Could not add work order: ',
+        woStatusUpdated: 'Work order status updated successfully.',
+        woStatusError: 'Could not update status: ',
+        editWoTitle: 'Edit Work Order',
+        btnWoSave: 'Save Changes',
+        btnWoCancel: 'Cancel',
+        btnEdit: 'Edit',
+        btnDelete: 'Delete',
+        confirmDeleteWo: 'Are you sure you want to delete this work order?',
+        woUpdated: 'Work order updated successfully.',
+        woUpdateError: 'Could not update work order: ',
+        woDeleted: 'Work order deleted successfully.',
+        woDeleteError: 'Could not delete work order: ',
+        assetStatusUpdated: 'Asset status updated successfully.',
+        assetStatusError: 'Could not update asset status: ',
+        phWoSearch: 'Search by code, title, or site...',
+        phAssetSearch: 'Search asset by name, code, site, or category...',
+        phPmSearch: 'Search PM by code, title, site, or technician...',
+        allPriorities: 'All Priorities',
+        allStatuses: 'All Statuses',
+        allFrequencies: 'All Frequencies',
+        resetFilters: 'Reset Filters',
+        noMatchingWo: 'No matching work orders found.',
+        noMatchingAssets: 'No matching assets found.',
+        noMatchingPm: 'No matching preventive maintenance items found.',
+        showingCount: 'Showing {shown} of {total}',
+        secWo: 'Work Orders',
+        secAssets: 'Assets & Systems',
+        secPm: 'Preventive Maintenance',
+        thCode: 'Code',
+        thTitle: 'Title',
+        thSite: 'Site',
+        thPriority: 'Priority',
+        thStatus: 'Status',
+        thActions: 'Actions',
+        connected: 'Connected to Supabase successfully.',
+        keyMissing: 'Please replace YOUR_PUBLISHABLE_KEY_HERE in index.html with your Supabase Publishable key.',
+        loadError: 'Could not load data from Supabase: '
+      },
+      he: {
+        appName: 'Fixa',
+        subtitle: 'מערכת לניהול ותחזוקת מבנים ומתקנים',
+        langLabel: 'שפה:',
+        refresh: 'רענן',
+        cardAssets: 'נכסים ומערכות',
+        cardWo: 'קריאות שירות',
+        cardPm: 'תחזוקה מונעת',
+        formWoTitle: 'קריאת שירות חדשה',
+        btnWoSubmit: 'הוסף קריאת שירות',
+        phWoTitle: 'למשל: החלפת מפסק ראשי',
+        phWoSite: 'למשל: מרכז לוגיסטי - מודיעין',
+        optionalTransHint: 'תרגומים אופציונליים ל-EN / AR (מושלמים אוטומטית לשפה הפעילה אם יישארו ריקים):',
+        btnCopyToLangs: 'העתק ל-EN ו-AR',
+        lblTitleEn: 'כותרת (EN)',
+        lblSiteEn: 'אתר (EN)',
+        lblTitleAr: 'כותרת (AR)',
+        lblSiteAr: 'אתר (AR)',
+        formAssetTitle: 'הוספת נכס / מערכת חדשה',
+        btnAssetSubmit: 'הוסף נכס',
+        lblAssetName: 'שם הנכס',
+        lblAssetCategory: 'קטגוריה',
+        phAssetName: 'למשל: גנרטור גיבוי 500kVA',
+        phAssetSite: 'למשל: מרכז לוגיסטי - מודיעין',
+        phAssetCategory: 'למשל: חשמל וגנרטורים',
+        astTransHint: 'תרגומים אופציונליים ל-EN / AR עבור שם ואתר (מושלמים אוטומטית לשפה הפעילה):',
+        lblNameEn: 'שם (EN)',
+        lblNameAr: 'שם (AR)',
+        assetCreated: 'הנכס נוסף בהצלחה.',
+        assetCreateError: 'שגיאה בהוספת הנכס: ',
+        editAssetTitle: 'עריכת נכס / מערכת',
+        assetUpdated: 'הנכס עודכן בהצלחה.',
+        assetUpdateError: 'שגיאה בעדכון הנכס: ',
+        confirmDeleteAsset: 'האם אתה בטוח שברצונך למחוק נכס זה?',
+        assetDeleted: 'הנכס נמחק בהצלחה.',
+        assetDeleteError: 'שגיאה במחיקת הנכס: ',
+        formPmTitle: 'הוספת תחזוקה מונעת חדשה',
+        btnPmSubmit: 'הוסף תחזוקה מונעת',
+        lblPmFrequency: 'תדירות',
+        lblPmTech: 'טכנאי אחראי',
+        phPmTitle: 'למשל: בדיקת מסנני מיזוג רבעונית',
+        phPmSite: 'למשל: מרכז לוגיסטי - מודיעין',
+        phPmFrequency: 'למשל: רבעוני',
+        phPmTech: 'למשל: דניאל לוי',
+        pmTransHint: 'תרגומים אופציונליים ל-EN / AR עבור כותרת ואתר (מושלמים אוטומטית לשפה הפעילה):',
+        pmCreated: 'תחזוקה מונעת נוספה בהצלחה.',
+        pmCreateError: 'שגיאה בהוספת תחזוקה מונעת: ',
+        editPmTitle: 'עריכת תחזוקה מונעת',
+        pmUpdated: 'תחזוקה מונעת עודכנה בהצלחה.',
+        pmUpdateError: 'שגיאה בעדכון תחזוקה מונעת: ',
+        confirmDeletePm: 'האם אתה בטוח שברצונך למחוק פריט תחזוקה מונעת זה?',
+        pmDeleted: 'תחזוקה מונעת נמחקה בהצלחה.',
+        pmDeleteError: 'שגיאה במחיקת תחזוקה מונעת: ',
+        woCreated: 'קריאת השירות נוספה בהצלחה.',
+        woCreateError: 'שגיאה בהוספת קריאת השירות: ',
+        woStatusUpdated: 'סטטוס קריאת השירות עודכן בהצלחה.',
+        woStatusError: 'שגיאה בעדכון הסטטוס: ',
+        editWoTitle: 'עריכת קריאת שירות',
+        btnWoSave: 'שמור שינויים',
+        btnWoCancel: 'ביטול',
+        btnEdit: 'ערוך',
+        btnDelete: 'מחק',
+        confirmDeleteWo: 'האם אתה בטוח שברצונך למחוק קריאת שירות זו?',
+        woUpdated: 'קריאת השירות עודכנה בהצלחה.',
+        woUpdateError: 'שגיאה בעדכון קריאת השירות: ',
+        woDeleted: 'קריאת השירות נמחקה בהצלחה.',
+        woDeleteError: 'שגיאה במחיקת קריאת השירות: ',
+        assetStatusUpdated: 'סטטוס הנכס עודכן בהצלחה.',
+        assetStatusError: 'שגיאה בעדכון סטטוס הנכס: ',
+        phWoSearch: 'חיפוש לפי קוד, כותרת או אתר...',
+        phAssetSearch: 'חיפוש נכס לפי שם, קוד, אתר או קטגוריה...',
+        phPmSearch: 'חיפוש תחזוקה מונעת לפי קוד, כותרת, אתר או טכנאי...',
+        allPriorities: 'כל העדיפויות',
+        allStatuses: 'כל הסטטוסים',
+        allFrequencies: 'כל התדירויות',
+        resetFilters: 'אפס סינון',
+        noMatchingWo: 'לא נמצאו קריאות שירות תואמות.',
+        noMatchingAssets: 'לא נמצאו נכסים תואמים.',
+        noMatchingPm: 'לא נמצאו פריטי תחזוקה מונעת תואמים.',
+        showingCount: 'מוצגים {shown} מתוך {total}',
+        secWo: 'קריאות שירות',
+        secAssets: 'נכסים ומערכות',
+        secPm: 'תחזוקה מונעת',
+        thCode: 'קוד',
+        thTitle: 'כותרת',
+        thSite: 'אתר',
+        thPriority: 'עדיפות',
+        thStatus: 'סטטוס',
+        thActions: 'פעולות',
+        connected: 'החיבור ל-Supabase בוצע בהצלחה.',
+        keyMissing: 'יש להחליף את YOUR_PUBLISHABLE_KEY_HERE בקובץ index.html במפתח הציבורי מ-Supabase.',
+        loadError: 'שגיאה בטעינת הנתונים מ-Supabase: '
+      },
+      ar: {
+        appName: 'Fixa',
+        subtitle: 'منصة إدارة وصيانة المباني والمرافق',
+        langLabel: 'اللغة:',
+        refresh: 'تحديث',
+        cardAssets: 'الأصول والمعدات',
+        cardWo: 'أوامر العمل',
+        cardPm: 'الصيانة الوقائية',
+        formWoTitle: 'إضافة أمر عمل جديد',
+        btnWoSubmit: 'إضافة أمر العمل',
+        phWoTitle: 'مثال: استبدال قاطع كهربائي',
+        phWoSite: 'مثال: المركز اللوجستي - موديعين',
+        optionalTransHint: 'ترجمات اختيارية لـ EN / AR (تُملأ تلقائياً للغة الحالية إذا تُركت فارغة):',
+        btnCopyToLangs: 'نسخ إلى EN و AR',
+        lblTitleEn: 'العنوان (EN)',
+        lblSiteEn: 'الموقع (EN)',
+        lblTitleAr: 'العنوان (AR)',
+        lblSiteAr: 'الموقع (AR)',
+        formAssetTitle: 'إضافة أصل أو نظام جديد',
+        btnAssetSubmit: 'إضافة أصل',
+        lblAssetName: 'اسم الأصل',
+        lblAssetCategory: 'الفئة',
+        phAssetName: 'مثال: مولد احتياطي 500kVA',
+        phAssetSite: 'مثال: المركز اللوجستي - موديعين',
+        phAssetCategory: 'مثال: طاقة ومولدات',
+        astTransHint: 'ترجمات اختيارية لـ EN / AR للاسم والموقع (تُملأ تلقائياً للغة الحالية):',
+        lblNameEn: 'الاسم (EN)',
+        lblNameAr: 'الاسم (AR)',
+        assetCreated: 'تمت إضافة الأصل بنجاح.',
+        assetCreateError: 'تعذر إضافة الأصل: ',
+        editAssetTitle: 'تعديل الأصل',
+        assetUpdated: 'تم تحديث الأصل بنجاح.',
+        assetUpdateError: 'تعذر تحديث الأصل: ',
+        confirmDeleteAsset: 'هل أنت متأكد من حذف هذا الأصل؟',
+        assetDeleted: 'تم حذف الأصل بنجاح.',
+        assetDeleteError: 'تعذر حذف الأصل: ',
+        formPmTitle: 'إضافة صيانة وقائية جديدة',
+        btnPmSubmit: 'إضافة صيانة وقائية',
+        lblPmFrequency: 'التكرار',
+        lblPmTech: 'الفني المسؤول',
+        phPmTitle: 'مثال: فحص فلاتر التكييف ربع السنوي',
+        phPmSite: 'مثال: المركز اللوجستي - موديعين',
+        phPmFrequency: 'مثال: ربع سنوي',
+        phPmTech: 'مثال: دانيال ليفي',
+        pmTransHint: 'ترجمات اختيارية لـ EN / AR للعنوان والموقع (تُملأ تلقائياً للغة الحالية):',
+        pmCreated: 'تمت إضافة الصيانة الوقائية بنجاح.',
+        pmCreateError: 'تعذر إضافة الصيانة الوقائية: ',
+        editPmTitle: 'تعديل الصيانة الوقائية',
+        pmUpdated: 'تم تحديث الصيانة الوقائية بنجاح.',
+        pmUpdateError: 'تعذر تحديث الصيانة الوقائية: ',
+        confirmDeletePm: 'هل أنت متأكد من حذف بند الصيانة الوقائية هذا؟',
+        pmDeleted: 'تم حذف الصيانة الوقائية بنجاح.',
+        pmDeleteError: 'تعذر حذف الصيانة الوقائية: ',
+        woCreated: 'تمت إضافة أمر العمل بنجاح.',
+        woCreateError: 'تعذر إضافة أمر العمل: ',
+        woStatusUpdated: 'تم تحديث حالة أمر العمل بنجاح.',
+        woStatusError: 'تعذر تحديث الحالة: ',
+        editWoTitle: 'تعديل أمر العمل',
+        btnWoSave: 'حفظ التغييرات',
+        btnWoCancel: 'إلغاء',
+        btnEdit: 'تعديل',
+        btnDelete: 'حذف',
+        confirmDeleteWo: 'هل أنت متأكد من حذف أمر العمل هذا؟',
+        woUpdated: 'تم تحديث أمر العمل بنجاح.',
+        woUpdateError: 'تعذر تحديث أمر العمل: ',
+        woDeleted: 'تم حذف أمر العمل بنجاح.',
+        woDeleteError: 'تعذر حذف أمر العمل: ',
+        assetStatusUpdated: 'تم تحديث حالة الأصل بنجاح.',
+        assetStatusError: 'تعذر تحديث حالة الأصل: ',
+        phWoSearch: 'بحث بالرمز أو العنوان أو الموقع...',
+        phAssetSearch: 'بحث عن أصل بالاسم أو الرمز أو الموقع أو الفئة...',
+        phPmSearch: 'بحث في الصيانة الوقائية بالرمز أو العنوان أو الموقع أو الفني...',
+        allPriorities: 'كل الأولويات',
+        allStatuses: 'كل الحالات',
+        allFrequencies: 'كل التكرارات',
+        resetFilters: 'إعادة ضبط الفلاتر',
+        noMatchingWo: 'لا توجد أوامر عمل مطابقة.',
+        noMatchingAssets: 'لا توجد أصول مطابقة.',
+        noMatchingPm: 'لا توجد بنود صيانة وقائية مطابقة.',
+        showingCount: 'عرض {shown} من {total}',
+        secWo: 'أوامر العمل',
+        secAssets: 'الأصول والمعدات',
+        secPm: 'الصيانة الوقائية',
+        thCode: 'الرمز',
+        thTitle: 'العنوان',
+        thSite: 'الموقع',
+        thPriority: 'الأولوية',
+        thStatus: 'الحالة',
+        thActions: 'الإجراءات',
+        connected: 'تم الاتصال بقاعدة بيانات Supabase بنجاح.',
+        keyMissing: 'يرجى استبدال YOUR_PUBLISHABLE_KEY_HERE في ملف index.html بمفتاح Publishable الخاص بـ Supabase.',
+        loadError: 'تعذر تحميل البيانات من Supabase: '
+      },
+      ru: {
+        appName: 'Fixa',
+        subtitle: 'Платформа технического обслуживания зданий и объектов',
+        langLabel: 'Язык:',
+        refresh: 'Обновить',
+        cardAssets: 'Активы',
+        cardWo: 'Заявки на работы',
+        cardPm: 'Плановое ТО',
+        formWoTitle: 'Новая заявка на работы',
+        btnWoSubmit: 'Добавить заявку',
+        phWoTitle: 'Например: Замена автомата защиты',
+        phWoSite: 'Например: Логистический центр',
+        optionalTransHint: 'Необязательные переводы EN / AR (заполняются автоматически для текущего языка):',
+        btnCopyToLangs: 'Копировать в EN и AR',
+        lblTitleEn: 'Название (EN)',
+        lblSiteEn: 'Объект (EN)',
+        lblTitleAr: 'Название (AR)',
+        lblSiteAr: 'Объект (AR)',
+        formAssetTitle: 'Новый актив',
+        btnAssetSubmit: 'Добавить актив',
+        lblAssetName: 'Название',
+        lblAssetCategory: 'Категория',
+        phAssetName: 'Например: Генератор 500kVA',
+        phAssetSite: 'Например: Логистический центр',
+        phAssetCategory: 'Например: Электроснабжение',
+        astTransHint: 'Необязательные переводы EN / AR для названия и объекта:',
+        lblNameEn: 'Название (EN)',
+        lblNameAr: 'Название (AR)',
+        assetCreated: 'Актив успешно добавлен.',
+        assetCreateError: 'Ошибка добавления актива: ',
+        editAssetTitle: 'Редактировать актив',
+        assetUpdated: 'Актив обновлён.',
+        assetUpdateError: 'Ошибка обновления актива: ',
+        confirmDeleteAsset: 'Вы уверены, что хотите удалить этот актив?',
+        assetDeleted: 'Актив удалён.',
+        assetDeleteError: 'Ошибка удаления актива: ',
+        formPmTitle: 'Новое плановое ТО',
+        btnPmSubmit: 'Добавить ТО',
+        lblPmFrequency: 'Периодичность',
+        lblPmTech: 'Техник',
+        phPmTitle: 'Например: Проверка фильтров ОВК',
+        phPmSite: 'Например: Логистический центр',
+        phPmFrequency: 'Например: Ежеквартально',
+        phPmTech: 'Например: Даниэль Леви',
+        pmTransHint: 'Необязательные переводы EN / AR для названия и объекта:',
+        pmCreated: 'Плановое ТО успешно добавлено.',
+        pmCreateError: 'Ошибка добавления планового ТО: ',
+        editPmTitle: 'Редактировать плановое ТО',
+        pmUpdated: 'Плановое ТО обновлено.',
+        pmUpdateError: 'Ошибка обновления планового ТО: ',
+        confirmDeletePm: 'Вы уверены, что хотите удалить этот пункт планового ТО?',
+        pmDeleted: 'Пункт планового ТО удалён.',
+        pmDeleteError: 'Ошибка удаления планового ТО: ',
+        woCreated: 'Заявка успешно добавлена.',
+        woCreateError: 'Ошибка добавления заявки: ',
+        woStatusUpdated: 'Статус заявки обновлён.',
+        woStatusError: 'Ошибка обновления статуса: ',
+        editWoTitle: 'Редактировать заявку',
+        btnWoSave: 'Сохранить',
+        btnWoCancel: 'Отмена',
+        btnEdit: 'Изменить',
+        btnDelete: 'Удалить',
+        confirmDeleteWo: 'Вы уверены, что хотите удалить эту заявку?',
+        woUpdated: 'Заявка обновлена.',
+        woUpdateError: 'Ошибка обновления заявки: ',
+        woDeleted: 'Заявка удалена.',
+        woDeleteError: 'Ошибка удаления заявки: ',
+        assetStatusUpdated: 'Статус актива обновлён.',
+        assetStatusError: 'Ошибка обновления статуса актива: ',
+        phWoSearch: 'Поиск по коду, названию или объекту...',
+        phAssetSearch: 'Поиск актива по имени, коду, объекту или категории...',
+        phPmSearch: 'Поиск ТО по коду, названию, объекту или технику...',
+        allPriorities: 'Все приоритеты',
+        allStatuses: 'Все статусы',
+        allFrequencies: 'Все интервалы',
+        resetFilters: 'Сбросить фильтры',
+        noMatchingWo: 'Подходящие заявки не найдены.',
+        noMatchingAssets: 'Подходящие активы не найдены.',
+        noMatchingPm: 'Подходящие пункты ТО не найдены.',
+        showingCount: 'Показано {shown} из {total}',
+        secWo: 'Заявки на работы',
+        secAssets: 'Активы и системы',
+        secPm: 'Плановое ТО',
+        thCode: 'Код',
+        thTitle: 'Название',
+        thSite: 'Объект',
+        thPriority: 'Приоритет',
+        thStatus: 'Статус',
+        thActions: 'Действия',
+        connected: 'Подключение к Supabase выполнено.',
+        keyMissing: 'Замените YOUR_PUBLISHABLE_KEY_HERE в index.html на ваш ключ Publishable из Supabase.',
+        loadError: 'Ошибка загрузки данных из Supabase: '
+      },
+      es: {
+        appName: 'Fixa',
+        subtitle: 'Plataforma de mantenimiento de edificios e instalaciones',
+        langLabel: 'Idioma:',
+        refresh: 'Actualizar',
+        cardAssets: 'Activos',
+        cardWo: 'Órdenes de trabajo',
+        cardPm: 'Mantenimiento preventivo',
+        formWoTitle: 'Nueva orden de trabajo',
+        btnWoSubmit: 'Agregar orden',
+        phWoTitle: 'Ej.: Reemplazar interruptor',
+        phWoSite: 'Ej.: Centro Logístico',
+        optionalTransHint: 'Traducciones EN / AR opcionales (se autocompletan para el idioma activo si se dejan vacías):',
+        btnCopyToLangs: 'Copiar a EN y AR',
+        lblTitleEn: 'Título (EN)',
+        lblSiteEn: 'Sitio (EN)',
+        lblTitleAr: 'Título (AR)',
+        lblSiteAr: 'Sitio (AR)',
+        formAssetTitle: 'Nuevo activo',
+        btnAssetSubmit: 'Agregar activo',
+        lblAssetName: 'Nombre',
+        lblAssetCategory: 'Categoría',
+        phAssetName: 'Ej.: Generador 500kVA',
+        phAssetSite: 'Ej.: Centro Logístico',
+        phAssetCategory: 'Ej.: Energía',
+        astTransHint: 'Traducciones EN / AR opcionales para nombre y sitio:',
+        lblNameEn: 'Nombre (EN)',
+        lblNameAr: 'Nombre (AR)',
+        assetCreated: 'Activo agregado correctamente.',
+        assetCreateError: 'Error al agregar el activo: ',
+        editAssetTitle: 'Editar activo',
+        assetUpdated: 'Activo actualizado.',
+        assetUpdateError: 'Error al actualizar el activo: ',
+        confirmDeleteAsset: '¿Seguro que deseas eliminar este activo?',
+        assetDeleted: 'Activo eliminado.',
+        assetDeleteError: 'Error al eliminar el activo: ',
+        formPmTitle: 'Nuevo mantenimiento preventivo',
+        btnPmSubmit: 'Agregar PM',
+        lblPmFrequency: 'Frecuencia',
+        lblPmTech: 'Técnico',
+        phPmTitle: 'Ej.: Revisión trimestral de filtros HVAC',
+        phPmSite: 'Ej.: Centro Logístico',
+        phPmFrequency: 'Ej.: Trimestral',
+        phPmTech: 'Ej.: Daniel Levi',
+        pmTransHint: 'Traducciones EN / AR opcionales para título y sitio:',
+        pmCreated: 'Mantenimiento preventivo agregado correctamente.',
+        pmCreateError: 'Error al agregar mantenimiento preventivo: ',
+        editPmTitle: 'Editar mantenimiento preventivo',
+        pmUpdated: 'Mantenimiento preventivo actualizado.',
+        pmUpdateError: 'Error al actualizar mantenimiento preventivo: ',
+        confirmDeletePm: '¿Seguro que deseas eliminar este mantenimiento preventivo?',
+        pmDeleted: 'Mantenimiento preventivo eliminado.',
+        pmDeleteError: 'Error al eliminar mantenimiento preventivo: ',
+        woCreated: 'Orden de trabajo agregada correctamente.',
+        woCreateError: 'Error al agregar la orden de trabajo: ',
+        woStatusUpdated: 'Estado de la orden actualizado.',
+        woStatusError: 'Error al actualizar el estado: ',
+        editWoTitle: 'Editar orden de trabajo',
+        btnWoSave: 'Guardar cambios',
+        btnWoCancel: 'Cancelar',
+        btnEdit: 'Editar',
+        btnDelete: 'Eliminar',
+        confirmDeleteWo: '¿Seguro que deseas eliminar esta orden de trabajo?',
+        woUpdated: 'Orden de trabajo actualizada.',
+        woUpdateError: 'Error al actualizar la orden: ',
+        woDeleted: 'Orden de trabajo eliminada.',
+        woDeleteError: 'Error al eliminar la orden: ',
+        assetStatusUpdated: 'Estado del activo actualizado.',
+        assetStatusError: 'Error al actualizar el estado del activo: ',
+        phWoSearch: 'Buscar por código, título o sitio...',
+        phAssetSearch: 'Buscar activo por nombre, código, sitio o categoría...',
+        phPmSearch: 'Buscar PM por código, título, sitio o técnico...',
+        allPriorities: 'Todas las prioridades',
+        allStatuses: 'Todos los estados',
+        allFrequencies: 'Todas las frecuencias',
+        resetFilters: 'Restablecer filtros',
+        noMatchingWo: 'No se encontraron órdenes de trabajo.',
+        noMatchingAssets: 'No se encontraron activos.',
+        noMatchingPm: 'No se encontraron mantenimientos preventivos.',
+        showingCount: 'Mostrando {shown} de {total}',
+        secWo: 'Órdenes de trabajo',
+        secAssets: 'Activos y sistemas',
+        secPm: 'Mantenimiento preventivo',
+        thCode: 'Código',
+        thTitle: 'Título',
+        thSite: 'Sitio',
+        thPriority: 'Prioridad',
+        thStatus: 'Estado',
+        thActions: 'Acciones',
+        connected: 'Conectado a Supabase correctamente.',
+        keyMissing: 'Reemplaza YOUR_PUBLISHABLE_KEY_HERE en index.html con tu clave Publishable de Supabase.',
+        loadError: 'Error al cargar datos desde Supabase: '
+      },
+      fr: {
+        appName: 'Fixa',
+        subtitle: 'Plateforme de maintenance des bâtiments et équipements',
+        langLabel: 'Langue :',
+        refresh: 'Actualiser',
+        cardAssets: 'Équipements',
+        cardWo: 'Ordres de travail',
+        cardPm: 'Maintenance préventive',
+        formWoTitle: 'Nouvel ordre de travail',
+        btnWoSubmit: 'Ajouter un ordre',
+        phWoTitle: 'Ex. : Remplacer le disjoncteur',
+        phWoSite: 'Ex. : Centre logistique',
+        optionalTransHint: 'Traductions EN / AR optionnelles (remplies automatiquement pour la langue active si vides) :',
+        btnCopyToLangs: 'Copier vers EN et AR',
+        lblTitleEn: 'Titre (EN)',
+        lblSiteEn: 'Site (EN)',
+        lblTitleAr: 'Titre (AR)',
+        lblSiteAr: 'Site (AR)',
+        formAssetTitle: 'Nouvel équipement',
+        btnAssetSubmit: 'Ajouter un équipement',
+        lblAssetName: 'Nom',
+        lblAssetCategory: 'Catégorie',
+        phAssetName: 'Ex. : Groupe électrogène 500kVA',
+        phAssetSite: 'Ex. : Centre logistique',
+        phAssetCategory: 'Ex. : Énergie',
+        astTransHint: 'Traductions EN / AR optionnelles pour le nom et le site :',
+        lblNameEn: 'Nom (EN)',
+        lblNameAr: 'Nom (AR)',
+        assetCreated: 'Équipement ajouté avec succès.',
+        assetCreateError: 'Impossible d’ajouter l’équipement : ',
+        editAssetTitle: 'Modifier l’équipement',
+        assetUpdated: 'Équipement mis à jour.',
+        assetUpdateError: 'Impossible de mettre à jour l’équipement : ',
+        confirmDeleteAsset: 'Voulez-vous vraiment supprimer cet équipement ?',
+        assetDeleted: 'Équipement supprimé.',
+        assetDeleteError: 'Impossible de supprimer l’équipement : ',
+        formPmTitle: 'Nouvelle maintenance préventive',
+        btnPmSubmit: 'Ajouter PM',
+        lblPmFrequency: 'Fréquence',
+        lblPmTech: 'Technicien',
+        phPmTitle: 'Ex. : Contrôle trimestriel des filtres CVC',
+        phPmSite: 'Ex. : Centre logistique',
+        phPmFrequency: 'Ex. : Trimestriel',
+        phPmTech: 'Ex. : Daniel Levi',
+        pmTransHint: 'Traductions EN / AR optionnelles pour le titre et le site :',
+        pmCreated: 'Maintenance préventive ajoutée avec succès.',
+        pmCreateError: 'Impossible d’ajouter la maintenance préventive : ',
+        editPmTitle: 'Modifier la maintenance préventive',
+        pmUpdated: 'Maintenance préventive mise à jour.',
+        pmUpdateError: 'Impossible de mettre à jour la maintenance préventive : ',
+        confirmDeletePm: 'Voulez-vous vraiment supprimer cette maintenance préventive ?',
+        pmDeleted: 'Maintenance préventive supprimée.',
+        pmDeleteError: 'Impossible de supprimer la maintenance préventive : ',
+        woCreated: 'Ordre de travail ajouté avec succès.',
+        woCreateError: 'Impossible d’ajouter l’ordre de travail : ',
+        woStatusUpdated: 'Statut de l’ordre mis à jour.',
+        woStatusError: 'Impossible de mettre à jour le statut : ',
+        editWoTitle: 'Modifier l’ordre de travail',
+        btnWoSave: 'Enregistrer',
+        btnWoCancel: 'Annuler',
+        btnEdit: 'Modifier',
+        btnDelete: 'Supprimer',
+        confirmDeleteWo: 'Voulez-vous vraiment supprimer cet ordre de travail ?',
+        woUpdated: 'Ordre de travail mis à jour.',
+        woUpdateError: 'Impossible de mettre à jour l’ordre : ',
+        woDeleted: 'Ordre de travail supprimé.',
+        woDeleteError: 'Impossible de supprimer l’ordre : ',
+        assetStatusUpdated: 'Statut de l’équipement mis à jour.',
+        assetStatusError: 'Impossible de mettre à jour le statut de l’équipement : ',
+        phWoSearch: 'Rechercher par code, titre ou site...',
+        phAssetSearch: 'Rechercher un équipement par nom, code, site ou catégorie...',
+        phPmSearch: 'Rechercher une PM par code, titre, site ou technicien...',
+        allPriorities: 'Toutes les priorités',
+        allStatuses: 'Tous les statuts',
+        allFrequencies: 'Toutes les fréquences',
+        resetFilters: 'Réinitialiser',
+        noMatchingWo: 'Aucun ordre de travail correspondant.',
+        noMatchingAssets: 'Aucun équipement correspondant.',
+        noMatchingPm: 'Aucune maintenance préventive correspondante.',
+        showingCount: 'Affichage de {shown} sur {total}',
+        secWo: 'Ordres de travail',
+        secAssets: 'Équipements et systèmes',
+        secPm: 'Maintenance préventive',
+        thCode: 'Code',
+        thTitle: 'Titre',
+        thSite: 'Site',
+        thPriority: 'Priorité',
+        thStatus: 'Statut',
+        thActions: 'Actions',
+        connected: 'Connexion à Supabase réussie.',
+        keyMissing: 'Remplacez YOUR_PUBLISHABLE_KEY_HERE dans index.html par votre clé Publishable Supabase.',
+        loadError: 'Impossible de charger les données depuis Supabase : '
+      },
+      it: {
+        appName: 'Fixa',
+        subtitle: 'Piattaforma di manutenzione edifici e impianti',
+        langLabel: 'Lingua:',
+        refresh: 'Aggiorna',
+        cardAssets: 'Asset',
+        cardWo: 'Ordini di lavoro',
+        cardPm: 'Manutenzione preventiva',
+        formWoTitle: 'Nuovo ordine di lavoro',
+        btnWoSubmit: 'Aggiungi ordine',
+        phWoTitle: 'Es.: Sostituzione interruttore',
+        phWoSite: 'Es.: Centro logistico',
+        optionalTransHint: 'Traduzioni EN / AR opzionali (compilate per la lingua attiva se lasciate vuote):',
+        btnCopyToLangs: 'Copia su EN e AR',
+        lblTitleEn: 'Titolo (EN)',
+        lblSiteEn: 'Sito (EN)',
+        lblTitleAr: 'Titolo (AR)',
+        lblSiteAr: 'Sito (AR)',
+        formAssetTitle: 'Nuovo asset',
+        btnAssetSubmit: 'Aggiungi asset',
+        lblAssetName: 'Nome',
+        lblAssetCategory: 'Categoria',
+        phAssetName: 'Es.: Generatore 500kVA',
+        phAssetSite: 'Es.: Centro logistico',
+        phAssetCategory: 'Es.: Energia',
+        astTransHint: 'Traduzioni EN / AR opzionali per nome e sito:',
+        lblNameEn: 'Nome (EN)',
+        lblNameAr: 'Nome (AR)',
+        assetCreated: 'Asset aggiunto con successo.',
+        assetCreateError: 'Impossibile aggiungere l’asset: ',
+        editAssetTitle: 'Modifica asset',
+        assetUpdated: 'Asset aggiornato.',
+        assetUpdateError: 'Impossibile aggiornare l’asset: ',
+        confirmDeleteAsset: 'Vuoi davvero eliminare questo asset?',
+        assetDeleted: 'Asset eliminato.',
+        assetDeleteError: 'Impossibile eliminare l’asset: ',
+        formPmTitle: 'Nuova manutenzione preventiva',
+        btnPmSubmit: 'Aggiungi PM',
+        lblPmFrequency: 'Frequenza',
+        lblPmTech: 'Tecnico',
+        phPmTitle: 'Es.: Controllo trimestrale filtri HVAC',
+        phPmSite: 'Es.: Centro logistico',
+        phPmFrequency: 'Es.: Trimestrale',
+        phPmTech: 'Es.: Daniel Levi',
+        pmTransHint: 'Traduzioni EN / AR opzionali per titolo e sito:',
+        pmCreated: 'Manutenzione preventiva aggiunta con successo.',
+        pmCreateError: 'Impossibile aggiungere la manutenzione preventiva: ',
+        editPmTitle: 'Modifica manutenzione preventiva',
+        pmUpdated: 'Manutenzione preventiva aggiornata.',
+        pmUpdateError: 'Impossibile aggiornare la manutenzione preventiva: ',
+        confirmDeletePm: 'Vuoi davvero eliminare questa manutenzione preventiva?',
+        pmDeleted: 'Manutenzione preventiva eliminata.',
+        pmDeleteError: 'Impossibile eliminare la manutenzione preventiva: ',
+        woCreated: 'Ordine di lavoro aggiunto con successo.',
+        woCreateError: 'Impossibile aggiungere l’ordine di lavoro: ',
+        woStatusUpdated: 'Stato dell’ordine aggiornato.',
+        woStatusError: 'Impossibile aggiornare lo stato: ',
+        editWoTitle: 'Modifica ordine di lavoro',
+        btnWoSave: 'Salva modifiche',
+        btnWoCancel: 'Annulla',
+        btnEdit: 'Modifica',
+        btnDelete: 'Elimina',
+        confirmDeleteWo: 'Vuoi davvero eliminare questo ordine di lavoro?',
+        woUpdated: 'Ordine di lavoro aggiornato.',
+        woUpdateError: 'Impossibile aggiornare l’ordine: ',
+        woDeleted: 'Ordine di lavoro eliminato.',
+        woDeleteError: 'Impossibile eliminare l’ordine: ',
+        assetStatusUpdated: 'Stato dell’asset aggiornato.',
+        assetStatusError: 'Impossibile aggiornare lo stato dell’asset: ',
+        phWoSearch: 'Cerca per codice, titolo o sito...',
+        phAssetSearch: 'Cerca asset per nome, codice, sito o categoria...',
+        phPmSearch: 'Cerca PM per codice, titolo, sito o tecnico...',
+        allPriorities: 'Tutte le priorità',
+        allStatuses: 'Tutti gli stati',
+        allFrequencies: 'Tutte le frequenze',
+        resetFilters: 'Reimposta filtri',
+        noMatchingWo: 'Nessun ordine di lavoro trovato.',
+        noMatchingAssets: 'Nessun asset trovato.',
+        noMatchingPm: 'Nessuna manutenzione preventiva trovata.',
+        showingCount: 'Mostrati {shown} di {total}',
+        secWo: 'Ordini di lavoro',
+        secAssets: 'Asset e sistemi',
+        secPm: 'Manutenzione preventiva',
+        thCode: 'Codice',
+        thTitle: 'Titolo',
+        thSite: 'Sito',
+        thPriority: 'Priorità',
+        thStatus: 'Stato',
+        thActions: 'Azioni',
+        connected: 'Connessione a Supabase riuscita.',
+        keyMissing: 'Sostituisci YOUR_PUBLISHABLE_KEY_HERE in index.html con la tua chiave Publishable di Supabase.',
+        loadError: 'Errore nel caricamento dati da Supabase: '
+      },
+      de: {
+        appName: 'Fixa',
+        subtitle: 'Plattform für Gebäude- und Anlagenwartung',
+        langLabel: 'Sprache:',
+        refresh: 'Aktualisieren',
+        cardAssets: 'Anlagen',
+        cardWo: 'Arbeitsaufträge',
+        cardPm: 'Vorbeugende Wartung',
+        formWoTitle: 'Neuer Arbeitsauftrag',
+        btnWoSubmit: 'Auftrag hinzufügen',
+        phWoTitle: 'Z. B.: Schutzschalter tauschen',
+        phWoSite: 'Z. B.: Logistikzentrum',
+        optionalTransHint: 'Optionale EN / AR Übersetzungen (bei aktiver Sprache automatisch ausgefüllt, wenn leer):',
+        btnCopyToLangs: 'In EN & AR kopieren',
+        lblTitleEn: 'Titel (EN)',
+        lblSiteEn: 'Standort (EN)',
+        lblTitleAr: 'Titel (AR)',
+        lblSiteAr: 'Standort (AR)',
+        formAssetTitle: 'Neue Anlage',
+        btnAssetSubmit: 'Anlage hinzufügen',
+        lblAssetName: 'Name',
+        lblAssetCategory: 'Kategorie',
+        phAssetName: 'Z. B.: Generator 500kVA',
+        phAssetSite: 'Z. B.: Logistikzentrum',
+        phAssetCategory: 'Z. B.: Stromversorgung',
+        astTransHint: 'Optionale EN / AR Übersetzungen für Name & Standort:',
+        lblNameEn: 'Name (EN)',
+        lblNameAr: 'Name (AR)',
+        assetCreated: 'Anlage erfolgreich hinzugefügt.',
+        assetCreateError: 'Anlage konnte nicht hinzugefügt werden: ',
+        editAssetTitle: 'Anlage bearbeiten',
+        assetUpdated: 'Anlage aktualisiert.',
+        assetUpdateError: 'Anlage konnte nicht aktualisiert werden: ',
+        confirmDeleteAsset: 'Möchten Sie diese Anlage wirklich löschen?',
+        assetDeleted: 'Anlage gelöscht.',
+        assetDeleteError: 'Anlage konnte nicht gelöscht werden: ',
+        formPmTitle: 'Neue vorbeugende Wartung',
+        btnPmSubmit: 'PM hinzufügen',
+        lblPmFrequency: 'Intervall',
+        lblPmTech: 'Techniker',
+        phPmTitle: 'Z. B.: Vierteljährliche Filterprüfung',
+        phPmSite: 'Z. B.: Logistikzentrum',
+        phPmFrequency: 'Z. B.: Vierteljährlich',
+        phPmTech: 'Z. B.: Daniel Levi',
+        pmTransHint: 'Optionale EN / AR Übersetzungen für Titel & Standort:',
+        pmCreated: 'Vorbeugende Wartung erfolgreich hinzugefügt.',
+        pmCreateError: 'Vorbeugende Wartung konnte nicht hinzugefügt werden: ',
+        editPmTitle: 'Vorbeugende Wartung bearbeiten',
+        pmUpdated: 'Vorbeugende Wartung aktualisiert.',
+        pmUpdateError: 'Vorbeugende Wartung konnte nicht aktualisiert werden: ',
+        confirmDeletePm: 'Möchten Sie diesen Wartungseintrag wirklich löschen?',
+        pmDeleted: 'Wartungseintrag gelöscht.',
+        pmDeleteError: 'Wartungseintrag konnte nicht gelöscht werden: ',
+        woCreated: 'Arbeitsauftrag erfolgreich hinzugefügt.',
+        woCreateError: 'Arbeitsauftrag konnte nicht hinzugefügt werden: ',
+        woStatusUpdated: 'Status des Arbeitsauftrags aktualisiert.',
+        woStatusError: 'Status konnte nicht aktualisiert werden: ',
+        editWoTitle: 'Arbeitsauftrag bearbeiten',
+        btnWoSave: 'Änderungen speichern',
+        btnWoCancel: 'Abbrechen',
+        btnEdit: 'Bearbeiten',
+        btnDelete: 'Löschen',
+        confirmDeleteWo: 'Möchten Sie diesen Arbeitsauftrag wirklich löschen?',
+        woUpdated: 'Arbeitsauftrag aktualisiert.',
+        woUpdateError: 'Arbeitsauftrag konnte nicht aktualisiert werden: ',
+        woDeleted: 'Arbeitsauftrag gelöscht.',
+        woDeleteError: 'Arbeitsauftrag konnte nicht gelöscht werden: ',
+        assetStatusUpdated: 'Status der Anlage aktualisiert.',
+        assetStatusError: 'Status der Anlage konnte nicht aktualisiert werden: ',
+        phWoSearch: 'Suche nach Code, Titel oder Standort...',
+        phAssetSearch: 'Anlage nach Name, Code, Standort oder Kategorie suchen...',
+        phPmSearch: 'PM nach Code, Titel, Standort oder Techniker suchen...',
+        allPriorities: 'Alle Prioritäten',
+        allStatuses: 'Alle Status',
+        allFrequencies: 'Alle Intervalle',
+        resetFilters: 'Filter zurücksetzen',
+        noMatchingWo: 'Keine passenden Arbeitsaufträge gefunden.',
+        noMatchingAssets: 'Keine passenden Anlagen gefunden.',
+        noMatchingPm: 'Keine passenden Wartungseinträge gefunden.',
+        showingCount: 'Zeige {shown} von {total}',
+        secWo: 'Arbeitsaufträge',
+        secAssets: 'Anlagen & Systeme',
+        secPm: 'Vorbeugende Wartung',
+        thCode: 'Code',
+        thTitle: 'Titel',
+        thSite: 'Standort',
+        thPriority: 'Priorität',
+        thStatus: 'Status',
+        thActions: 'Aktionen',
+        connected: 'Erfolgreich mit Supabase verbunden.',
+        keyMissing: 'Ersetzen Sie YOUR_PUBLISHABLE_KEY_HERE in index.html durch Ihren Supabase Publishable Key.',
+        loadError: 'Fehler beim Laden der Daten aus Supabase: '
+      }
+    };
+
+    const STATUS_MAP = {
+      'תקין': {
+        he: 'תקין',
+        ar: 'سليم',
+        en: 'Operational',
+        ru: 'Исправно',
+        es: 'Operativo',
+        fr: 'Opérationnel',
+        it: 'Operativo',
+        de: 'Betriebsbereit'
+      },
+      'operational': {
+        he: 'תקין',
+        ar: 'سليم',
+        en: 'Operational',
+        ru: 'Исправно',
+        es: 'Operativo',
+        fr: 'Opérationnel',
+        it: 'Operativo',
+        de: 'Betriebsbereit'
+      },
+      'בטיפול': {
+        he: 'בטיפול',
+        ar: 'قيد المعالجة',
+        en: 'In Progress',
+        ru: 'В работе',
+        es: 'En curso',
+        fr: 'En cours',
+        it: 'In corso',
+        de: 'In Bearbeitung'
+      },
+      'in progress': {
+        he: 'בטיפול',
+        ar: 'قيد المعالجة',
+        en: 'In Progress',
+        ru: 'В работе',
+        es: 'En curso',
+        fr: 'En cours',
+        it: 'In corso',
+        de: 'In Bearbeitung'
+      },
+      'דורש בדיקה': {
+        he: 'דורש בדיקה',
+        ar: 'يتطلب فحصًا',
+        en: 'Needs Inspection',
+        ru: 'Требует проверки',
+        es: 'Requiere inspección',
+        fr: 'Inspection requise',
+        it: 'Richiede ispezione',
+        de: 'Prüfung erforderlich'
+      },
+      'needs inspection': {
+        he: 'דורש בדיקה',
+        ar: 'يتطلب فحصًا',
+        en: 'Needs Inspection',
+        ru: 'Требует проверки',
+        es: 'Requiere inspección',
+        fr: 'Inspection requise',
+        it: 'Richiede ispezione',
+        de: 'Prüfung erforderlich'
+      }
+    };
+
+    const PRIORITY_MAP = {
+      'גבוה': {
+        he: 'גבוה',
+        ar: 'عالية',
+        en: 'High',
+        ru: 'Высокий',
+        es: 'Alta',
+        fr: 'Élevée',
+        it: 'Alta',
+        de: 'Hoch'
+      },
+      'high': {
+        he: 'גבוה',
+        ar: 'عالية',
+        en: 'High',
+        ru: 'Высокий',
+        es: 'Alta',
+        fr: 'Élevée',
+        it: 'Alta',
+        de: 'Hoch'
+      },
+      'בינוני': {
+        he: 'בינוני',
+        ar: 'متوسطة',
+        en: 'Medium',
+        ru: 'Средний',
+        es: 'Media',
+        fr: 'Moyenne',
+        it: 'Media',
+        de: 'Mittel'
+      },
+      'medium': {
+        he: 'בינוני',
+        ar: 'متوسطة',
+        en: 'Medium',
+        ru: 'Средний',
+        es: 'Media',
+        fr: 'Moyenne',
+        it: 'Media',
+        de: 'Mittel'
+      },
+      'נמוך': {
+        he: 'נמוך',
+        ar: 'منخفضة',
+        en: 'Low',
+        ru: 'Низкий',
+        es: 'Baja',
+        fr: 'Faible',
+        it: 'Bassa',
+        de: 'Niedrig'
+      },
+      'low': {
+        he: 'נמוך',
+        ar: 'منخفضة',
+        en: 'Low',
+        ru: 'Низкий',
+        es: 'Baja',
+        fr: 'Faible',
+        it: 'Bassa',
+        de: 'Niedrig'
+      }
+    };
+
+    function translateDbValue(value, map, lang) {
+      if (!value) return '';
+      const raw = String(value).trim();
+      const entry = map[raw] || map[raw.toLowerCase()];
+      if (!entry) return raw;
+      return entry[lang] || entry.en || raw;
+    }
+
+    function normalizeStatusKey(status) {
+      const raw = String(status || '').trim().toLowerCase();
+      if (raw === 'תקין' || raw === 'operational') return 'תקין';
+      if (raw === 'דורש בדיקה' || raw === 'needs inspection') return 'דורש בדיקה';
+      return 'בטיפול';
+    }
+
+    function normalizePriorityKey(priority) {
+      const raw = String(priority || '').trim().toLowerCase();
+      if (raw === 'גבוה' || raw === 'high') return 'גבוה';
+      if (raw === 'נמוך' || raw === 'low') return 'נמוך';
+      return 'בינוני';
+    }
+
+    function getAssetStatusBadgeClass(statusKey) {
+      if (statusKey === 'תקין') return 'bg-emerald-50 text-emerald-700 border-emerald-200';
+      if (statusKey === 'דורש בדיקה') return 'bg-amber-50 text-amber-800 border-amber-200';
+      return 'bg-blue-50 text-blue-700 border-blue-200';
+    }
+
+    function getLocalizedField(record, field, lang) {
+      if (!record) return '';
+      const localizedKey = `${field}_${lang}`;
+      const localizedVal = record[localizedKey];
+      if (typeof localizedVal === 'string' && localizedVal.trim() !== '') {
+        return localizedVal;
+      }
+      return record[field] || '';
+    }
+
+    function formatCountText(template, shown, total) {
+      return template.replace('{shown}', shown).replace('{total}', total);
+    }
+
+    function copyMainFieldsToTranslations() {
+      const title = document.getElementById('woTitleInput').value.trim();
+      const site = document.getElementById('woSiteInput').value.trim();
+
+      if (title) {
+        document.getElementById('woTitleEnInput').value = title;
+        document.getElementById('woTitleArInput').value = title;
+      }
+      if (site) {
+        document.getElementById('woSiteEnInput').value = site;
+        document.getElementById('woSiteArInput').value = site;
+      }
+    }
+
+    function copyAssetFieldsToTranslations() {
+      const name = document.getElementById('assetNameInput').value.trim();
+      const site = document.getElementById('assetSiteInput').value.trim();
+
+      if (name) {
+        document.getElementById('assetNameEnInput').value = name;
+        document.getElementById('assetNameArInput').value = name;
+      }
+      if (site) {
+        document.getElementById('assetSiteEnInput').value = site;
+        document.getElementById('assetSiteArInput').value = site;
+      }
+    }
+
+    function copyPmFieldsToTranslations() {
+      const title = document.getElementById('pmTitleInput').value.trim();
+      const site = document.getElementById('pmSiteInput').value.trim();
+
+      if (title) {
+        document.getElementById('pmTitleEnInput').value = title;
+        document.getElementById('pmTitleArInput').value = title;
+      }
+      if (site) {
+        document.getElementById('pmSiteEnInput').value = site;
+        document.getElementById('pmSiteArInput').value = site;
+      }
+    }
+
+    let currentLang = 'en';
+    let cachedWorkOrders = [];
+    let cachedAssets = [];
+    let cachedPmList = [];
+
+    function populatePmFrequencyOptions() {
+      const t = TRANSLATIONS[currentLang];
+      const selectEl = document.getElementById('pmFilterFreq');
+      const previousValue = selectEl.value;
+
+      const freqs = Array.from(
+        new Set(
+          cachedPmList
+            .map(pm => getLocalizedField(pm, 'frequency', currentLang).trim())
+            .filter(Boolean)
+        )
+      ).sort((a, b) => a.localeCompare(b));
+
+      selectEl.innerHTML = `<option value="ALL">${t.allFrequencies}</option>` +
+        freqs.map(freq => `<option value="${freq.replace(/"/g, '&quot;')}">${freq}</option>`).join('');
+
+      if (previousValue && Array.from(selectEl.options).some(opt => opt.value === previousValue)) {
+        selectEl.value = previousValue;
+      } else {
+        selectEl.value = 'ALL';
+      }
+    }
+
+    function applyLanguage(lang) {
+      currentLang = TRANSLATIONS[lang] ? lang : 'en';
+      const t = TRANSLATIONS[currentLang];
+      const isRtl = RTL_LANGS.includes(currentLang);
+
+      document.documentElement.lang = currentLang;
+      document.documentElement.dir = isRtl ? 'rtl' : 'ltr';
+      document.getElementById('langSelect').value = currentLang;
+
+      document.getElementById('t-app-name').textContent = t.appName;
+      document.getElementById('t-subtitle').textContent = t.subtitle;
+      document.getElementById('t-lang-label').textContent = t.langLabel;
+      document.getElementById('t-refresh').textContent = t.refresh;
+      document.getElementById('t-card-assets').textContent = t.cardAssets;
+      document.getElementById('t-card-wo').textContent = t.cardWo;
+      document.getElementById('t-card-pm').textContent = t.cardPm;
+
+      document.getElementById('t-form-wo-title').textContent = t.formWoTitle;
+      document.getElementById('lbl-wo-code').textContent = t.thCode;
+      document.getElementById('lbl-wo-title').textContent = t.thTitle;
+      document.getElementById('lbl-wo-site').textContent = t.thSite;
+      document.getElementById('lbl-wo-prio').textContent = t.thPriority;
+      document.getElementById('lbl-wo-status').textContent = t.thStatus;
+      document.getElementById('btn-wo-submit').textContent = t.btnWoSubmit;
+      document.getElementById('woTitleInput').placeholder = t.phWoTitle;
+      document.getElementById('woSiteInput').placeholder = t.phWoSite;
+
+      document.getElementById('t-optional-trans-hint').textContent = t.optionalTransHint;
+      document.getElementById('btn-copy-to-langs').textContent = t.btnCopyToLangs;
+      document.getElementById('lbl-wo-title-en').textContent = t.lblTitleEn;
+      document.getElementById('lbl-wo-site-en').textContent = t.lblSiteEn;
+      document.getElementById('lbl-wo-title-ar').textContent = t.lblTitleAr;
+      document.getElementById('lbl-wo-site-ar').textContent = t.lblSiteAr;
+
+      document.getElementById('t-form-asset-title').textContent = t.formAssetTitle;
+      document.getElementById('lbl-ast-code').textContent = t.thCode;
+      document.getElementById('lbl-ast-name').textContent = t.lblAssetName;
+      document.getElementById('lbl-ast-site').textContent = t.thSite;
+      document.getElementById('lbl-ast-cat').textContent = t.lblAssetCategory;
+      document.getElementById('lbl-ast-status').textContent = t.thStatus;
+      document.getElementById('btn-ast-submit').textContent = t.btnAssetSubmit;
+      document.getElementById('assetNameInput').placeholder = t.phAssetName;
+      document.getElementById('assetSiteInput').placeholder = t.phAssetSite;
+      document.getElementById('assetCategoryInput').placeholder = t.phAssetCategory;
+
+      document.getElementById('ast-opt-st-ok').textContent = translateDbValue('תקין', STATUS_MAP, currentLang);
+      document.getElementById('ast-opt-st-insp').textContent = translateDbValue('דורש בדיקה', STATUS_MAP, currentLang);
+      document.getElementById('ast-opt-st-prog').textContent = translateDbValue('בטיפול', STATUS_MAP, currentLang);
+
+      document.getElementById('t-ast-trans-hint').textContent = t.astTransHint;
+      document.getElementById('btn-ast-copy-to-langs').textContent = t.btnCopyToLangs;
+      document.getElementById('lbl-ast-name-en').textContent = t.lblNameEn;
+      document.getElementById('lbl-ast-site-en').textContent = t.lblSiteEn;
+      document.getElementById('lbl-ast-name-ar').textContent = t.lblNameAr;
+      document.getElementById('lbl-ast-site-ar').textContent = t.lblSiteAr;
+
+      document.getElementById('t-form-pm-title').textContent = t.formPmTitle;
+      document.getElementById('lbl-pm-code').textContent = t.thCode;
+      document.getElementById('lbl-pm-title').textContent = t.thTitle;
+      document.getElementById('lbl-pm-site').textContent = t.thSite;
+      document.getElementById('lbl-pm-freq').textContent = t.lblPmFrequency;
+      document.getElementById('lbl-pm-tech').textContent = t.lblPmTech;
+      document.getElementById('btn-pm-submit').textContent = t.btnPmSubmit;
+      document.getElementById('pmTitleInput').placeholder = t.phPmTitle;
+      document.getElementById('pmSiteInput').placeholder = t.phPmSite;
+      document.getElementById('pmFrequencyInput').placeholder = t.phPmFrequency;
+      document.getElementById('pmTechInput').placeholder = t.phPmTech;
+
+      document.getElementById('t-pm-trans-hint').textContent = t.pmTransHint;
+      document.getElementById('btn-pm-copy-to-langs').textContent = t.btnCopyToLangs;
+      document.getElementById('lbl-pm-title-en').textContent = t.lblTitleEn;
+      document.getElementById('lbl-pm-site-en').textContent = t.lblSiteEn;
+      document.getElementById('lbl-pm-title-ar').textContent = t.lblTitleAr;
+      document.getElementById('lbl-pm-site-ar').textContent = t.lblSiteAr;
+
+      document.getElementById('opt-prio-low').textContent = translateDbValue('נמוך', PRIORITY_MAP, currentLang);
+      document.getElementById('opt-prio-med').textContent = translateDbValue('בינוני', PRIORITY_MAP, currentLang);
+      document.getElementById('opt-prio-high').textContent = translateDbValue('גבוה', PRIORITY_MAP, currentLang);
+
+      document.getElementById('opt-st-prog').textContent = translateDbValue('בטיפול', STATUS_MAP, currentLang);
+      document.getElementById('opt-st-insp').textContent = translateDbValue('דורש בדיקה', STATUS_MAP, currentLang);
+      document.getElementById('opt-st-ok').textContent = translateDbValue('תקין', STATUS_MAP, currentLang);
+
+      document.getElementById('t-edit-wo-title').textContent = t.editWoTitle;
+      document.getElementById('edit-lbl-code').textContent = t.thCode;
+      document.getElementById('edit-lbl-title').textContent = t.thTitle;
+      document.getElementById('edit-lbl-site').textContent = t.thSite;
+      document.getElementById('edit-lbl-prio').textContent = t.thPriority;
+      document.getElementById('edit-lbl-status').textContent = t.thStatus;
+      document.getElementById('btn-wo-save').textContent = t.btnWoSave;
+      document.getElementById('btn-wo-cancel').textContent = t.btnWoCancel;
+
+      document.getElementById('edit-opt-prio-low').textContent = translateDbValue('נמוך', PRIORITY_MAP, currentLang);
+      document.getElementById('edit-opt-prio-med').textContent = translateDbValue('בינוני', PRIORITY_MAP, currentLang);
+      document.getElementById('edit-opt-prio-high').textContent = translateDbValue('גבוה', PRIORITY_MAP, currentLang);
+
+      document.getElementById('edit-opt-st-prog').textContent = translateDbValue('בטיפול', STATUS_MAP, currentLang);
+      document.getElementById('edit-opt-st-insp').textContent = translateDbValue('דורש בדיקה', STATUS_MAP, currentLang);
+      document.getElementById('edit-opt-st-ok').textContent = translateDbValue('תקין', STATUS_MAP, currentLang);
+
+      document.getElementById('t-edit-asset-title').textContent = t.editAssetTitle;
+      document.getElementById('edit-ast-lbl-code').textContent = t.thCode;
+      document.getElementById('edit-ast-lbl-name').textContent = t.lblAssetName;
+      document.getElementById('edit-ast-lbl-site').textContent = t.thSite;
+      document.getElementById('edit-ast-lbl-cat').textContent = t.lblAssetCategory;
+      document.getElementById('edit-ast-lbl-status').textContent = t.thStatus;
+      document.getElementById('btn-ast-save').textContent = t.btnWoSave;
+      document.getElementById('btn-ast-cancel').textContent = t.btnWoCancel;
+
+      document.getElementById('edit-ast-opt-ok').textContent = translateDbValue('תקין', STATUS_MAP, currentLang);
+      document.getElementById('edit-ast-opt-insp').textContent = translateDbValue('דורש בדיקה', STATUS_MAP, currentLang);
+      document.getElementById('edit-ast-opt-prog').textContent = translateDbValue('בטיפול', STATUS_MAP, currentLang);
+
+      document.getElementById('t-edit-pm-title').textContent = t.editPmTitle;
+      document.getElementById('edit-pm-lbl-code').textContent = t.thCode;
+      document.getElementById('edit-pm-lbl-title').textContent = t.thTitle;
+      document.getElementById('edit-pm-lbl-site').textContent = t.thSite;
+      document.getElementById('edit-pm-lbl-freq').textContent = t.lblPmFrequency;
+      document.getElementById('edit-pm-lbl-tech').textContent = t.lblPmTech;
+      document.getElementById('btn-pm-save').textContent = t.btnWoSave;
+      document.getElementById('btn-pm-cancel').textContent = t.btnWoCancel;
+
+      document.getElementById('woSearchInput').placeholder = t.phWoSearch;
+      document.getElementById('flt-wo-prio-all').textContent = t.allPriorities;
+      document.getElementById('flt-wo-prio-high').textContent = translateDbValue('גבוה', PRIORITY_MAP, currentLang);
+      document.getElementById('flt-wo-prio-med').textContent = translateDbValue('בינוני', PRIORITY_MAP, currentLang);
+      document.getElementById('flt-wo-prio-low').textContent = translateDbValue('נמוך', PRIORITY_MAP, currentLang);
+
+      document.getElementById('flt-wo-st-all').textContent = t.allStatuses;
+      document.getElementById('flt-wo-st-prog').textContent = translateDbValue('בטיפול', STATUS_MAP, currentLang);
+      document.getElementById('flt-wo-st-insp').textContent = translateDbValue('דורש בדיקה', STATUS_MAP, currentLang);
+      document.getElementById('flt-wo-st-ok').textContent = translateDbValue('תקין', STATUS_MAP, currentLang);
+      document.getElementById('btn-wo-reset-filters').textContent = t.resetFilters;
+
+      document.getElementById('assetSearchInput').placeholder = t.phAssetSearch;
+      document.getElementById('flt-ast-st-all').textContent = t.allStatuses;
+      document.getElementById('flt-ast-st-ok').textContent = translateDbValue('תקין', STATUS_MAP, currentLang);
+      document.getElementById('flt-ast-st-insp').textContent = translateDbValue('דורש בדיקה', STATUS_MAP, currentLang);
+      document.getElementById('flt-ast-st-prog').textContent = translateDbValue('בטיפול', STATUS_MAP, currentLang);
+
+      document.getElementById('pmSearchInput').placeholder = t.phPmSearch;
+      populatePmFrequencyOptions();
+
+      document.getElementById('t-sec-wo').textContent = t.secWo;
+      document.getElementById('t-sec-assets').textContent = t.secAssets;
+      document.getElementById('t-sec-pm').textContent = t.secPm;
+      document.getElementById('th-wo-num').textContent = t.thCode;
+      document.getElementById('th-wo-title').textContent = t.thTitle;
+      document.getElementById('th-wo-site').textContent = t.thSite;
+      document.getElementById('th-wo-prio').textContent = t.thPriority;
+      document.getElementById('th-wo-status').textContent = t.thStatus;
+      document.getElementById('th-wo-actions').textContent = t.thActions;
+    }
+
+    document.getElementById('langSelect').addEventListener('change', (e) => {
+      applyLanguage(e.target.value);
+      renderWorkOrders();
+      renderAssets();
+      renderPmList();
+    });
+
+    function resetWorkOrderFilters() {
+      document.getElementById('woSearchInput').value = '';
+      document.getElementById('woFilterPriority').value = 'ALL';
+      document.getElementById('woFilterStatus').value = 'ALL';
+      renderWorkOrders();
+    }
+
+    function renderWorkOrders() {
+      const t = TRANSLATIONS[currentLang];
+      const searchQuery = (document.getElementById('woSearchInput').value || '').trim().toLowerCase();
+      const priorityFilter = document.getElementById('woFilterPriority').value;
+      const statusFilter = document.getElementById('woFilterStatus').value;
+
+      const filtered = cachedWorkOrders.filter(wo => {
+        const woPriorityKey = normalizePriorityKey(wo.priority);
+        const woStatusKey = normalizeStatusKey(wo.status);
+
+        if (priorityFilter !== 'ALL' && woPriorityKey !== priorityFilter) return false;
+        if (statusFilter !== 'ALL' && woStatusKey !== statusFilter) return false;
+
+        if (searchQuery) {
+          const code = String(wo.wo_number || '').toLowerCase();
+          const titleLocalized = getLocalizedField(wo, 'title', currentLang).toLowerCase();
+          const titleRaw = String(wo.title || '').toLowerCase();
+          const siteLocalized = getLocalizedField(wo, 'site_name', currentLang).toLowerCase();
+          const siteRaw = String(wo.site_name || '').toLowerCase();
+
+          const matches =
+            code.includes(searchQuery) ||
+            titleLocalized.includes(searchQuery) ||
+            titleRaw.includes(searchQuery) ||
+            siteLocalized.includes(searchQuery) ||
+            siteRaw.includes(searchQuery);
+
+          if (!matches) return false;
+        }
+
+        return true;
+      });
+
+      document.getElementById('woFilteredCount').textContent = formatCountText(
+        t.showingCount,
+        filtered.length,
+        cachedWorkOrders.length
+      );
+
+      const woBody = document.getElementById('woTableBody');
+      if (filtered.length === 0) {
+        woBody.innerHTML = `
+          <tr>
+            <td colspan="6" class="py-4 px-3 text-center text-slate-500">${t.noMatchingWo}</td>
+          </tr>
+        `;
+        return;
+      }
+
+      woBody.innerHTML = filtered.map(wo => {
+        const currentStatus = normalizeStatusKey(wo.status);
+        const safeId = wo.id ? `'${String(wo.id).replace(/'/g, "\\'")}'` : 'null';
+        const safeNum = `'${String(wo.wo_number || '').replace(/'/g, "\\'")}'`;
+
+        return `
+          <tr>
+            <td class="py-2.5 px-3 font-medium">${wo.wo_number || ''}</td>
+            <td class="py-2.5 px-3">${getLocalizedField(wo, 'title', currentLang)}</td>
+            <td class="py-2.5 px-3">${getLocalizedField(wo, 'site_name', currentLang)}</td>
+            <td class="py-2.5 px-3">${translateDbValue(wo.priority, PRIORITY_MAP, currentLang)}</td>
+            <td class="py-2.5 px-3">
+              <select
+                onchange="updateWorkOrderStatus(${safeId}, ${safeNum}, this.value)"
+                class="px-2.5 py-1 rounded-full text-xs font-medium bg-slate-100 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
+              >
+                <option value="בטיפול" ${currentStatus === 'בטיפול' ? 'selected' : ''}>${translateDbValue('בטיפול', STATUS_MAP, currentLang)}</option>
+                <option value="דורש בדיקה" ${currentStatus === 'דורש בדיקה' ? 'selected' : ''}>${translateDbValue('דורש בדיקה', STATUS_MAP, currentLang)}</option>
+                <option value="תקין" ${currentStatus === 'תקין' ? 'selected' : ''}>${translateDbValue('תקין', STATUS_MAP, currentLang)}</option>
+              </select>
+            </td>
+            <td class="py-2.5 px-3">
+              <div class="flex items-center gap-1.5">
+                <button
+                  type="button"
+                  onclick="openEditWorkOrder(${safeNum})"
+                  class="px-2.5 py-1 rounded-lg text-xs font-medium bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 transition"
+                >${t.btnEdit}</button>
+                <button
+                  type="button"
+                  onclick="deleteWorkOrder(${safeId}, ${safeNum})"
+                  class="px-2.5 py-1 rounded-lg text-xs font-medium bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 transition"
+                >${t.btnDelete}</button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function renderAssets() {
+      const t = TRANSLATIONS[currentLang];
+      const searchQuery = (document.getElementById('assetSearchInput').value || '').trim().toLowerCase();
+      const statusFilter = document.getElementById('assetFilterStatus').value;
+
+      const filtered = cachedAssets.filter(a => {
+        const assetStatusKey = normalizeStatusKey(a.status);
+        if (statusFilter !== 'ALL' && assetStatusKey !== statusFilter) return false;
+
+        if (searchQuery) {
+          const code = String(a.asset_code || '').toLowerCase();
+          const nameLocalized = getLocalizedField(a, 'name', currentLang).toLowerCase();
+          const nameRaw = String(a.name || '').toLowerCase();
+          const siteLocalized = getLocalizedField(a, 'site_name', currentLang).toLowerCase();
+          const siteRaw = String(a.site_name || '').toLowerCase();
+          const catLocalized = getLocalizedField(a, 'category', currentLang).toLowerCase();
+          const catRaw = String(a.category || '').toLowerCase();
+
+          const matches =
+            code.includes(searchQuery) ||
+            nameLocalized.includes(searchQuery) ||
+            nameRaw.includes(searchQuery) ||
+            siteLocalized.includes(searchQuery) ||
+            siteRaw.includes(searchQuery) ||
+            catLocalized.includes(searchQuery) ||
+            catRaw.includes(searchQuery);
+
+          if (!matches) return false;
+        }
+
+        return true;
+      });
+
+      document.getElementById('assetsFilteredCount').textContent = formatCountText(
+        t.showingCount,
+        filtered.length,
+        cachedAssets.length
+      );
+
+      const assetsListEl = document.getElementById('assetsList');
+      if (filtered.length === 0) {
+        assetsListEl.innerHTML = `<li class="p-3 rounded-xl bg-slate-50 border border-slate-200 text-center text-slate-500">${t.noMatchingAssets}</li>`;
+        return;
+      }
+
+      assetsListEl.innerHTML = filtered.map(a => {
+        const currentStatus = normalizeStatusKey(a.status);
+        const safeId = a.id ? `'${String(a.id).replace(/'/g, "\\'")}'` : 'null';
+        const safeCode = `'${String(a.asset_code || '').replace(/'/g, "\\'")}'`;
+        const badgeClass = getAssetStatusBadgeClass(currentStatus);
+
+        return `
+          <li class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <div class="font-semibold">${getLocalizedField(a, 'name', currentLang)} <span class="text-xs text-slate-500">(${a.asset_code || ''})</span></div>
+              <div class="text-xs text-slate-500">${getLocalizedField(a, 'site_name', currentLang)} • ${getLocalizedField(a, 'category', currentLang)}</div>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <select
+                onchange="updateAssetStatus(${safeId}, ${safeCode}, this.value)"
+                class="text-xs font-semibold px-2.5 py-1 rounded-full border cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 ${badgeClass}"
+              >
+                <option value="תקין" ${currentStatus === 'תקין' ? 'selected' : ''}>${translateDbValue('תקין', STATUS_MAP, currentLang)}</option>
+                <option value="דורש בדיקה" ${currentStatus === 'דורש בדיקה' ? 'selected' : ''}>${translateDbValue('דורש בדיקה', STATUS_MAP, currentLang)}</option>
+                <option value="בטיפול" ${currentStatus === 'בטיפול' ? 'selected' : ''}>${translateDbValue('בטיפול', STATUS_MAP, currentLang)}</option>
+              </select>
+              <button
+                type="button"
+                onclick="openEditAsset(${safeCode})"
+                class="px-2.5 py-1 rounded-lg text-xs font-medium bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 transition"
+              >${t.btnEdit}</button>
+              <button
+                type="button"
+                onclick="deleteAsset(${safeId}, ${safeCode})"
+                class="px-2.5 py-1 rounded-lg text-xs font-medium bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 transition"
+              >${t.btnDelete}</button>
+            </div>
+          </li>
+        `;
+      }).join('');
+    }
+
+    function renderPmList() {
+      const t = TRANSLATIONS[currentLang];
+      const searchQuery = (document.getElementById('pmSearchInput').value || '').trim().toLowerCase();
+      const freqFilter = document.getElementById('pmFilterFreq').value;
+
+      const filtered = cachedPmList.filter(pm => {
+        const freqLocalized = getLocalizedField(pm, 'frequency', currentLang).trim();
+        if (freqFilter !== 'ALL' && freqLocalized !== freqFilter) return false;
+
+        if (searchQuery) {
+          const code = String(pm.pm_code || '').toLowerCase();
+          const titleLocalized = getLocalizedField(pm, 'title', currentLang).toLowerCase();
+          const titleRaw = String(pm.title || '').toLowerCase();
+          const siteLocalized = getLocalizedField(pm, 'site_name', currentLang).toLowerCase();
+          const siteRaw = String(pm.site_name || '').toLowerCase();
+          const techLocalized = getLocalizedField(pm, 'assigned_technician', currentLang).toLowerCase();
+          const techRaw = String(pm.assigned_technician || '').toLowerCase();
+
+          const matches =
+            code.includes(searchQuery) ||
+            titleLocalized.includes(searchQuery) ||
+            titleRaw.includes(searchQuery) ||
+            siteLocalized.includes(searchQuery) ||
+            siteRaw.includes(searchQuery) ||
+            techLocalized.includes(searchQuery) ||
+            techRaw.includes(searchQuery);
+
+          if (!matches) return false;
+        }
+
+        return true;
+      });
+
+      document.getElementById('pmFilteredCount').textContent = formatCountText(
+        t.showingCount,
+        filtered.length,
+        cachedPmList.length
+      );
+
+      const pmListEl = document.getElementById('pmList');
+      if (filtered.length === 0) {
+        pmListEl.innerHTML = `<li class="p-3 rounded-xl bg-slate-50 border border-slate-200 text-center text-slate-500">${t.noMatchingPm}</li>`;
+        return;
+      }
+
+      pmListEl.innerHTML = filtered.map(pm => {
+        const safeId = pm.id ? `'${String(pm.id).replace(/'/g, "\\'")}'` : 'null';
+        const safeCode = `'${String(pm.pm_code || '').replace(/'/g, "\\'")}'`;
+
+        return `
+          <li class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex flex-wrap items-center justify-between gap-2">
+            <div>
+              <div class="font-semibold">${getLocalizedField(pm, 'title', currentLang)} <span class="text-xs text-slate-500">(${pm.pm_code || ''})</span></div>
+              <div class="text-xs text-slate-500">${getLocalizedField(pm, 'site_name', currentLang)} • ${getLocalizedField(pm, 'frequency', currentLang)}</div>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="text-xs text-slate-600 px-2">${getLocalizedField(pm, 'assigned_technician', currentLang)}</span>
+              <button
+                type="button"
+                onclick="openEditPm(${safeCode})"
+                class="px-2.5 py-1 rounded-lg text-xs font-medium bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 transition"
+              >${t.btnEdit}</button>
+              <button
+                type="button"
+                onclick="deletePm(${safeId}, ${safeCode})"
+                class="px-2.5 py-1 rounded-lg text-xs font-medium bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 transition"
+              >${t.btnDelete}</button>
+            </div>
+          </li>
+        `;
+      }).join('');
+    }
+
+    function openEditAsset(assetCode) {
+      const asset = cachedAssets.find(item => String(item.asset_code) === String(assetCode));
+      if (!asset) return;
+
+      document.getElementById('editAssetId').value = asset.id || '';
+      document.getElementById('editAssetOriginalCode').value = asset.asset_code || '';
+      document.getElementById('editAssetCodeInput').value = asset.asset_code || '';
+      document.getElementById('editAssetNameInput').value = getLocalizedField(asset, 'name', currentLang) || asset.name || '';
+      document.getElementById('editAssetSiteInput').value = getLocalizedField(asset, 'site_name', currentLang) || asset.site_name || '';
+      document.getElementById('editAssetCategoryInput').value = getLocalizedField(asset, 'category', currentLang) || asset.category || '';
+      document.getElementById('editAssetStatusSelect').value = normalizeStatusKey(asset.status);
+
+      const section = document.getElementById('editAssetSection');
+      section.classList.remove('hidden');
+      section.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function closeEditAsset() {
+      document.getElementById('editAssetSection').classList.add('hidden');
+      document.getElementById('editAssetForm').reset();
+    }
+
+    async function saveAssetEdit(event) {
+      event.preventDefault();
+      const t = TRANSLATIONS[currentLang];
+      const banner = document.getElementById('statusBanner');
+
+      if (!SUPABASE_KEY || SUPABASE_KEY === 'YOUR_PUBLISHABLE_KEY_HERE') {
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-amber-50 text-amber-800 border border-amber-200';
+        banner.textContent = t.keyMissing;
+        return;
+      }
+
+      const assetId = document.getElementById('editAssetId').value.trim();
+      const originalCode = document.getElementById('editAssetOriginalCode').value.trim();
+      const asset_code = document.getElementById('editAssetCodeInput').value.trim();
+      const name = document.getElementById('editAssetNameInput').value.trim();
+      const site_name = document.getElementById('editAssetSiteInput').value.trim();
+      const category = document.getElementById('editAssetCategoryInput').value.trim();
+      const status = document.getElementById('editAssetStatusSelect').value;
+
+      if (!asset_code || !name || !site_name || !category) return;
+
+      const updatePayload = { asset_code, name, site_name, category, status };
+      if (currentLang !== 'he' && TRANSLATIONS[currentLang]) {
+        updatePayload[`name_${currentLang}`] = name;
+        updatePayload[`site_name_${currentLang}`] = site_name;
+      }
+
+      const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+      try {
+        let query = client.from('assets').update(updatePayload);
+        if (assetId) {
+          query = query.eq('id', assetId);
+        } else {
+          query = query.eq('asset_code', originalCode);
+        }
+
+        const { error } = await query;
+        if (error) throw error;
+
+        closeEditAsset();
+        await loadAllData();
+
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-emerald-50 text-emerald-800 border border-emerald-200';
+        banner.textContent = t.assetUpdated;
+      } catch (err) {
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-red-50 text-red-800 border border-red-200';
+        banner.textContent = t.assetUpdateError + (err.message || err);
+      }
+    }
+
+    async function deleteAsset(assetId, assetCode) {
+      const t = TRANSLATIONS[currentLang];
+      const banner = document.getElementById('statusBanner');
+
+      if (!window.confirm(t.confirmDeleteAsset)) return;
+
+      if (!SUPABASE_KEY || SUPABASE_KEY === 'YOUR_PUBLISHABLE_KEY_HERE') {
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-amber-50 text-amber-800 border border-amber-200';
+        banner.textContent = t.keyMissing;
+        return;
+      }
+
+      const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+      try {
+        let query = client.from('assets').delete();
+        if (assetId) {
+          query = query.eq('id', assetId);
+        } else {
+          query = query.eq('asset_code', assetCode);
+        }
+
+        const { error } = await query;
+        if (error) throw error;
+
+        const editingCode = document.getElementById('editAssetOriginalCode').value;
+        if (editingCode && String(editingCode) === String(assetCode)) {
+          closeEditAsset();
+        }
+
+        await loadAllData();
+
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-emerald-50 text-emerald-800 border border-emerald-200';
+        banner.textContent = t.assetDeleted;
+      } catch (err) {
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-red-50 text-red-800 border border-red-200';
+        banner.textContent = t.assetDeleteError + (err.message || err);
+      }
+    }
+
+    function openEditPm(pmCode) {
+      const pm = cachedPmList.find(item => String(item.pm_code) === String(pmCode));
+      if (!pm) return;
+
+      document.getElementById('editPmId').value = pm.id || '';
+      document.getElementById('editPmOriginalCode').value = pm.pm_code || '';
+      document.getElementById('editPmCodeInput').value = pm.pm_code || '';
+      document.getElementById('editPmTitleInput').value = getLocalizedField(pm, 'title', currentLang) || pm.title || '';
+      document.getElementById('editPmSiteInput').value = getLocalizedField(pm, 'site_name', currentLang) || pm.site_name || '';
+      document.getElementById('editPmFrequencyInput').value = getLocalizedField(pm, 'frequency', currentLang) || pm.frequency || '';
+      document.getElementById('editPmTechInput').value = getLocalizedField(pm, 'assigned_technician', currentLang) || pm.assigned_technician || '';
+
+      const section = document.getElementById('editPmSection');
+      section.classList.remove('hidden');
+      section.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function closeEditPm() {
+      document.getElementById('editPmSection').classList.add('hidden');
+      document.getElementById('editPmForm').reset();
+    }
+
+    async function savePmEdit(event) {
+      event.preventDefault();
+      const t = TRANSLATIONS[currentLang];
+      const banner = document.getElementById('statusBanner');
+
+      if (!SUPABASE_KEY || SUPABASE_KEY === 'YOUR_PUBLISHABLE_KEY_HERE') {
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-amber-50 text-amber-800 border border-amber-200';
+        banner.textContent = t.keyMissing;
+        return;
+      }
+
+      const pmId = document.getElementById('editPmId').value.trim();
+      const originalCode = document.getElementById('editPmOriginalCode').value.trim();
+      const pm_code = document.getElementById('editPmCodeInput').value.trim();
+      const title = document.getElementById('editPmTitleInput').value.trim();
+      const site_name = document.getElementById('editPmSiteInput').value.trim();
+      const frequency = document.getElementById('editPmFrequencyInput').value.trim();
+      const assigned_technician = document.getElementById('editPmTechInput').value.trim();
+
+      if (!pm_code || !title || !site_name || !frequency || !assigned_technician) return;
+
+      const updatePayload = { pm_code, title, site_name, frequency, assigned_technician };
+      if (currentLang !== 'he' && TRANSLATIONS[currentLang]) {
+        updatePayload[`title_${currentLang}`] = title;
+        updatePayload[`site_name_${currentLang}`] = site_name;
+      }
+
+      const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+      try {
+        let query = client.from('preventive_maintenance').update(updatePayload);
+        if (pmId) {
+          query = query.eq('id', pmId);
+        } else {
+          query = query.eq('pm_code', originalCode);
+        }
+
+        const { error } = await query;
+        if (error) throw error;
+
+        closeEditPm();
+        await loadAllData();
+
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-emerald-50 text-emerald-800 border border-emerald-200';
+        banner.textContent = t.pmUpdated;
+      } catch (err) {
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-red-50 text-red-800 border border-red-200';
+        banner.textContent = t.pmUpdateError + (err.message || err);
+      }
+    }
+
+    async function deletePm(pmId, pmCode) {
+      const t = TRANSLATIONS[currentLang];
+      const banner = document.getElementById('statusBanner');
+
+      if (!window.confirm(t.confirmDeletePm)) return;
+
+      if (!SUPABASE_KEY || SUPABASE_KEY === 'YOUR_PUBLISHABLE_KEY_HERE') {
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-amber-50 text-amber-800 border border-amber-200';
+        banner.textContent = t.keyMissing;
+        return;
+      }
+
+      const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+      try {
+        let query = client.from('preventive_maintenance').delete();
+        if (pmId) {
+          query = query.eq('id', pmId);
+        } else {
+          query = query.eq('pm_code', pmCode);
+        }
+
+        const { error } = await query;
+        if (error) throw error;
+
+        const editingCode = document.getElementById('editPmOriginalCode').value;
+        if (editingCode && String(editingCode) === String(pmCode)) {
+          closeEditPm();
+        }
+
+        await loadAllData();
+
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-emerald-50 text-emerald-800 border border-emerald-200';
+        banner.textContent = t.pmDeleted;
+      } catch (err) {
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-red-50 text-red-800 border border-red-200';
+        banner.textContent = t.pmDeleteError + (err.message || err);
+      }
+    }
+
+    async function createPm(event) {
+      event.preventDefault();
+      const t = TRANSLATIONS[currentLang];
+      const banner = document.getElementById('statusBanner');
+
+      if (!SUPABASE_KEY || SUPABASE_KEY === 'YOUR_PUBLISHABLE_KEY_HERE') {
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-amber-50 text-amber-800 border border-amber-200';
+        banner.textContent = t.keyMissing;
+        return;
+      }
+
+      const pm_code = document.getElementById('pmCodeInput').value.trim();
+      const title = document.getElementById('pmTitleInput').value.trim();
+      const site_name = document.getElementById('pmSiteInput').value.trim();
+      const frequency = document.getElementById('pmFrequencyInput').value.trim();
+      const assigned_technician = document.getElementById('pmTechInput').value.trim();
+
+      const titleEnInput = document.getElementById('pmTitleEnInput').value.trim();
+      const siteEnInput = document.getElementById('pmSiteEnInput').value.trim();
+      const titleArInput = document.getElementById('pmTitleArInput').value.trim();
+      const siteArInput = document.getElementById('pmSiteArInput').value.trim();
+
+      if (!pm_code || !title || !site_name || !frequency || !assigned_technician) return;
+
+      const nextDueDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
+      const payload = {
+        pm_code,
+        title,
+        site_name,
+        frequency,
+        assigned_technician,
+        next_due_at: nextDueDate
+      };
+
+      if (titleEnInput) {
+        payload.title_en = titleEnInput;
+      } else if (currentLang === 'en') {
+        payload.title_en = title;
+      }
+
+      if (siteEnInput) {
+        payload.site_name_en = siteEnInput;
+      } else if (currentLang === 'en') {
+        payload.site_name_en = site_name;
+      }
+
+      if (titleArInput) {
+        payload.title_ar = titleArInput;
+      } else if (currentLang === 'ar') {
+        payload.title_ar = title;
+      }
+
+      if (siteArInput) {
+        payload.site_name_ar = siteArInput;
+      } else if (currentLang === 'ar') {
+        payload.site_name_ar = site_name;
+      }
+
+      if (currentLang !== 'he' && currentLang !== 'en' && currentLang !== 'ar' && TRANSLATIONS[currentLang]) {
+        payload[`title_${currentLang}`] = title;
+        payload[`site_name_${currentLang}`] = site_name;
+      }
+
+      const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+      try {
+        const { error } = await client.from('preventive_maintenance').insert([payload]);
+        if (error) throw error;
+
+        document.getElementById('pmForm').reset();
+        await loadAllData();
+
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-emerald-50 text-emerald-800 border border-emerald-200';
+        banner.textContent = t.pmCreated;
+      } catch (err) {
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-red-50 text-red-800 border border-red-200';
+        banner.textContent = t.pmCreateError + (err.message || err);
+      }
+    }
+
+    async function createAsset(event) {
+      event.preventDefault();
+      const t = TRANSLATIONS[currentLang];
+      const banner = document.getElementById('statusBanner');
+
+      if (!SUPABASE_KEY || SUPABASE_KEY === 'YOUR_PUBLISHABLE_KEY_HERE') {
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-amber-50 text-amber-800 border border-amber-200';
+        banner.textContent = t.keyMissing;
+        return;
+      }
+
+      const asset_code = document.getElementById('assetCodeInput').value.trim();
+      const name = document.getElementById('assetNameInput').value.trim();
+      const site_name = document.getElementById('assetSiteInput').value.trim();
+      const category = document.getElementById('assetCategoryInput').value.trim();
+      const status = document.getElementById('assetStatusSelect').value;
+
+      const nameEnInput = document.getElementById('assetNameEnInput').value.trim();
+      const siteEnInput = document.getElementById('assetSiteEnInput').value.trim();
+      const nameArInput = document.getElementById('assetNameArInput').value.trim();
+      const siteArInput = document.getElementById('assetSiteArInput').value.trim();
+
+      if (!asset_code || !name || !site_name || !category) return;
+
+      const payload = { asset_code, name, site_name, category, status };
+
+      if (nameEnInput) {
+        payload.name_en = nameEnInput;
+      } else if (currentLang === 'en') {
+        payload.name_en = name;
+      }
+
+      if (siteEnInput) {
+        payload.site_name_en = siteEnInput;
+      } else if (currentLang === 'en') {
+        payload.site_name_en = site_name;
+      }
+
+      if (nameArInput) {
+        payload.name_ar = nameArInput;
+      } else if (currentLang === 'ar') {
+        payload.name_ar = name;
+      }
+
+      if (siteArInput) {
+        payload.site_name_ar = siteArInput;
+      } else if (currentLang === 'ar') {
+        payload.site_name_ar = site_name;
+      }
+
+      if (currentLang !== 'he' && currentLang !== 'en' && currentLang !== 'ar' && TRANSLATIONS[currentLang]) {
+        payload[`name_${currentLang}`] = name;
+        payload[`site_name_${currentLang}`] = site_name;
+      }
+
+      const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+      try {
+        const { error } = await client.from('assets').insert([payload]);
+        if (error) throw error;
+
+        document.getElementById('assetForm').reset();
+        await loadAllData();
+
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-emerald-50 text-emerald-800 border border-emerald-200';
+        banner.textContent = t.assetCreated;
+      } catch (err) {
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-red-50 text-red-800 border border-red-200';
+        banner.textContent = t.assetCreateError + (err.message || err);
+      }
+    }
+
+    function openEditWorkOrder(woNumber) {
+      const wo = cachedWorkOrders.find(item => String(item.wo_number) === String(woNumber));
+      if (!wo) return;
+
+      document.getElementById('editWoId').value = wo.id || '';
+      document.getElementById('editWoOriginalNum').value = wo.wo_number || '';
+      document.getElementById('editWoCodeInput').value = wo.wo_number || '';
+      document.getElementById('editWoTitleInput').value = getLocalizedField(wo, 'title', currentLang) || wo.title || '';
+      document.getElementById('editWoSiteInput').value = getLocalizedField(wo, 'site_name', currentLang) || wo.site_name || '';
+      document.getElementById('editWoPrioritySelect').value = normalizePriorityKey(wo.priority);
+      document.getElementById('editWoStatusSelect').value = normalizeStatusKey(wo.status);
+
+      const section = document.getElementById('editWoSection');
+      section.classList.remove('hidden');
+      section.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function closeEditWorkOrder() {
+      document.getElementById('editWoSection').classList.add('hidden');
+      document.getElementById('editWoForm').reset();
+    }
+
+    async function saveWorkOrderEdit(event) {
+      event.preventDefault();
+      const t = TRANSLATIONS[currentLang];
+      const banner = document.getElementById('statusBanner');
+
+      if (!SUPABASE_KEY || SUPABASE_KEY === 'YOUR_PUBLISHABLE_KEY_HERE') {
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-amber-50 text-amber-800 border border-amber-200';
+        banner.textContent = t.keyMissing;
+        return;
+      }
+
+      const woId = document.getElementById('editWoId').value.trim();
+      const originalNum = document.getElementById('editWoOriginalNum').value.trim();
+      const wo_number = document.getElementById('editWoCodeInput').value.trim();
+      const title = document.getElementById('editWoTitleInput').value.trim();
+      const site_name = document.getElementById('editWoSiteInput').value.trim();
+      const priority = document.getElementById('editWoPrioritySelect').value;
+      const status = document.getElementById('editWoStatusSelect').value;
+
+      if (!wo_number || !title || !site_name) return;
+
+      const updatePayload = { wo_number, title, site_name, priority, status };
+      if (currentLang !== 'he' && TRANSLATIONS[currentLang]) {
+        updatePayload[`title_${currentLang}`] = title;
+        updatePayload[`site_name_${currentLang}`] = site_name;
+      }
+
+      const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+      try {
+        let query = client.from('work_orders').update(updatePayload);
+        if (woId) {
+          query = query.eq('id', woId);
+        } else {
+          query = query.eq('wo_number', originalNum);
+        }
+
+        const { error } = await query;
+        if (error) throw error;
+
+        closeEditWorkOrder();
+        await loadAllData();
+
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-emerald-50 text-emerald-800 border border-emerald-200';
+        banner.textContent = t.woUpdated;
+      } catch (err) {
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-red-50 text-red-800 border border-red-200';
+        banner.textContent = t.woUpdateError + (err.message || err);
+      }
+    }
+
+    async function deleteWorkOrder(woId, woNumber) {
+      const t = TRANSLATIONS[currentLang];
+      const banner = document.getElementById('statusBanner');
+
+      if (!window.confirm(t.confirmDeleteWo)) return;
+
+      if (!SUPABASE_KEY || SUPABASE_KEY === 'YOUR_PUBLISHABLE_KEY_HERE') {
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-amber-50 text-amber-800 border border-amber-200';
+        banner.textContent = t.keyMissing;
+        return;
+      }
+
+      const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+      try {
+        let query = client.from('work_orders').delete();
+        if (woId) {
+          query = query.eq('id', woId);
+        } else {
+          query = query.eq('wo_number', woNumber);
+        }
+
+        const { error } = await query;
+        if (error) throw error;
+
+        const editingNum = document.getElementById('editWoOriginalNum').value;
+        if (editingNum && String(editingNum) === String(woNumber)) {
+          closeEditWorkOrder();
+        }
+
+        await loadAllData();
+
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-emerald-50 text-emerald-800 border border-emerald-200';
+        banner.textContent = t.woDeleted;
+      } catch (err) {
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-red-50 text-red-800 border border-red-200';
+        banner.textContent = t.woDeleteError + (err.message || err);
+      }
+    }
+
+    async function createWorkOrder(event) {
+      event.preventDefault();
+      const t = TRANSLATIONS[currentLang];
+      const banner = document.getElementById('statusBanner');
+
+      if (!SUPABASE_KEY || SUPABASE_KEY === 'YOUR_PUBLISHABLE_KEY_HERE') {
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-amber-50 text-amber-800 border border-amber-200';
+        banner.textContent = t.keyMissing;
+        return;
+      }
+
+      const wo_number = document.getElementById('woCodeInput').value.trim();
+      const title = document.getElementById('woTitleInput').value.trim();
+      const site_name = document.getElementById('woSiteInput').value.trim();
+      const priority = document.getElementById('woPrioritySelect').value;
+      const status = document.getElementById('woStatusSelect').value;
+
+      const titleEnInput = document.getElementById('woTitleEnInput').value.trim();
+      const siteEnInput = document.getElementById('woSiteEnInput').value.trim();
+      const titleArInput = document.getElementById('woTitleArInput').value.trim();
+      const siteArInput = document.getElementById('woSiteArInput').value.trim();
+
+      if (!wo_number || !title || !site_name) return;
+
+      const payload = { wo_number, title, site_name, priority, status };
+
+      if (titleEnInput) {
+        payload.title_en = titleEnInput;
+      } else if (currentLang === 'en') {
+        payload.title_en = title;
+      }
+
+      if (siteEnInput) {
+        payload.site_name_en = siteEnInput;
+      } else if (currentLang === 'en') {
+        payload.site_name_en = site_name;
+      }
+
+      if (titleArInput) {
+        payload.title_ar = titleArInput;
+      } else if (currentLang === 'ar') {
+        payload.title_ar = title;
+      }
+
+      if (siteArInput) {
+        payload.site_name_ar = siteArInput;
+      } else if (currentLang === 'ar') {
+        payload.site_name_ar = site_name;
+      }
+
+      if (currentLang !== 'he' && currentLang !== 'en' && currentLang !== 'ar' && TRANSLATIONS[currentLang]) {
+        payload[`title_${currentLang}`] = title;
+        payload[`site_name_${currentLang}`] = site_name;
+      }
+
+      const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+      try {
+        const { error } = await client.from('work_orders').insert([payload]);
+        if (error) throw error;
+
+        document.getElementById('woForm').reset();
+        await loadAllData();
+
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-emerald-50 text-emerald-800 border border-emerald-200';
+        banner.textContent = t.woCreated;
+      } catch (err) {
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-red-50 text-red-800 border border-red-200';
+        banner.textContent = t.woCreateError + (err.message || err);
+      }
+    }
+
+    async function updateWorkOrderStatus(woId, woNumber, newStatus) {
+      const t = TRANSLATIONS[currentLang];
+      const banner = document.getElementById('statusBanner');
+
+      if (!SUPABASE_KEY || SUPABASE_KEY === 'YOUR_PUBLISHABLE_KEY_HERE') {
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-amber-50 text-amber-800 border border-amber-200';
+        banner.textContent = t.keyMissing;
+        return;
+      }
+
+      const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+      try {
+        let query = client.from('work_orders').update({ status: newStatus });
+        if (woId) {
+          query = query.eq('id', woId);
+        } else {
+          query = query.eq('wo_number', woNumber);
+        }
+
+        const { error } = await query;
+        if (error) throw error;
+
+        await loadAllData();
+
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-emerald-50 text-emerald-800 border border-emerald-200';
+        banner.textContent = t.woStatusUpdated;
+      } catch (err) {
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-red-50 text-red-800 border border-red-200';
+        banner.textContent = t.woStatusError + (err.message || err);
+      }
+    }
+
+    async function updateAssetStatus(assetId, assetCode, newStatus) {
+      const t = TRANSLATIONS[currentLang];
+      const banner = document.getElementById('statusBanner');
+
+      if (!SUPABASE_KEY || SUPABASE_KEY === 'YOUR_PUBLISHABLE_KEY_HERE') {
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-amber-50 text-amber-800 border border-amber-200';
+        banner.textContent = t.keyMissing;
+        return;
+      }
+
+      const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+      try {
+        let query = client.from('assets').update({ status: newStatus });
+        if (assetId) {
+          query = query.eq('id', assetId);
+        } else {
+          query = query.eq('asset_code', assetCode);
+        }
+
+        const { error } = await query;
+        if (error) throw error;
+
+        await loadAllData();
+
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-emerald-50 text-emerald-800 border border-emerald-200';
+        banner.textContent = t.assetStatusUpdated;
+      } catch (err) {
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-red-50 text-red-800 border border-red-200';
+        banner.textContent = t.assetStatusError + (err.message || err);
+      }
+    }
+
+    async function loadAllData() {
+      const t = TRANSLATIONS[currentLang];
+      const banner = document.getElementById('statusBanner');
+
+      if (!SUPABASE_KEY || SUPABASE_KEY === 'YOUR_PUBLISHABLE_KEY_HERE') {
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-amber-50 text-amber-800 border border-amber-200';
+        banner.textContent = t.keyMissing;
+        return;
+      }
+
+      const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+      try {
+        const [assetsRes, woRes, pmRes] = await Promise.all([
+          client.from('assets').select('*').order('asset_code', { ascending: true }),
+          client.from('work_orders').select('*').order('created_at', { ascending: false }),
+          client.from('preventive_maintenance').select('*').order('next_due_at', { ascending: true })
+        ]);
+
+        if (assetsRes.error) throw assetsRes.error;
+        if (woRes.error) throw woRes.error;
+        if (pmRes.error) throw pmRes.error;
+
+        cachedAssets = assetsRes.data || [];
+        cachedWorkOrders = woRes.data || [];
+        cachedPmList = pmRes.data || [];
+
+        document.getElementById('count-assets').textContent = cachedAssets.length;
+        document.getElementById('count-wo').textContent = cachedWorkOrders.length;
+        document.getElementById('count-pm').textContent = cachedPmList.length;
+
+        populatePmFrequencyOptions();
+        renderWorkOrders();
+        renderAssets();
+        renderPmList();
+
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-emerald-50 text-emerald-800 border border-emerald-200';
+        banner.textContent = t.connected;
+      } catch (err) {
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-red-50 text-red-800 border border-red-200';
+        banner.textContent = t.loadError + (err.message || err);
+      }
+    }
+
+    applyLanguage('en');
+    loadAllData();
+  </script>
+</body>
+</html>
