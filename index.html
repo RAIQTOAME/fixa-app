@@ -95,6 +95,39 @@
           </select>
         </div>
 
+        <!-- Optional Translated Columns (EN / AR) -->
+        <div class="lg:col-span-6 pt-2 border-t border-slate-100">
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+            <span id="t-optional-trans-hint" class="text-xs font-medium text-slate-500">Optional EN / AR translations (auto-filled for active language if left blank):</span>
+            <button
+              id="btn-copy-to-langs"
+              type="button"
+              onclick="copyMainFieldsToTranslations()"
+              class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 text-xs font-medium transition"
+            >
+              Copy to EN & AR
+            </button>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+            <div>
+              <label id="lbl-wo-title-en" for="woTitleEnInput" class="block text-xs text-slate-500 mb-1">Title (EN)</label>
+              <input id="woTitleEnInput" type="text" class="w-full border border-slate-200 rounded-xl px-3 py-1.5 text-sm bg-slate-50/60 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            </div>
+            <div>
+              <label id="lbl-wo-site-en" for="woSiteEnInput" class="block text-xs text-slate-500 mb-1">Site (EN)</label>
+              <input id="woSiteEnInput" type="text" class="w-full border border-slate-200 rounded-xl px-3 py-1.5 text-sm bg-slate-50/60 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            </div>
+            <div>
+              <label id="lbl-wo-title-ar" for="woTitleArInput" class="block text-xs text-slate-500 mb-1">Title (AR)</label>
+              <input id="woTitleArInput" type="text" dir="rtl" class="w-full border border-slate-200 rounded-xl px-3 py-1.5 text-sm bg-slate-50/60 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            </div>
+            <div>
+              <label id="lbl-wo-site-ar" for="woSiteArInput" class="block text-xs text-slate-500 mb-1">Site (AR)</label>
+              <input id="woSiteArInput" type="text" dir="rtl" class="w-full border border-slate-200 rounded-xl px-3 py-1.5 text-sm bg-slate-50/60 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            </div>
+          </div>
+        </div>
+
         <div class="lg:col-span-6 flex justify-end mt-1">
           <button id="btn-wo-submit" type="submit" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium transition">
             Add Work Order
@@ -288,6 +321,12 @@
         btnWoSubmit: 'Add Work Order',
         phWoTitle: 'e.g. Replace circuit breaker',
         phWoSite: 'e.g. Logistics Center - Modiin',
+        optionalTransHint: 'Optional EN / AR translations (auto-filled for active language if left blank):',
+        btnCopyToLangs: 'Copy to EN & AR',
+        lblTitleEn: 'Title (EN)',
+        lblSiteEn: 'Site (EN)',
+        lblTitleAr: 'Title (AR)',
+        lblSiteAr: 'Site (AR)',
         woCreated: 'Work order added successfully.',
         woCreateError: 'Could not add work order: ',
         woStatusUpdated: 'Work order status updated successfully.',
@@ -337,6 +376,12 @@
         btnWoSubmit: 'הוסף קריאת שירות',
         phWoTitle: 'למשל: החלפת מפסק ראשי',
         phWoSite: 'למשל: מרכז לוגיסטי - מודיעין',
+        optionalTransHint: 'תרגומים אופציונליים ל-EN / AR (מושלמים אוטומטית לשפה הפעילה אם יישארו ריקים):',
+        btnCopyToLangs: 'העתק ל-EN ו-AR',
+        lblTitleEn: 'כותרת (EN)',
+        lblSiteEn: 'אתר (EN)',
+        lblTitleAr: 'כותרת (AR)',
+        lblSiteAr: 'אתר (AR)',
         woCreated: 'קריאת השירות נוספה בהצלחה.',
         woCreateError: 'שגיאה בהוספת קריאת השירות: ',
         woStatusUpdated: 'סטטוס קריאת השירות עודכן בהצלחה.',
@@ -386,6 +431,12 @@
         btnWoSubmit: 'إضافة أمر العمل',
         phWoTitle: 'مثال: استبدال قاطع كهربائي',
         phWoSite: 'مثال: المركز اللوجستي - موديعين',
+        optionalTransHint: 'ترجمات اختيارية لـ EN / AR (تُملأ تلقائياً للغة الحالية إذا تُركت فارغة):',
+        btnCopyToLangs: 'نسخ إلى EN و AR',
+        lblTitleEn: 'العنوان (EN)',
+        lblSiteEn: 'الموقع (EN)',
+        lblTitleAr: 'العنوان (AR)',
+        lblSiteAr: 'الموقع (AR)',
         woCreated: 'تمت إضافة أمر العمل بنجاح.',
         woCreateError: 'تعذر إضافة أمر العمل: ',
         woStatusUpdated: 'تم تحديث حالة أمر العمل بنجاح.',
@@ -435,6 +486,12 @@
         btnWoSubmit: 'Добавить заявку',
         phWoTitle: 'Например: Замена автомата защиты',
         phWoSite: 'Например: Логистический центр',
+        optionalTransHint: 'Необязательные переводы EN / AR (заполняются автоматически для текущего языка):',
+        btnCopyToLangs: 'Копировать в EN и AR',
+        lblTitleEn: 'Название (EN)',
+        lblSiteEn: 'Объект (EN)',
+        lblTitleAr: 'Название (AR)',
+        lblSiteAr: 'Объект (AR)',
         woCreated: 'Заявка успешно добавлена.',
         woCreateError: 'Ошибка добавления заявки: ',
         woStatusUpdated: 'Статус заявки обновлён.',
@@ -484,6 +541,12 @@
         btnWoSubmit: 'Agregar orden',
         phWoTitle: 'Ej.: Reemplazar interruptor',
         phWoSite: 'Ej.: Centro Logístico',
+        optionalTransHint: 'Traducciones EN / AR opcionales (se autocompletan para el idioma activo si se dejan vacías):',
+        btnCopyToLangs: 'Copiar a EN y AR',
+        lblTitleEn: 'Título (EN)',
+        lblSiteEn: 'Sitio (EN)',
+        lblTitleAr: 'Título (AR)',
+        lblSiteAr: 'Sitio (AR)',
         woCreated: 'Orden de trabajo agregada correctamente.',
         woCreateError: 'Error al agregar la orden de trabajo: ',
         woStatusUpdated: 'Estado de la orden actualizado.',
@@ -533,6 +596,12 @@
         btnWoSubmit: 'Ajouter un ordre',
         phWoTitle: 'Ex. : Remplacer le disjoncteur',
         phWoSite: 'Ex. : Centre logistique',
+        optionalTransHint: 'Traductions EN / AR optionnelles (remplies automatiquement pour la langue active si vides) :',
+        btnCopyToLangs: 'Copier vers EN et AR',
+        lblTitleEn: 'Titre (EN)',
+        lblSiteEn: 'Site (EN)',
+        lblTitleAr: 'Titre (AR)',
+        lblSiteAr: 'Site (AR)',
         woCreated: 'Ordre de travail ajouté avec succès.',
         woCreateError: 'Impossible d’ajouter l’ordre de travail : ',
         woStatusUpdated: 'Statut de l’ordre mis à jour.',
@@ -582,6 +651,12 @@
         btnWoSubmit: 'Aggiungi ordine',
         phWoTitle: 'Es.: Sostituzione interruttore',
         phWoSite: 'Es.: Centro logistico',
+        optionalTransHint: 'Traduzioni EN / AR opzionali (compilate per la lingua attiva se lasciate vuote):',
+        btnCopyToLangs: 'Copia su EN e AR',
+        lblTitleEn: 'Titolo (EN)',
+        lblSiteEn: 'Sito (EN)',
+        lblTitleAr: 'Titolo (AR)',
+        lblSiteAr: 'Sito (AR)',
         woCreated: 'Ordine di lavoro aggiunto con successo.',
         woCreateError: 'Impossibile aggiungere l’ordine di lavoro: ',
         woStatusUpdated: 'Stato dell’ordine aggiornato.',
@@ -631,6 +706,12 @@
         btnWoSubmit: 'Auftrag hinzufügen',
         phWoTitle: 'Z. B.: Schutzschalter tauschen',
         phWoSite: 'Z. B.: Logistikzentrum',
+        optionalTransHint: 'Optionale EN / AR Übersetzungen (bei aktiver Sprache automatisch ausgefüllt, wenn leer):',
+        btnCopyToLangs: 'In EN & AR kopieren',
+        lblTitleEn: 'Titel (EN)',
+        lblSiteEn: 'Standort (EN)',
+        lblTitleAr: 'Titel (AR)',
+        lblSiteAr: 'Standort (AR)',
         woCreated: 'Arbeitsauftrag erfolgreich hinzugefügt.',
         woCreateError: 'Arbeitsauftrag konnte nicht hinzugefügt werden: ',
         woStatusUpdated: 'Status des Arbeitsauftrags aktualisiert.',
@@ -838,6 +919,20 @@
       return template.replace('{shown}', shown).replace('{total}', total);
     }
 
+    function copyMainFieldsToTranslations() {
+      const title = document.getElementById('woTitleInput').value.trim();
+      const site = document.getElementById('woSiteInput').value.trim();
+
+      if (title) {
+        document.getElementById('woTitleEnInput').value = title;
+        document.getElementById('woTitleArInput').value = title;
+      }
+      if (site) {
+        document.getElementById('woSiteEnInput').value = site;
+        document.getElementById('woSiteArInput').value = site;
+      }
+    }
+
     let currentLang = 'en';
     let cachedWorkOrders = [];
     let cachedAssets = [];
@@ -869,6 +964,13 @@
       document.getElementById('btn-wo-submit').textContent = t.btnWoSubmit;
       document.getElementById('woTitleInput').placeholder = t.phWoTitle;
       document.getElementById('woSiteInput').placeholder = t.phWoSite;
+
+      document.getElementById('t-optional-trans-hint').textContent = t.optionalTransHint;
+      document.getElementById('btn-copy-to-langs').textContent = t.btnCopyToLangs;
+      document.getElementById('lbl-wo-title-en').textContent = t.lblTitleEn;
+      document.getElementById('lbl-wo-site-en').textContent = t.lblSiteEn;
+      document.getElementById('lbl-wo-title-ar').textContent = t.lblTitleAr;
+      document.getElementById('lbl-wo-site-ar').textContent = t.lblSiteAr;
 
       document.getElementById('opt-prio-low').textContent = translateDbValue('נמוך', PRIORITY_MAP, currentLang);
       document.getElementById('opt-prio-med').textContent = translateDbValue('בינוני', PRIORITY_MAP, currentLang);
@@ -1240,15 +1342,48 @@
       const priority = document.getElementById('woPrioritySelect').value;
       const status = document.getElementById('woStatusSelect').value;
 
+      const titleEnInput = document.getElementById('woTitleEnInput').value.trim();
+      const siteEnInput = document.getElementById('woSiteEnInput').value.trim();
+      const titleArInput = document.getElementById('woTitleArInput').value.trim();
+      const siteArInput = document.getElementById('woSiteArInput').value.trim();
+
       if (!wo_number || !title || !site_name) return;
+
+      const payload = { wo_number, title, site_name, priority, status };
+
+      if (titleEnInput) {
+        payload.title_en = titleEnInput;
+      } else if (currentLang === 'en') {
+        payload.title_en = title;
+      }
+
+      if (siteEnInput) {
+        payload.site_name_en = siteEnInput;
+      } else if (currentLang === 'en') {
+        payload.site_name_en = site_name;
+      }
+
+      if (titleArInput) {
+        payload.title_ar = titleArInput;
+      } else if (currentLang === 'ar') {
+        payload.title_ar = title;
+      }
+
+      if (siteArInput) {
+        payload.site_name_ar = siteArInput;
+      } else if (currentLang === 'ar') {
+        payload.site_name_ar = site_name;
+      }
+
+      if (currentLang !== 'he' && currentLang !== 'en' && currentLang !== 'ar' && TRANSLATIONS[currentLang]) {
+        payload[`title_${currentLang}`] = title;
+        payload[`site_name_${currentLang}`] = site_name;
+      }
 
       const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
       try {
-        const { error } = await client.from('work_orders').insert([
-          { wo_number, title, site_name, priority, status }
-        ]);
-
+        const { error } = await client.from('work_orders').insert([payload]);
         if (error) throw error;
 
         document.getElementById('woForm').reset();
