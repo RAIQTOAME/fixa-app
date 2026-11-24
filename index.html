@@ -156,7 +156,60 @@
 
     <!-- Work Orders Section -->
     <section class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm mb-6">
-      <h2 id="t-sec-wo" class="text-lg font-bold mb-4">Work Orders</h2>
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+        <h2 id="t-sec-wo" class="text-lg font-bold">Work Orders</h2>
+        <span id="woFilteredCount" class="text-xs font-medium text-slate-500"></span>
+      </div>
+
+      <!-- Work Orders Search & Filter Controls -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3 mb-4">
+        <div class="lg:col-span-2">
+          <input
+            id="woSearchInput"
+            type="text"
+            oninput="renderWorkOrders()"
+            class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
+        <div>
+          <select
+            id="woFilterPriority"
+            onchange="renderWorkOrders()"
+            class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option id="flt-wo-prio-all" value="ALL">All Priorities</option>
+            <option id="flt-wo-prio-high" value="גבוה">High</option>
+            <option id="flt-wo-prio-med" value="בינוני">Medium</option>
+            <option id="flt-wo-prio-low" value="נמוך">Low</option>
+          </select>
+        </div>
+
+        <div>
+          <select
+            id="woFilterStatus"
+            onchange="renderWorkOrders()"
+            class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option id="flt-wo-st-all" value="ALL">All Statuses</option>
+            <option id="flt-wo-st-prog" value="בטיפול">In Progress</option>
+            <option id="flt-wo-st-insp" value="דורש בדיקה">Needs Inspection</option>
+            <option id="flt-wo-st-ok" value="תקין">Operational</option>
+          </select>
+        </div>
+
+        <div>
+          <button
+            id="btn-wo-reset-filters"
+            type="button"
+            onclick="resetWorkOrderFilters()"
+            class="w-full px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 text-sm font-medium transition"
+          >
+            Reset Filters
+          </button>
+        </div>
+      </div>
+
       <div class="overflow-x-auto">
         <table class="w-full text-sm border-collapse">
           <thead>
@@ -177,7 +230,35 @@
     <!-- Assets & PM Grid -->
     <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <div class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
-        <h2 id="t-sec-assets" class="text-lg font-bold mb-4">Assets & Systems</h2>
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-4">
+          <h2 id="t-sec-assets" class="text-lg font-bold">Assets & Systems</h2>
+          <span id="assetsFilteredCount" class="text-xs font-medium text-slate-500"></span>
+        </div>
+
+        <!-- Assets Search & Filter Controls -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 mb-4">
+          <div class="sm:col-span-2">
+            <input
+              id="assetSearchInput"
+              type="text"
+              oninput="renderAssets()"
+              class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+          <div>
+            <select
+              id="assetFilterStatus"
+              onchange="renderAssets()"
+              class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option id="flt-ast-st-all" value="ALL">All Statuses</option>
+              <option id="flt-ast-st-ok" value="תקין">Operational</option>
+              <option id="flt-ast-st-insp" value="דורש בדיקה">Needs Inspection</option>
+              <option id="flt-ast-st-prog" value="בטיפול">In Progress</option>
+            </select>
+          </div>
+        </div>
+
         <ul id="assetsList" class="space-y-3 text-sm"></ul>
       </div>
 
@@ -223,6 +304,14 @@
         woDeleteError: 'Could not delete work order: ',
         assetStatusUpdated: 'Asset status updated successfully.',
         assetStatusError: 'Could not update asset status: ',
+        phWoSearch: 'Search by code, title, or site...',
+        phAssetSearch: 'Search asset by name, code, site, or category...',
+        allPriorities: 'All Priorities',
+        allStatuses: 'All Statuses',
+        resetFilters: 'Reset Filters',
+        noMatchingWo: 'No matching work orders found.',
+        noMatchingAssets: 'No matching assets found.',
+        showingCount: 'Showing {shown} of {total}',
         secWo: 'Work Orders',
         secAssets: 'Assets & Systems',
         secPm: 'Preventive Maintenance',
@@ -264,6 +353,14 @@
         woDeleteError: 'שגיאה במחיקת קריאת השירות: ',
         assetStatusUpdated: 'סטטוס הנכס עודכן בהצלחה.',
         assetStatusError: 'שגיאה בעדכון סטטוס הנכס: ',
+        phWoSearch: 'חיפוש לפי קוד, כותרת או אתר...',
+        phAssetSearch: 'חיפוש נכס לפי שם, קוד, אתר או קטגוריה...',
+        allPriorities: 'כל העדיפויות',
+        allStatuses: 'כל הסטטוסים',
+        resetFilters: 'אפס סינון',
+        noMatchingWo: 'לא נמצאו קריאות שירות תואמות.',
+        noMatchingAssets: 'לא נמצאו נכסים תואמים.',
+        showingCount: 'מוצגים {shown} מתוך {total}',
         secWo: 'קריאות שירות',
         secAssets: 'נכסים ומערכות',
         secPm: 'תחזוקה מונעת',
@@ -305,6 +402,14 @@
         woDeleteError: 'تعذر حذف أمر العمل: ',
         assetStatusUpdated: 'تم تحديث حالة الأصل بنجاح.',
         assetStatusError: 'تعذر تحديث حالة الأصل: ',
+        phWoSearch: 'بحث بالرمز أو العنوان أو الموقع...',
+        phAssetSearch: 'بحث عن أصل بالاسم أو الرمز أو الموقع أو الفئة...',
+        allPriorities: 'كل الأولويات',
+        allStatuses: 'كل الحالات',
+        resetFilters: 'إعادة ضبط الفلاتر',
+        noMatchingWo: 'لا توجد أوامر عمل مطابقة.',
+        noMatchingAssets: 'لا توجد أصول مطابقة.',
+        showingCount: 'عرض {shown} من {total}',
         secWo: 'أوامر العمل',
         secAssets: 'الأصول والمعدات',
         secPm: 'الصيانة الوقائية',
@@ -346,6 +451,14 @@
         woDeleteError: 'Ошибка удаления заявки: ',
         assetStatusUpdated: 'Статус актива обновлён.',
         assetStatusError: 'Ошибка обновления статуса актива: ',
+        phWoSearch: 'Поиск по коду, названию или объекту...',
+        phAssetSearch: 'Поиск актива по имени, коду, объекту или категории...',
+        allPriorities: 'Все приоритеты',
+        allStatuses: 'Все статусы',
+        resetFilters: 'Сбросить фильтры',
+        noMatchingWo: 'Подходящие заявки не найдены.',
+        noMatchingAssets: 'Подходящие активы не найдены.',
+        showingCount: 'Показано {shown} из {total}',
         secWo: 'Заявки на работы',
         secAssets: 'Активы и системы',
         secPm: 'Плановое ТО',
@@ -387,6 +500,14 @@
         woDeleteError: 'Error al eliminar la orden: ',
         assetStatusUpdated: 'Estado del activo actualizado.',
         assetStatusError: 'Error al actualizar el estado del activo: ',
+        phWoSearch: 'Buscar por código, título o sitio...',
+        phAssetSearch: 'Buscar activo por nombre, código, sitio o categoría...',
+        allPriorities: 'Todas las prioridades',
+        allStatuses: 'Todos los estados',
+        resetFilters: 'Restablecer filtros',
+        noMatchingWo: 'No se encontraron órdenes de trabajo.',
+        noMatchingAssets: 'No se encontraron activos.',
+        showingCount: 'Mostrando {shown} de {total}',
         secWo: 'Órdenes de trabajo',
         secAssets: 'Activos y sistemas',
         secPm: 'Mantenimiento preventivo',
@@ -428,6 +549,14 @@
         woDeleteError: 'Impossible de supprimer l’ordre : ',
         assetStatusUpdated: 'Statut de l’équipement mis à jour.',
         assetStatusError: 'Impossible de mettre à jour le statut de l’équipement : ',
+        phWoSearch: 'Rechercher par code, titre ou site...',
+        phAssetSearch: 'Rechercher un équipement par nom, code, site ou catégorie...',
+        allPriorities: 'Toutes les priorités',
+        allStatuses: 'Tous les statuts',
+        resetFilters: 'Réinitialiser',
+        noMatchingWo: 'Aucun ordre de travail correspondant.',
+        noMatchingAssets: 'Aucun équipement correspondant.',
+        showingCount: 'Affichage de {shown} sur {total}',
         secWo: 'Ordres de travail',
         secAssets: 'Équipements et systèmes',
         secPm: 'Maintenance préventive',
@@ -469,6 +598,14 @@
         woDeleteError: 'Impossibile eliminare l’ordine: ',
         assetStatusUpdated: 'Stato dell’asset aggiornato.',
         assetStatusError: 'Impossibile aggiornare lo stato dell’asset: ',
+        phWoSearch: 'Cerca per codice, titolo o sito...',
+        phAssetSearch: 'Cerca asset per nome, codice, sito o categoria...',
+        allPriorities: 'Tutte le priorità',
+        allStatuses: 'Tutti gli stati',
+        resetFilters: 'Reimposta filtri',
+        noMatchingWo: 'Nessun ordine di lavoro trovato.',
+        noMatchingAssets: 'Nessun asset trovato.',
+        showingCount: 'Mostrati {shown} di {total}',
         secWo: 'Ordini di lavoro',
         secAssets: 'Asset e sistemi',
         secPm: 'Manutenzione preventiva',
@@ -510,6 +647,14 @@
         woDeleteError: 'Arbeitsauftrag konnte nicht gelöscht werden: ',
         assetStatusUpdated: 'Status der Anlage aktualisiert.',
         assetStatusError: 'Status der Anlage konnte nicht aktualisiert werden: ',
+        phWoSearch: 'Suche nach Code, Titel oder Standort...',
+        phAssetSearch: 'Anlage nach Name, Code, Standort oder Kategorie suchen...',
+        allPriorities: 'Alle Prioritäten',
+        allStatuses: 'Alle Status',
+        resetFilters: 'Filter zurücksetzen',
+        noMatchingWo: 'Keine passenden Arbeitsaufträge gefunden.',
+        noMatchingAssets: 'Keine passenden Anlagen gefunden.',
+        showingCount: 'Zeige {shown} von {total}',
         secWo: 'Arbeitsaufträge',
         secAssets: 'Anlagen & Systeme',
         secPm: 'Vorbeugende Wartung',
@@ -689,8 +834,14 @@
       return record[field] || '';
     }
 
+    function formatCountText(template, shown, total) {
+      return template.replace('{shown}', shown).replace('{total}', total);
+    }
+
     let currentLang = 'en';
     let cachedWorkOrders = [];
+    let cachedAssets = [];
+    let cachedPmList = [];
 
     function applyLanguage(lang) {
       currentLang = TRANSLATIONS[lang] ? lang : 'en';
@@ -698,4 +849,530 @@
       const isRtl = RTL_LANGS.includes(currentLang);
 
       document.documentElement.lang = currentLang;
-      document
+      document.documentElement.dir = isRtl ? 'rtl' : 'ltr';
+      document.getElementById('langSelect').value = currentLang;
+
+      document.getElementById('t-app-name').textContent = t.appName;
+      document.getElementById('t-subtitle').textContent = t.subtitle;
+      document.getElementById('t-lang-label').textContent = t.langLabel;
+      document.getElementById('t-refresh').textContent = t.refresh;
+      document.getElementById('t-card-assets').textContent = t.cardAssets;
+      document.getElementById('t-card-wo').textContent = t.cardWo;
+      document.getElementById('t-card-pm').textContent = t.cardPm;
+
+      document.getElementById('t-form-wo-title').textContent = t.formWoTitle;
+      document.getElementById('lbl-wo-code').textContent = t.thCode;
+      document.getElementById('lbl-wo-title').textContent = t.thTitle;
+      document.getElementById('lbl-wo-site').textContent = t.thSite;
+      document.getElementById('lbl-wo-prio').textContent = t.thPriority;
+      document.getElementById('lbl-wo-status').textContent = t.thStatus;
+      document.getElementById('btn-wo-submit').textContent = t.btnWoSubmit;
+      document.getElementById('woTitleInput').placeholder = t.phWoTitle;
+      document.getElementById('woSiteInput').placeholder = t.phWoSite;
+
+      document.getElementById('opt-prio-low').textContent = translateDbValue('נמוך', PRIORITY_MAP, currentLang);
+      document.getElementById('opt-prio-med').textContent = translateDbValue('בינוני', PRIORITY_MAP, currentLang);
+      document.getElementById('opt-prio-high').textContent = translateDbValue('גבוה', PRIORITY_MAP, currentLang);
+
+      document.getElementById('opt-st-prog').textContent = translateDbValue('בטיפול', STATUS_MAP, currentLang);
+      document.getElementById('opt-st-insp').textContent = translateDbValue('דורש בדיקה', STATUS_MAP, currentLang);
+      document.getElementById('opt-st-ok').textContent = translateDbValue('תקין', STATUS_MAP, currentLang);
+
+      document.getElementById('t-edit-wo-title').textContent = t.editWoTitle;
+      document.getElementById('edit-lbl-code').textContent = t.thCode;
+      document.getElementById('edit-lbl-title').textContent = t.thTitle;
+      document.getElementById('edit-lbl-site').textContent = t.thSite;
+      document.getElementById('edit-lbl-prio').textContent = t.thPriority;
+      document.getElementById('edit-lbl-status').textContent = t.thStatus;
+      document.getElementById('btn-wo-save').textContent = t.btnWoSave;
+      document.getElementById('btn-wo-cancel').textContent = t.btnWoCancel;
+
+      document.getElementById('edit-opt-prio-low').textContent = translateDbValue('נמוך', PRIORITY_MAP, currentLang);
+      document.getElementById('edit-opt-prio-med').textContent = translateDbValue('בינוני', PRIORITY_MAP, currentLang);
+      document.getElementById('edit-opt-prio-high').textContent = translateDbValue('גבוה', PRIORITY_MAP, currentLang);
+
+      document.getElementById('edit-opt-st-prog').textContent = translateDbValue('בטיפול', STATUS_MAP, currentLang);
+      document.getElementById('edit-opt-st-insp').textContent = translateDbValue('דורש בדיקה', STATUS_MAP, currentLang);
+      document.getElementById('edit-opt-st-ok').textContent = translateDbValue('תקין', STATUS_MAP, currentLang);
+
+      document.getElementById('woSearchInput').placeholder = t.phWoSearch;
+      document.getElementById('flt-wo-prio-all').textContent = t.allPriorities;
+      document.getElementById('flt-wo-prio-high').textContent = translateDbValue('גבוה', PRIORITY_MAP, currentLang);
+      document.getElementById('flt-wo-prio-med').textContent = translateDbValue('בינוני', PRIORITY_MAP, currentLang);
+      document.getElementById('flt-wo-prio-low').textContent = translateDbValue('נמוך', PRIORITY_MAP, currentLang);
+
+      document.getElementById('flt-wo-st-all').textContent = t.allStatuses;
+      document.getElementById('flt-wo-st-prog').textContent = translateDbValue('בטיפול', STATUS_MAP, currentLang);
+      document.getElementById('flt-wo-st-insp').textContent = translateDbValue('דורש בדיקה', STATUS_MAP, currentLang);
+      document.getElementById('flt-wo-st-ok').textContent = translateDbValue('תקין', STATUS_MAP, currentLang);
+      document.getElementById('btn-wo-reset-filters').textContent = t.resetFilters;
+
+      document.getElementById('assetSearchInput').placeholder = t.phAssetSearch;
+      document.getElementById('flt-ast-st-all').textContent = t.allStatuses;
+      document.getElementById('flt-ast-st-ok').textContent = translateDbValue('תקין', STATUS_MAP, currentLang);
+      document.getElementById('flt-ast-st-insp').textContent = translateDbValue('דורש בדיקה', STATUS_MAP, currentLang);
+      document.getElementById('flt-ast-st-prog').textContent = translateDbValue('בטיפול', STATUS_MAP, currentLang);
+
+      document.getElementById('t-sec-wo').textContent = t.secWo;
+      document.getElementById('t-sec-assets').textContent = t.secAssets;
+      document.getElementById('t-sec-pm').textContent = t.secPm;
+      document.getElementById('th-wo-num').textContent = t.thCode;
+      document.getElementById('th-wo-title').textContent = t.thTitle;
+      document.getElementById('th-wo-site').textContent = t.thSite;
+      document.getElementById('th-wo-prio').textContent = t.thPriority;
+      document.getElementById('th-wo-status').textContent = t.thStatus;
+      document.getElementById('th-wo-actions').textContent = t.thActions;
+    }
+
+    document.getElementById('langSelect').addEventListener('change', (e) => {
+      applyLanguage(e.target.value);
+      renderWorkOrders();
+      renderAssets();
+      renderPmList();
+    });
+
+    function resetWorkOrderFilters() {
+      document.getElementById('woSearchInput').value = '';
+      document.getElementById('woFilterPriority').value = 'ALL';
+      document.getElementById('woFilterStatus').value = 'ALL';
+      renderWorkOrders();
+    }
+
+    function renderWorkOrders() {
+      const t = TRANSLATIONS[currentLang];
+      const searchQuery = (document.getElementById('woSearchInput').value || '').trim().toLowerCase();
+      const priorityFilter = document.getElementById('woFilterPriority').value;
+      const statusFilter = document.getElementById('woFilterStatus').value;
+
+      const filtered = cachedWorkOrders.filter(wo => {
+        const woPriorityKey = normalizePriorityKey(wo.priority);
+        const woStatusKey = normalizeStatusKey(wo.status);
+
+        if (priorityFilter !== 'ALL' && woPriorityKey !== priorityFilter) return false;
+        if (statusFilter !== 'ALL' && woStatusKey !== statusFilter) return false;
+
+        if (searchQuery) {
+          const code = String(wo.wo_number || '').toLowerCase();
+          const titleLocalized = getLocalizedField(wo, 'title', currentLang).toLowerCase();
+          const titleRaw = String(wo.title || '').toLowerCase();
+          const siteLocalized = getLocalizedField(wo, 'site_name', currentLang).toLowerCase();
+          const siteRaw = String(wo.site_name || '').toLowerCase();
+
+          const matches =
+            code.includes(searchQuery) ||
+            titleLocalized.includes(searchQuery) ||
+            titleRaw.includes(searchQuery) ||
+            siteLocalized.includes(searchQuery) ||
+            siteRaw.includes(searchQuery);
+
+          if (!matches) return false;
+        }
+
+        return true;
+      });
+
+      document.getElementById('woFilteredCount').textContent = formatCountText(
+        t.showingCount,
+        filtered.length,
+        cachedWorkOrders.length
+      );
+
+      const woBody = document.getElementById('woTableBody');
+      if (filtered.length === 0) {
+        woBody.innerHTML = `
+          <tr>
+            <td colspan="6" class="py-4 px-3 text-center text-slate-500">${t.noMatchingWo}</td>
+          </tr>
+        `;
+        return;
+      }
+
+      woBody.innerHTML = filtered.map(wo => {
+        const currentStatus = normalizeStatusKey(wo.status);
+        const safeId = wo.id ? `'${String(wo.id).replace(/'/g, "\\'")}'` : 'null';
+        const safeNum = `'${String(wo.wo_number || '').replace(/'/g, "\\'")}'`;
+
+        return `
+          <tr>
+            <td class="py-2.5 px-3 font-medium">${wo.wo_number || ''}</td>
+            <td class="py-2.5 px-3">${getLocalizedField(wo, 'title', currentLang)}</td>
+            <td class="py-2.5 px-3">${getLocalizedField(wo, 'site_name', currentLang)}</td>
+            <td class="py-2.5 px-3">${translateDbValue(wo.priority, PRIORITY_MAP, currentLang)}</td>
+            <td class="py-2.5 px-3">
+              <select
+                onchange="updateWorkOrderStatus(${safeId}, ${safeNum}, this.value)"
+                class="px-2.5 py-1 rounded-full text-xs font-medium bg-slate-100 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
+              >
+                <option value="בטיפול" ${currentStatus === 'בטיפול' ? 'selected' : ''}>${translateDbValue('בטיפול', STATUS_MAP, currentLang)}</option>
+                <option value="דורש בדיקה" ${currentStatus === 'דורש בדיקה' ? 'selected' : ''}>${translateDbValue('דורש בדיקה', STATUS_MAP, currentLang)}</option>
+                <option value="תקין" ${currentStatus === 'תקין' ? 'selected' : ''}>${translateDbValue('תקין', STATUS_MAP, currentLang)}</option>
+              </select>
+            </td>
+            <td class="py-2.5 px-3">
+              <div class="flex items-center gap-1.5">
+                <button
+                  type="button"
+                  onclick="openEditWorkOrder(${safeNum})"
+                  class="px-2.5 py-1 rounded-lg text-xs font-medium bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 transition"
+                >${t.btnEdit}</button>
+                <button
+                  type="button"
+                  onclick="deleteWorkOrder(${safeId}, ${safeNum})"
+                  class="px-2.5 py-1 rounded-lg text-xs font-medium bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 transition"
+                >${t.btnDelete}</button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function renderAssets() {
+      const t = TRANSLATIONS[currentLang];
+      const searchQuery = (document.getElementById('assetSearchInput').value || '').trim().toLowerCase();
+      const statusFilter = document.getElementById('assetFilterStatus').value;
+
+      const filtered = cachedAssets.filter(a => {
+        const assetStatusKey = normalizeStatusKey(a.status);
+        if (statusFilter !== 'ALL' && assetStatusKey !== statusFilter) return false;
+
+        if (searchQuery) {
+          const code = String(a.asset_code || '').toLowerCase();
+          const nameLocalized = getLocalizedField(a, 'name', currentLang).toLowerCase();
+          const nameRaw = String(a.name || '').toLowerCase();
+          const siteLocalized = getLocalizedField(a, 'site_name', currentLang).toLowerCase();
+          const siteRaw = String(a.site_name || '').toLowerCase();
+          const catLocalized = getLocalizedField(a, 'category', currentLang).toLowerCase();
+          const catRaw = String(a.category || '').toLowerCase();
+
+          const matches =
+            code.includes(searchQuery) ||
+            nameLocalized.includes(searchQuery) ||
+            nameRaw.includes(searchQuery) ||
+            siteLocalized.includes(searchQuery) ||
+            siteRaw.includes(searchQuery) ||
+            catLocalized.includes(searchQuery) ||
+            catRaw.includes(searchQuery);
+
+          if (!matches) return false;
+        }
+
+        return true;
+      });
+
+      document.getElementById('assetsFilteredCount').textContent = formatCountText(
+        t.showingCount,
+        filtered.length,
+        cachedAssets.length
+      );
+
+      const assetsListEl = document.getElementById('assetsList');
+      if (filtered.length === 0) {
+        assetsListEl.innerHTML = `<li class="p-3 rounded-xl bg-slate-50 border border-slate-200 text-center text-slate-500">${t.noMatchingAssets}</li>`;
+        return;
+      }
+
+      assetsListEl.innerHTML = filtered.map(a => {
+        const currentStatus = normalizeStatusKey(a.status);
+        const safeId = a.id ? `'${String(a.id).replace(/'/g, "\\'")}'` : 'null';
+        const safeCode = `'${String(a.asset_code || '').replace(/'/g, "\\'")}'`;
+        const badgeClass = getAssetStatusBadgeClass(currentStatus);
+
+        return `
+          <li class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between gap-2">
+            <div>
+              <div class="font-semibold">${getLocalizedField(a, 'name', currentLang)} <span class="text-xs text-slate-500">(${a.asset_code || ''})</span></div>
+              <div class="text-xs text-slate-500">${getLocalizedField(a, 'site_name', currentLang)} • ${getLocalizedField(a, 'category', currentLang)}</div>
+            </div>
+            <select
+              onchange="updateAssetStatus(${safeId}, ${safeCode}, this.value)"
+              class="text-xs font-semibold px-2.5 py-1 rounded-full border cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 ${badgeClass}"
+            >
+              <option value="תקין" ${currentStatus === 'תקין' ? 'selected' : ''}>${translateDbValue('תקין', STATUS_MAP, currentLang)}</option>
+              <option value="דורש בדיקה" ${currentStatus === 'דורש בדיקה' ? 'selected' : ''}>${translateDbValue('דורש בדיקה', STATUS_MAP, currentLang)}</option>
+              <option value="בטיפול" ${currentStatus === 'בטיפול' ? 'selected' : ''}>${translateDbValue('בטיפול', STATUS_MAP, currentLang)}</option>
+            </select>
+          </li>
+        `;
+      }).join('');
+    }
+
+    function renderPmList() {
+      const pmListEl = document.getElementById('pmList');
+      pmListEl.innerHTML = cachedPmList.map(pm => `
+        <li class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between gap-2">
+          <div>
+            <div class="font-semibold">${getLocalizedField(pm, 'title', currentLang)} <span class="text-xs text-slate-500">(${pm.pm_code || ''})</span></div>
+            <div class="text-xs text-slate-500">${getLocalizedField(pm, 'site_name', currentLang)} • ${getLocalizedField(pm, 'frequency', currentLang)}</div>
+          </div>
+          <span class="text-xs text-slate-600">${getLocalizedField(pm, 'assigned_technician', currentLang)}</span>
+        </li>
+      `).join('');
+    }
+
+    function openEditWorkOrder(woNumber) {
+      const wo = cachedWorkOrders.find(item => String(item.wo_number) === String(woNumber));
+      if (!wo) return;
+
+      document.getElementById('editWoId').value = wo.id || '';
+      document.getElementById('editWoOriginalNum').value = wo.wo_number || '';
+      document.getElementById('editWoCodeInput').value = wo.wo_number || '';
+      document.getElementById('editWoTitleInput').value = getLocalizedField(wo, 'title', currentLang) || wo.title || '';
+      document.getElementById('editWoSiteInput').value = getLocalizedField(wo, 'site_name', currentLang) || wo.site_name || '';
+      document.getElementById('editWoPrioritySelect').value = normalizePriorityKey(wo.priority);
+      document.getElementById('editWoStatusSelect').value = normalizeStatusKey(wo.status);
+
+      const section = document.getElementById('editWoSection');
+      section.classList.remove('hidden');
+      section.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function closeEditWorkOrder() {
+      document.getElementById('editWoSection').classList.add('hidden');
+      document.getElementById('editWoForm').reset();
+    }
+
+    async function saveWorkOrderEdit(event) {
+      event.preventDefault();
+      const t = TRANSLATIONS[currentLang];
+      const banner = document.getElementById('statusBanner');
+
+      if (!SUPABASE_KEY || SUPABASE_KEY === 'YOUR_PUBLISHABLE_KEY_HERE') {
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-amber-50 text-amber-800 border border-amber-200';
+        banner.textContent = t.keyMissing;
+        return;
+      }
+
+      const woId = document.getElementById('editWoId').value.trim();
+      const originalNum = document.getElementById('editWoOriginalNum').value.trim();
+      const wo_number = document.getElementById('editWoCodeInput').value.trim();
+      const title = document.getElementById('editWoTitleInput').value.trim();
+      const site_name = document.getElementById('editWoSiteInput').value.trim();
+      const priority = document.getElementById('editWoPrioritySelect').value;
+      const status = document.getElementById('editWoStatusSelect').value;
+
+      if (!wo_number || !title || !site_name) return;
+
+      const updatePayload = { wo_number, title, site_name, priority, status };
+      if (currentLang !== 'he' && TRANSLATIONS[currentLang]) {
+        updatePayload[`title_${currentLang}`] = title;
+        updatePayload[`site_name_${currentLang}`] = site_name;
+      }
+
+      const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+      try {
+        let query = client.from('work_orders').update(updatePayload);
+        if (woId) {
+          query = query.eq('id', woId);
+        } else {
+          query = query.eq('wo_number', originalNum);
+        }
+
+        const { error } = await query;
+        if (error) throw error;
+
+        closeEditWorkOrder();
+        await loadAllData();
+
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-emerald-50 text-emerald-800 border border-emerald-200';
+        banner.textContent = t.woUpdated;
+      } catch (err) {
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-red-50 text-red-800 border border-red-200';
+        banner.textContent = t.woUpdateError + (err.message || err);
+      }
+    }
+
+    async function deleteWorkOrder(woId, woNumber) {
+      const t = TRANSLATIONS[currentLang];
+      const banner = document.getElementById('statusBanner');
+
+      if (!window.confirm(t.confirmDeleteWo)) return;
+
+      if (!SUPABASE_KEY || SUPABASE_KEY === 'YOUR_PUBLISHABLE_KEY_HERE') {
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-amber-50 text-amber-800 border border-amber-200';
+        banner.textContent = t.keyMissing;
+        return;
+      }
+
+      const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+      try {
+        let query = client.from('work_orders').delete();
+        if (woId) {
+          query = query.eq('id', woId);
+        } else {
+          query = query.eq('wo_number', woNumber);
+        }
+
+        const { error } = await query;
+        if (error) throw error;
+
+        const editingNum = document.getElementById('editWoOriginalNum').value;
+        if (editingNum && String(editingNum) === String(woNumber)) {
+          closeEditWorkOrder();
+        }
+
+        await loadAllData();
+
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-emerald-50 text-emerald-800 border border-emerald-200';
+        banner.textContent = t.woDeleted;
+      } catch (err) {
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-red-50 text-red-800 border border-red-200';
+        banner.textContent = t.woDeleteError + (err.message || err);
+      }
+    }
+
+    async function createWorkOrder(event) {
+      event.preventDefault();
+      const t = TRANSLATIONS[currentLang];
+      const banner = document.getElementById('statusBanner');
+
+      if (!SUPABASE_KEY || SUPABASE_KEY === 'YOUR_PUBLISHABLE_KEY_HERE') {
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-amber-50 text-amber-800 border border-amber-200';
+        banner.textContent = t.keyMissing;
+        return;
+      }
+
+      const wo_number = document.getElementById('woCodeInput').value.trim();
+      const title = document.getElementById('woTitleInput').value.trim();
+      const site_name = document.getElementById('woSiteInput').value.trim();
+      const priority = document.getElementById('woPrioritySelect').value;
+      const status = document.getElementById('woStatusSelect').value;
+
+      if (!wo_number || !title || !site_name) return;
+
+      const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+      try {
+        const { error } = await client.from('work_orders').insert([
+          { wo_number, title, site_name, priority, status }
+        ]);
+
+        if (error) throw error;
+
+        document.getElementById('woForm').reset();
+        await loadAllData();
+
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-emerald-50 text-emerald-800 border border-emerald-200';
+        banner.textContent = t.woCreated;
+      } catch (err) {
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-red-50 text-red-800 border border-red-200';
+        banner.textContent = t.woCreateError + (err.message || err);
+      }
+    }
+
+    async function updateWorkOrderStatus(woId, woNumber, newStatus) {
+      const t = TRANSLATIONS[currentLang];
+      const banner = document.getElementById('statusBanner');
+
+      if (!SUPABASE_KEY || SUPABASE_KEY === 'YOUR_PUBLISHABLE_KEY_HERE') {
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-amber-50 text-amber-800 border border-amber-200';
+        banner.textContent = t.keyMissing;
+        return;
+      }
+
+      const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+      try {
+        let query = client.from('work_orders').update({ status: newStatus });
+        if (woId) {
+          query = query.eq('id', woId);
+        } else {
+          query = query.eq('wo_number', woNumber);
+        }
+
+        const { error } = await query;
+        if (error) throw error;
+
+        await loadAllData();
+
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-emerald-50 text-emerald-800 border border-emerald-200';
+        banner.textContent = t.woStatusUpdated;
+      } catch (err) {
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-red-50 text-red-800 border border-red-200';
+        banner.textContent = t.woStatusError + (err.message || err);
+      }
+    }
+
+    async function updateAssetStatus(assetId, assetCode, newStatus) {
+      const t = TRANSLATIONS[currentLang];
+      const banner = document.getElementById('statusBanner');
+
+      if (!SUPABASE_KEY || SUPABASE_KEY === 'YOUR_PUBLISHABLE_KEY_HERE') {
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-amber-50 text-amber-800 border border-amber-200';
+        banner.textContent = t.keyMissing;
+        return;
+      }
+
+      const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+      try {
+        let query = client.from('assets').update({ status: newStatus });
+        if (assetId) {
+          query = query.eq('id', assetId);
+        } else {
+          query = query.eq('asset_code', assetCode);
+        }
+
+        const { error } = await query;
+        if (error) throw error;
+
+        await loadAllData();
+
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-emerald-50 text-emerald-800 border border-emerald-200';
+        banner.textContent = t.assetStatusUpdated;
+      } catch (err) {
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-red-50 text-red-800 border border-red-200';
+        banner.textContent = t.assetStatusError + (err.message || err);
+      }
+    }
+
+    async function loadAllData() {
+      const t = TRANSLATIONS[currentLang];
+      const banner = document.getElementById('statusBanner');
+
+      if (!SUPABASE_KEY || SUPABASE_KEY === 'YOUR_PUBLISHABLE_KEY_HERE') {
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-amber-50 text-amber-800 border border-amber-200';
+        banner.textContent = t.keyMissing;
+        return;
+      }
+
+      const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+      try {
+        const [assetsRes, woRes, pmRes] = await Promise.all([
+          client.from('assets').select('*').order('asset_code', { ascending: true }),
+          client.from('work_orders').select('*').order('created_at', { ascending: false }),
+          client.from('preventive_maintenance').select('*').order('next_due_at', { ascending: true })
+        ]);
+
+        if (assetsRes.error) throw assetsRes.error;
+        if (woRes.error) throw woRes.error;
+        if (pmRes.error) throw pmRes.error;
+
+        cachedAssets = assetsRes.data || [];
+        cachedWorkOrders = woRes.data || [];
+        cachedPmList = pmRes.data || [];
+
+        document.getElementById('count-assets').textContent = cachedAssets.length;
+        document.getElementById('count-wo').textContent = cachedWorkOrders.length;
+        document.getElementById('count-pm').textContent = cachedPmList.length;
+
+        renderWorkOrders();
+        renderAssets();
+        renderPmList();
+
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-emerald-50 text-emerald-800 border border-emerald-200';
+        banner.textContent = t.connected;
+      } catch (err) {
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-red-50 text-red-800 border border-red-200';
+        banner.textContent = t.loadError + (err.message || err);
+      }
+    }
+
+    applyLanguage('en');
+    loadAllData();
+  </script>
+</body>
+</html>
