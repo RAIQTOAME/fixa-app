@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
@@ -158,6 +157,8 @@
         phWoSite: 'e.g. Logistics Center - Modiin',
         woCreated: 'Work order added successfully.',
         woCreateError: 'Could not add work order: ',
+        woStatusUpdated: 'Work order status updated successfully.',
+        woStatusError: 'Could not update status: ',
         secWo: 'Work Orders',
         secAssets: 'Assets & Systems',
         secPm: 'Preventive Maintenance',
@@ -184,6 +185,8 @@
         phWoSite: 'למשל: מרכז לוגיסטי - מודיעין',
         woCreated: 'קריאת השירות נוספה בהצלחה.',
         woCreateError: 'שגיאה בהוספת קריאת השירות: ',
+        woStatusUpdated: 'סטטוס קריאת השירות עודכן בהצלחה.',
+        woStatusError: 'שגיאה בעדכון הסטטוס: ',
         secWo: 'קריאות שירות',
         secAssets: 'נכסים ומערכות',
         secPm: 'תחזוקה מונעת',
@@ -210,6 +213,8 @@
         phWoSite: 'مثال: المركز اللوجستي - موديعين',
         woCreated: 'تمت إضافة أمر العمل بنجاح.',
         woCreateError: 'تعذر إضافة أمر العمل: ',
+        woStatusUpdated: 'تم تحديث حالة أمر العمل بنجاح.',
+        woStatusError: 'تعذر تحديث الحالة: ',
         secWo: 'أوامر العمل',
         secAssets: 'الأصول والمعدات',
         secPm: 'الصيانة الوقائية',
@@ -236,6 +241,8 @@
         phWoSite: 'Например: Логистический центр',
         woCreated: 'Заявка успешно добавлена.',
         woCreateError: 'Ошибка добавления заявки: ',
+        woStatusUpdated: 'Статус заявки обновлён.',
+        woStatusError: 'Ошибка обновления статуса: ',
         secWo: 'Заявки на работы',
         secAssets: 'Активы и системы',
         secPm: 'Плановое ТО',
@@ -262,6 +269,8 @@
         phWoSite: 'Ej.: Centro Logístico',
         woCreated: 'Orden de trabajo agregada correctamente.',
         woCreateError: 'Error al agregar la orden de trabajo: ',
+        woStatusUpdated: 'Estado de la orden actualizado.',
+        woStatusError: 'Error al actualizar el estado: ',
         secWo: 'Órdenes de trabajo',
         secAssets: 'Activos y sistemas',
         secPm: 'Mantenimiento preventivo',
@@ -288,6 +297,8 @@
         phWoSite: 'Ex. : Centre logistique',
         woCreated: 'Ordre de travail ajouté avec succès.',
         woCreateError: 'Impossible d’ajouter l’ordre de travail : ',
+        woStatusUpdated: 'Statut de l’ordre mis à jour.',
+        woStatusError: 'Impossible de mettre à jour le statut : ',
         secWo: 'Ordres de travail',
         secAssets: 'Équipements et systèmes',
         secPm: 'Maintenance préventive',
@@ -314,6 +325,8 @@
         phWoSite: 'Es.: Centro logistico',
         woCreated: 'Ordine di lavoro aggiunto con successo.',
         woCreateError: 'Impossibile aggiungere l’ordine di lavoro: ',
+        woStatusUpdated: 'Stato dell’ordine aggiornato.',
+        woStatusError: 'Impossibile aggiornare lo stato: ',
         secWo: 'Ordini di lavoro',
         secAssets: 'Asset e sistemi',
         secPm: 'Manutenzione preventiva',
@@ -340,6 +353,8 @@
         phWoSite: 'Z. B.: Logistikzentrum',
         woCreated: 'Arbeitsauftrag erfolgreich hinzugefügt.',
         woCreateError: 'Arbeitsauftrag konnte nicht hinzugefügt werden: ',
+        woStatusUpdated: 'Status des Arbeitsauftrags aktualisiert.',
+        woStatusError: 'Status konnte nicht aktualisiert werden: ',
         secWo: 'Arbeitsaufträge',
         secAssets: 'Anlagen & Systeme',
         secPm: 'Vorbeugende Wartung',
@@ -488,6 +503,13 @@
       return entry[lang] || entry.en || raw;
     }
 
+    function normalizeStatusKey(status) {
+      const raw = String(status || '').trim().toLowerCase();
+      if (raw === 'תקין' || raw === 'operational') return 'תקין';
+      if (raw === 'דורש בדיקה' || raw === 'needs inspection') return 'דורש בדיקה';
+      return 'בטיפול';
+    }
+
     function getLocalizedField(record, field, lang) {
       if (!record) return '';
       const localizedKey = `${field}_${lang}`;
@@ -589,6 +611,39 @@
       }
     }
 
+    async function updateWorkOrderStatus(woId, woNumber, newStatus) {
+      const t = TRANSLATIONS[currentLang];
+      const banner = document.getElementById('statusBanner');
+
+      if (!SUPABASE_KEY || SUPABASE_KEY === 'YOUR_PUBLISHABLE_KEY_HERE') {
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-amber-50 text-amber-800 border border-amber-200';
+        banner.textContent = t.keyMissing;
+        return;
+      }
+
+      const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+      try {
+        let query = client.from('work_orders').update({ status: newStatus });
+        if (woId) {
+          query = query.eq('id', woId);
+        } else {
+          query = query.eq('wo_number', woNumber);
+        }
+
+        const { error } = await query;
+        if (error) throw error;
+
+        await loadAllData();
+
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-emerald-50 text-emerald-800 border border-emerald-200';
+        banner.textContent = t.woStatusUpdated;
+      } catch (err) {
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-red-50 text-red-800 border border-red-200';
+        banner.textContent = t.woStatusError + (err.message || err);
+      }
+    }
+
     async function loadAllData() {
       const t = TRANSLATIONS[currentLang];
       const banner = document.getElementById('statusBanner');
@@ -621,15 +676,30 @@
         document.getElementById('count-pm').textContent = pmListData.length;
 
         const woBody = document.getElementById('woTableBody');
-        woBody.innerHTML = workOrders.map(wo => `
-          <tr>
-            <td class="py-2.5 px-3 font-medium">${wo.wo_number || ''}</td>
-            <td class="py-2.5 px-3">${getLocalizedField(wo, 'title', currentLang)}</td>
-            <td class="py-2.5 px-3">${getLocalizedField(wo, 'site_name', currentLang)}</td>
-            <td class="py-2.5 px-3">${translateDbValue(wo.priority, PRIORITY_MAP, currentLang)}</td>
-            <td class="py-2.5 px-3"><span class="px-2 py-1 rounded-full text-xs bg-slate-100">${translateDbValue(wo.status, STATUS_MAP, currentLang)}</span></td>
-          </tr>
-        `).join('');
+        woBody.innerHTML = workOrders.map(wo => {
+          const currentStatus = normalizeStatusKey(wo.status);
+          const safeId = wo.id ? `'${String(wo.id).replace(/'/g, "\\'")}'` : 'null';
+          const safeNum = `'${String(wo.wo_number || '').replace(/'/g, "\\'")}'`;
+
+          return `
+            <tr>
+              <td class="py-2.5 px-3 font-medium">${wo.wo_number || ''}</td>
+              <td class="py-2.5 px-3">${getLocalizedField(wo, 'title', currentLang)}</td>
+              <td class="py-2.5 px-3">${getLocalizedField(wo, 'site_name', currentLang)}</td>
+              <td class="py-2.5 px-3">${translateDbValue(wo.priority, PRIORITY_MAP, currentLang)}</td>
+              <td class="py-2.5 px-3">
+                <select
+                  onchange="updateWorkOrderStatus(${safeId}, ${safeNum}, this.value)"
+                  class="px-2.5 py-1 rounded-full text-xs font-medium bg-slate-100 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
+                >
+                  <option value="בטיפול" ${currentStatus === 'בטיפול' ? 'selected' : ''}>${translateDbValue('בטיפול', STATUS_MAP, currentLang)}</option>
+                  <option value="דורש בדיקה" ${currentStatus === 'דורש בדיקה' ? 'selected' : ''}>${translateDbValue('דורש בדיקה', STATUS_MAP, currentLang)}</option>
+                  <option value="תקין" ${currentStatus === 'תקין' ? 'selected' : ''}>${translateDbValue('תקין', STATUS_MAP, currentLang)}</option>
+                </select>
+              </td>
+            </tr>
+          `;
+        }).join('');
 
         const assetsListEl = document.getElementById('assetsList');
         assetsListEl.innerHTML = assets.map(a => `
