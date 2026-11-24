@@ -239,6 +239,11 @@
           <input id="pmTechInput" type="text" required class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
         </div>
 
+        <div class="lg:col-span-2">
+          <label id="lbl-pm-due" for="pmNextDueInput" class="block text-xs font-semibold text-slate-600 mb-1">Next Due Date</label>
+          <input id="pmNextDueInput" type="datetime-local" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500" />
+        </div>
+
         <!-- Optional Translated Columns for PM (EN / AR) -->
         <div class="lg:col-span-6 pt-2 border-t border-slate-100">
           <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
@@ -410,7 +415,12 @@
           <input id="editPmTechInput" type="text" required class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500" />
         </div>
 
-        <div class="lg:col-span-6 flex justify-end gap-2 mt-1">
+        <div class="lg:col-span-2">
+          <label id="edit-pm-lbl-due" for="editPmNextDueInput" class="block text-xs font-semibold text-slate-700 mb-1">Next Due Date</label>
+          <input id="editPmNextDueInput" type="datetime-local" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+        </div>
+
+        <div class="lg:col-span-4 flex justify-end gap-2 mt-1">
           <button id="btn-pm-cancel" type="button" onclick="closeEditPm()" class="px-4 py-2 rounded-xl bg-white hover:bg-slate-100 text-slate-700 border border-slate-300 text-sm font-medium transition">
             Cancel
           </button>
@@ -608,6 +618,11 @@
         btnPmSubmit: 'Add PM',
         lblPmFrequency: 'Frequency',
         lblPmTech: 'Technician',
+        lblPmNextDue: 'Next Due Date',
+        lblNextDueShort: 'Next due',
+        btnMarkDone: 'Mark Done',
+        pmMarkedDone: 'PM marked done and next due date scheduled.',
+        pmMarkDoneError: 'Could not mark PM as done: ',
         phPmTitle: 'e.g. Quarterly HVAC filter inspection',
         phPmSite: 'e.g. Logistics Center - Modiin',
         phPmFrequency: 'e.g. Quarterly',
@@ -701,6 +716,11 @@
         btnPmSubmit: 'הוסף תחזוקה מונעת',
         lblPmFrequency: 'תדירות',
         lblPmTech: 'טכנאי אחראי',
+        lblPmNextDue: 'מועד יעד הבא',
+        lblNextDueShort: 'יעד הבא',
+        btnMarkDone: 'סמן כבוצע',
+        pmMarkedDone: 'התחזוקה סומנה כבוצעה ומועד היעד הבא עודכן.',
+        pmMarkDoneError: 'שגיאה בסימון התחזוקה כבוצעה: ',
         phPmTitle: 'למשל: בדיקת מסנני מיזוג רבעונית',
         phPmSite: 'למשל: מרכז לוגיסטי - מודיעין',
         phPmFrequency: 'למשל: רבעוני',
@@ -794,6 +814,11 @@
         btnPmSubmit: 'إضافة صيانة وقائية',
         lblPmFrequency: 'التكرار',
         lblPmTech: 'الفني المسؤول',
+        lblPmNextDue: 'موعد الاستحقاق القادم',
+        lblNextDueShort: 'الاستحقاق القادم',
+        btnMarkDone: 'تم التنفيذ',
+        pmMarkedDone: 'تم تعليم الصيانة كمنفّذة وتحديث موعد الاستحقاق القادم.',
+        pmMarkDoneError: 'تعذر تعليم الصيانة كمنفّذة: ',
         phPmTitle: 'مثال: فحص فلاتر التكييف ربع السنوي',
         phPmSite: 'مثال: المركز اللوجستي - موديعين',
         phPmFrequency: 'مثال: ربع سنوي',
@@ -887,6 +912,11 @@
         btnPmSubmit: 'Добавить ТО',
         lblPmFrequency: 'Периодичность',
         lblPmTech: 'Техник',
+        lblPmNextDue: 'Следующая дата',
+        lblNextDueShort: 'След. дата',
+        btnMarkDone: 'Выполнено',
+        pmMarkedDone: 'ТО отмечено как выполненное, следующая дата обновлена.',
+        pmMarkDoneError: 'Ошибка при отметке ТО: ',
         phPmTitle: 'Например: Проверка фильтров ОВК',
         phPmSite: 'Например: Логистический центр',
         phPmFrequency: 'Например: Ежеквартально',
@@ -980,6 +1010,11 @@
         btnPmSubmit: 'Agregar PM',
         lblPmFrequency: 'Frecuencia',
         lblPmTech: 'Técnico',
+        lblPmNextDue: 'Próxima fecha',
+        lblNextDueShort: 'Próxima fecha',
+        btnMarkDone: 'Completado',
+        pmMarkedDone: 'PM marcado como realizado y próxima fecha programada.',
+        pmMarkDoneError: 'Error al marcar PM como realizado: ',
         phPmTitle: 'Ej.: Revisión trimestral de filtros HVAC',
         phPmSite: 'Ej.: Centro Logístico',
         phPmFrequency: 'Ej.: Trimestral',
@@ -1073,6 +1108,11 @@
         btnPmSubmit: 'Ajouter PM',
         lblPmFrequency: 'Fréquence',
         lblPmTech: 'Technicien',
+        lblPmNextDue: 'Prochaine échéance',
+        lblNextDueShort: 'Échéance',
+        btnMarkDone: 'Terminé',
+        pmMarkedDone: 'PM marquée comme effectuée et prochaine date mise à jour.',
+        pmMarkDoneError: 'Impossible de marquer la PM comme effectuée : ',
         phPmTitle: 'Ex. : Contrôle trimestriel des filtres CVC',
         phPmSite: 'Ex. : Centre logistique',
         phPmFrequency: 'Ex. : Trimestriel',
@@ -1166,6 +1206,11 @@
         btnPmSubmit: 'Aggiungi PM',
         lblPmFrequency: 'Frequenza',
         lblPmTech: 'Tecnico',
+        lblPmNextDue: 'Prossima scadenza',
+        lblNextDueShort: 'Scadenza',
+        btnMarkDone: 'Completata',
+        pmMarkedDone: 'PM segnata come completata e prossima scadenza aggiornata.',
+        pmMarkDoneError: 'Impossibile segnare la PM come completata: ',
         phPmTitle: 'Es.: Controllo trimestrale filtri HVAC',
         phPmSite: 'Es.: Centro logistico',
         phPmFrequency: 'Es.: Trimestrale',
@@ -1259,6 +1304,11 @@
         btnPmSubmit: 'PM hinzufügen',
         lblPmFrequency: 'Intervall',
         lblPmTech: 'Techniker',
+        lblPmNextDue: 'Nächstes Fälligkeitsdatum',
+        lblNextDueShort: 'Nächste Fälligkeit',
+        btnMarkDone: 'Erledigt',
+        pmMarkedDone: 'PM als erledigt markiert und nächstes Datum gesetzt.',
+        pmMarkDoneError: 'Fehler beim Markieren als erledigt: ',
         phPmTitle: 'Z. B.: Vierteljährliche Filterprüfung',
         phPmSite: 'Z. B.: Logistikzentrum',
         phPmFrequency: 'Z. B.: Vierteljährlich',
@@ -1482,6 +1532,52 @@
       return template.replace('{shown}', shown).replace('{total}', total);
     }
 
+    function toDatetimeLocalValue(isoString) {
+      if (!isoString) return '';
+      const date = new Date(isoString);
+      if (Number.isNaN(date.getTime())) return '';
+      const offsetMs = date.getTimezoneOffset() * 60000;
+      return new Date(date.getTime() - offsetMs).toISOString().slice(0, 16);
+    }
+
+    function formatDisplayDate(isoString, lang) {
+      if (!isoString) return '';
+      const date = new Date(isoString);
+      if (Number.isNaN(date.getTime())) return String(isoString);
+      try {
+        return date.toLocaleString(lang || 'en', {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+      } catch (_) {
+        return date.toISOString().slice(0, 16).replace('T', ' ');
+      }
+    }
+
+    function computeNextDueIso(frequencyText) {
+      const freq = String(frequencyText || '').trim().toLowerCase();
+      let daysToAdd = 7;
+
+      if (freq.includes('daily') || freq.includes('יומי') || freq.includes('يومي') || freq.includes('ежедневно') || freq.includes('diario') || freq.includes('quotidien') || freq.includes('giornaliero') || freq.includes('täglich')) {
+        daysToAdd = 1;
+      } else if (freq.includes('weekly') || freq.includes('שבועי') || freq.includes('أسبوعي') || freq.includes('еженедельно') || freq.includes('semanal') || freq.includes('hebdomadaire') || freq.includes('settimanale') || freq.includes('wöchentlich')) {
+        daysToAdd = 7;
+      } else if (freq.includes('monthly') || freq.includes('חודשי') || freq.includes('شهري') || freq.includes('ежемесячно') || freq.includes('mensual') || freq.includes('mensuel') || freq.includes('mensile') || freq.includes('monatlich')) {
+        daysToAdd = 30;
+      } else if (freq.includes('quarterly') || freq.includes('רבעוני') || freq.includes('ربع سنوي') || freq.includes('ежеквартально') || freq.includes('trimestral') || freq.includes('trimestriel') || freq.includes('vierteljährlich')) {
+        daysToAdd = 90;
+      } else if (freq.includes('semi') || freq.includes('half') || freq.includes('חצי') || freq.includes('نصف سنوي') || freq.includes('полугодие') || freq.includes('semestral') || freq.includes('semestriel') || freq.includes('halbjährlich')) {
+        daysToAdd = 180;
+      } else if (freq.includes('annual') || freq.includes('yearly') || freq.includes('שנתי') || freq.includes('سنوي') || freq.includes('ежегодно') || freq.includes('anual') || freq.includes('annuel') || freq.includes('annuale') || freq.includes('jährlich')) {
+        daysToAdd = 365;
+      }
+
+      return new Date(Date.now() + daysToAdd * 24 * 60 * 60 * 1000).toISOString();
+    }
+
     function copyMainFieldsToTranslations() {
       const title = document.getElementById('woTitleInput').value.trim();
       const site = document.getElementById('woSiteInput').value.trim();
@@ -1614,6 +1710,7 @@
       document.getElementById('lbl-pm-site').textContent = t.thSite;
       document.getElementById('lbl-pm-freq').textContent = t.lblPmFrequency;
       document.getElementById('lbl-pm-tech').textContent = t.lblPmTech;
+      document.getElementById('lbl-pm-due').textContent = t.lblPmNextDue;
       document.getElementById('btn-pm-submit').textContent = t.btnPmSubmit;
       document.getElementById('pmTitleInput').placeholder = t.phPmTitle;
       document.getElementById('pmSiteInput').placeholder = t.phPmSite;
@@ -1671,6 +1768,7 @@
       document.getElementById('edit-pm-lbl-site').textContent = t.thSite;
       document.getElementById('edit-pm-lbl-freq').textContent = t.lblPmFrequency;
       document.getElementById('edit-pm-lbl-tech').textContent = t.lblPmTech;
+      document.getElementById('edit-pm-lbl-due').textContent = t.lblPmNextDue;
       document.getElementById('btn-pm-save').textContent = t.btnWoSave;
       document.getElementById('btn-pm-cancel').textContent = t.btnWoCancel;
 
@@ -1939,15 +2037,21 @@
       pmListEl.innerHTML = filtered.map(pm => {
         const safeId = pm.id ? `'${String(pm.id).replace(/'/g, "\\'")}'` : 'null';
         const safeCode = `'${String(pm.pm_code || '').replace(/'/g, "\\'")}'`;
+        const dueText = pm.next_due_at ? formatDisplayDate(pm.next_due_at, currentLang) : '';
 
         return `
           <li class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex flex-wrap items-center justify-between gap-2">
             <div>
               <div class="font-semibold">${getLocalizedField(pm, 'title', currentLang)} <span class="text-xs text-slate-500">(${pm.pm_code || ''})</span></div>
-              <div class="text-xs text-slate-500">${getLocalizedField(pm, 'site_name', currentLang)} • ${getLocalizedField(pm, 'frequency', currentLang)}</div>
+              <div class="text-xs text-slate-500">${getLocalizedField(pm, 'site_name', currentLang)} • ${getLocalizedField(pm, 'frequency', currentLang)} • ${getLocalizedField(pm, 'assigned_technician', currentLang)}</div>
+              ${dueText ? `<div class="text-xs text-indigo-700 font-medium mt-0.5">${t.lblNextDueShort}: ${dueText}</div>` : ''}
             </div>
-            <div class="flex items-center gap-1.5">
-              <span class="text-xs text-slate-600 px-2">${getLocalizedField(pm, 'assigned_technician', currentLang)}</span>
+            <div class="flex flex-wrap items-center gap-1.5">
+              <button
+                type="button"
+                onclick="markPmDone(${safeId}, ${safeCode})"
+                class="px-2.5 py-1 rounded-lg text-xs font-medium bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 transition"
+              >${t.btnMarkDone}</button>
               <button
                 type="button"
                 onclick="openEditPm(${safeCode})"
@@ -1962,6 +2066,44 @@
           </li>
         `;
       }).join('');
+    }
+
+    async function markPmDone(pmId, pmCode) {
+      const t = TRANSLATIONS[currentLang];
+      const banner = document.getElementById('statusBanner');
+
+      if (!SUPABASE_KEY || SUPABASE_KEY === 'YOUR_PUBLISHABLE_KEY_HERE') {
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-amber-50 text-amber-800 border border-amber-200';
+        banner.textContent = t.keyMissing;
+        return;
+      }
+
+      const pm = cachedPmList.find(item =>
+        (pmId && String(item.id) === String(pmId)) || String(item.pm_code) === String(pmCode)
+      );
+      const nextDueIso = computeNextDueIso(pm ? pm.frequency : '');
+
+      const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+      try {
+        let query = client.from('preventive_maintenance').update({ next_due_at: nextDueIso });
+        if (pmId) {
+          query = query.eq('id', pmId);
+        } else {
+          query = query.eq('pm_code', pmCode);
+        }
+
+        const { error } = await query;
+        if (error) throw error;
+
+        await loadAllData();
+
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-emerald-50 text-emerald-800 border border-emerald-200';
+        banner.textContent = t.pmMarkedDone;
+      } catch (err) {
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-red-50 text-red-800 border border-red-200';
+        banner.textContent = t.pmMarkDoneError + (err.message || err);
+      }
     }
 
     function openEditAsset(assetCode) {
@@ -2088,6 +2230,7 @@
       document.getElementById('editPmSiteInput').value = getLocalizedField(pm, 'site_name', currentLang) || pm.site_name || '';
       document.getElementById('editPmFrequencyInput').value = getLocalizedField(pm, 'frequency', currentLang) || pm.frequency || '';
       document.getElementById('editPmTechInput').value = getLocalizedField(pm, 'assigned_technician', currentLang) || pm.assigned_technician || '';
+      document.getElementById('editPmNextDueInput').value = toDatetimeLocalValue(pm.next_due_at);
 
       const section = document.getElementById('editPmSection');
       section.classList.remove('hidden');
@@ -2117,10 +2260,18 @@
       const site_name = document.getElementById('editPmSiteInput').value.trim();
       const frequency = document.getElementById('editPmFrequencyInput').value.trim();
       const assigned_technician = document.getElementById('editPmTechInput').value.trim();
+      const nextDueLocal = document.getElementById('editPmNextDueInput').value;
 
       if (!pm_code || !title || !site_name || !frequency || !assigned_technician) return;
 
       const updatePayload = { pm_code, title, site_name, frequency, assigned_technician };
+      if (nextDueLocal) {
+        const parsed = new Date(nextDueLocal);
+        if (!Number.isNaN(parsed.getTime())) {
+          updatePayload.next_due_at = parsed.toISOString();
+        }
+      }
+
       if (currentLang !== 'he' && TRANSLATIONS[currentLang]) {
         updatePayload[`title_${currentLang}`] = title;
         updatePayload[`site_name_${currentLang}`] = site_name;
@@ -2206,6 +2357,7 @@
       const site_name = document.getElementById('pmSiteInput').value.trim();
       const frequency = document.getElementById('pmFrequencyInput').value.trim();
       const assigned_technician = document.getElementById('pmTechInput').value.trim();
+      const nextDueLocal = document.getElementById('pmNextDueInput').value;
 
       const titleEnInput = document.getElementById('pmTitleEnInput').value.trim();
       const siteEnInput = document.getElementById('pmSiteEnInput').value.trim();
@@ -2214,7 +2366,14 @@
 
       if (!pm_code || !title || !site_name || !frequency || !assigned_technician) return;
 
-      const nextDueDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
+      let nextDueDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
+      if (nextDueLocal) {
+        const parsed = new Date(nextDueLocal);
+        if (!Number.isNaN(parsed.getTime())) {
+          nextDueDate = parsed.toISOString();
+        }
+      }
+
       const payload = {
         pm_code,
         title,
