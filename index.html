@@ -210,6 +210,76 @@
       </form>
     </section>
 
+    <!-- New Preventive Maintenance Form -->
+    <section class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm mb-6">
+      <h2 id="t-form-pm-title" class="text-lg font-bold mb-4">New Preventive Maintenance</h2>
+      <form id="pmForm" onsubmit="createPm(event)" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-3 items-end">
+        <div>
+          <label id="lbl-pm-code" for="pmCodeInput" class="block text-xs font-semibold text-slate-600 mb-1">Code</label>
+          <input id="pmCodeInput" type="text" required placeholder="PM-309" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+        </div>
+
+        <div class="lg:col-span-2">
+          <label id="lbl-pm-title" for="pmTitleInput" class="block text-xs font-semibold text-slate-600 mb-1">Title</label>
+          <input id="pmTitleInput" type="text" required class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+        </div>
+
+        <div>
+          <label id="lbl-pm-site" for="pmSiteInput" class="block text-xs font-semibold text-slate-600 mb-1">Site</label>
+          <input id="pmSiteInput" type="text" required class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+        </div>
+
+        <div>
+          <label id="lbl-pm-freq" for="pmFrequencyInput" class="block text-xs font-semibold text-slate-600 mb-1">Frequency</label>
+          <input id="pmFrequencyInput" type="text" required class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+        </div>
+
+        <div>
+          <label id="lbl-pm-tech" for="pmTechInput" class="block text-xs font-semibold text-slate-600 mb-1">Technician</label>
+          <input id="pmTechInput" type="text" required class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+        </div>
+
+        <!-- Optional Translated Columns for PM (EN / AR) -->
+        <div class="lg:col-span-6 pt-2 border-t border-slate-100">
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+            <span id="t-pm-trans-hint" class="text-xs font-medium text-slate-500">Optional EN / AR translations for title & site (auto-filled for active language if left blank):</span>
+            <button
+              id="btn-pm-copy-to-langs"
+              type="button"
+              onclick="copyPmFieldsToTranslations()"
+              class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 text-xs font-medium transition"
+            >
+              Copy to EN & AR
+            </button>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+            <div>
+              <label id="lbl-pm-title-en" for="pmTitleEnInput" class="block text-xs text-slate-500 mb-1">Title (EN)</label>
+              <input id="pmTitleEnInput" type="text" class="w-full border border-slate-200 rounded-xl px-3 py-1.5 text-sm bg-slate-50/60 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            </div>
+            <div>
+              <label id="lbl-pm-site-en" for="pmSiteEnInput" class="block text-xs text-slate-500 mb-1">Site (EN)</label>
+              <input id="pmSiteEnInput" type="text" class="w-full border border-slate-200 rounded-xl px-3 py-1.5 text-sm bg-slate-50/60 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            </div>
+            <div>
+              <label id="lbl-pm-title-ar" for="pmTitleArInput" class="block text-xs text-slate-500 mb-1">Title (AR)</label>
+              <input id="pmTitleArInput" type="text" dir="rtl" class="w-full border border-slate-200 rounded-xl px-3 py-1.5 text-sm bg-slate-50/60 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            </div>
+            <div>
+              <label id="lbl-pm-site-ar" for="pmSiteArInput" class="block text-xs text-slate-500 mb-1">Site (AR)</label>
+              <input id="pmSiteArInput" type="text" dir="rtl" class="w-full border border-slate-200 rounded-xl px-3 py-1.5 text-sm bg-slate-50/60 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-6 flex justify-end mt-1">
+          <button id="btn-pm-submit" type="submit" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium transition">
+            Add PM
+          </button>
+        </div>
+      </form>
+    </section>
+
     <!-- Edit Work Order Panel (Hidden by default) -->
     <section id="editWoSection" class="hidden bg-amber-50/60 border border-amber-300 rounded-2xl p-5 shadow-sm mb-6">
       <h2 id="t-edit-wo-title" class="text-lg font-bold mb-4 text-amber-950">Edit Work Order</h2>
@@ -413,6 +483,17 @@
         lblNameAr: 'Name (AR)',
         assetCreated: 'Asset added successfully.',
         assetCreateError: 'Could not add asset: ',
+        formPmTitle: 'New Preventive Maintenance',
+        btnPmSubmit: 'Add PM',
+        lblPmFrequency: 'Frequency',
+        lblPmTech: 'Technician',
+        phPmTitle: 'e.g. Quarterly HVAC filter inspection',
+        phPmSite: 'e.g. Logistics Center - Modiin',
+        phPmFrequency: 'e.g. Quarterly',
+        phPmTech: 'e.g. Daniel Levi',
+        pmTransHint: 'Optional EN / AR translations for title & site (auto-filled for active language if left blank):',
+        pmCreated: 'Preventive maintenance added successfully.',
+        pmCreateError: 'Could not add preventive maintenance: ',
         woCreated: 'Work order added successfully.',
         woCreateError: 'Could not add work order: ',
         woStatusUpdated: 'Work order status updated successfully.',
@@ -480,6 +561,17 @@
         lblNameAr: 'שם (AR)',
         assetCreated: 'הנכס נוסף בהצלחה.',
         assetCreateError: 'שגיאה בהוספת הנכס: ',
+        formPmTitle: 'הוספת תחזוקה מונעת חדשה',
+        btnPmSubmit: 'הוסף תחזוקה מונעת',
+        lblPmFrequency: 'תדירות',
+        lblPmTech: 'טכנאי אחראי',
+        phPmTitle: 'למשל: בדיקת מסנני מיזוג רבעונית',
+        phPmSite: 'למשל: מרכז לוגיסטי - מודיעין',
+        phPmFrequency: 'למשל: רבעוני',
+        phPmTech: 'למשל: דניאל לוי',
+        pmTransHint: 'תרגומים אופציונליים ל-EN / AR עבור כותרת ואתר (מושלמים אוטומטית לשפה הפעילה):',
+        pmCreated: 'תחזוקה מונעת נוספה בהצלחה.',
+        pmCreateError: 'שגיאה בהוספת תחזוקה מונעת: ',
         woCreated: 'קריאת השירות נוספה בהצלחה.',
         woCreateError: 'שגיאה בהוספת קריאת השירות: ',
         woStatusUpdated: 'סטטוס קריאת השירות עודכן בהצלחה.',
@@ -547,6 +639,17 @@
         lblNameAr: 'الاسم (AR)',
         assetCreated: 'تمت إضافة الأصل بنجاح.',
         assetCreateError: 'تعذر إضافة الأصل: ',
+        formPmTitle: 'إضافة صيانة وقائية جديدة',
+        btnPmSubmit: 'إضافة صيانة وقائية',
+        lblPmFrequency: 'التكرار',
+        lblPmTech: 'الفني المسؤول',
+        phPmTitle: 'مثال: فحص فلاتر التكييف ربع السنوي',
+        phPmSite: 'مثال: المركز اللوجستي - موديعين',
+        phPmFrequency: 'مثال: ربع سنوي',
+        phPmTech: 'مثال: دانيال ليفي',
+        pmTransHint: 'ترجمات اختيارية لـ EN / AR للعنوان والموقع (تُملأ تلقائياً للغة الحالية):',
+        pmCreated: 'تمت إضافة الصيانة الوقائية بنجاح.',
+        pmCreateError: 'تعذر إضافة الصيانة الوقائية: ',
         woCreated: 'تمت إضافة أمر العمل بنجاح.',
         woCreateError: 'تعذر إضافة أمر العمل: ',
         woStatusUpdated: 'تم تحديث حالة أمر العمل بنجاح.',
@@ -614,6 +717,17 @@
         lblNameAr: 'Название (AR)',
         assetCreated: 'Актив успешно добавлен.',
         assetCreateError: 'Ошибка добавления актива: ',
+        formPmTitle: 'Новое плановое ТО',
+        btnPmSubmit: 'Добавить ТО',
+        lblPmFrequency: 'Периодичность',
+        lblPmTech: 'Техник',
+        phPmTitle: 'Например: Проверка фильтров ОВК',
+        phPmSite: 'Например: Логистический центр',
+        phPmFrequency: 'Например: Ежеквартально',
+        phPmTech: 'Например: Даниэль Леви',
+        pmTransHint: 'Необязательные переводы EN / AR для названия и объекта:',
+        pmCreated: 'Плановое ТО успешно добавлено.',
+        pmCreateError: 'Ошибка добавления планового ТО: ',
         woCreated: 'Заявка успешно добавлена.',
         woCreateError: 'Ошибка добавления заявки: ',
         woStatusUpdated: 'Статус заявки обновлён.',
@@ -681,6 +795,17 @@
         lblNameAr: 'Nombre (AR)',
         assetCreated: 'Activo agregado correctamente.',
         assetCreateError: 'Error al agregar el activo: ',
+        formPmTitle: 'Nuevo mantenimiento preventivo',
+        btnPmSubmit: 'Agregar PM',
+        lblPmFrequency: 'Frecuencia',
+        lblPmTech: 'Técnico',
+        phPmTitle: 'Ej.: Revisión trimestral de filtros HVAC',
+        phPmSite: 'Ej.: Centro Logístico',
+        phPmFrequency: 'Ej.: Trimestral',
+        phPmTech: 'Ej.: Daniel Levi',
+        pmTransHint: 'Traducciones EN / AR opcionales para título y sitio:',
+        pmCreated: 'Mantenimiento preventivo agregado correctamente.',
+        pmCreateError: 'Error al agregar mantenimiento preventivo: ',
         woCreated: 'Orden de trabajo agregada correctamente.',
         woCreateError: 'Error al agregar la orden de trabajo: ',
         woStatusUpdated: 'Estado de la orden actualizado.',
@@ -748,6 +873,17 @@
         lblNameAr: 'Nom (AR)',
         assetCreated: 'Équipement ajouté avec succès.',
         assetCreateError: 'Impossible d’ajouter l’équipement : ',
+        formPmTitle: 'Nouvelle maintenance préventive',
+        btnPmSubmit: 'Ajouter PM',
+        lblPmFrequency: 'Fréquence',
+        lblPmTech: 'Technicien',
+        phPmTitle: 'Ex. : Contrôle trimestriel des filtres CVC',
+        phPmSite: 'Ex. : Centre logistique',
+        phPmFrequency: 'Ex. : Trimestriel',
+        phPmTech: 'Ex. : Daniel Levi',
+        pmTransHint: 'Traductions EN / AR optionnelles pour le titre et le site :',
+        pmCreated: 'Maintenance préventive ajoutée avec succès.',
+        pmCreateError: 'Impossible d’ajouter la maintenance préventive : ',
         woCreated: 'Ordre de travail ajouté avec succès.',
         woCreateError: 'Impossible d’ajouter l’ordre de travail : ',
         woStatusUpdated: 'Statut de l’ordre mis à jour.',
@@ -815,6 +951,17 @@
         lblNameAr: 'Nome (AR)',
         assetCreated: 'Asset aggiunto con successo.',
         assetCreateError: 'Impossibile aggiungere l’asset: ',
+        formPmTitle: 'Nuova manutenzione preventiva',
+        btnPmSubmit: 'Aggiungi PM',
+        lblPmFrequency: 'Frequenza',
+        lblPmTech: 'Tecnico',
+        phPmTitle: 'Es.: Controllo trimestrale filtri HVAC',
+        phPmSite: 'Es.: Centro logistico',
+        phPmFrequency: 'Es.: Trimestrale',
+        phPmTech: 'Es.: Daniel Levi',
+        pmTransHint: 'Traduzioni EN / AR opzionali per titolo e sito:',
+        pmCreated: 'Manutenzione preventiva aggiunta con successo.',
+        pmCreateError: 'Impossibile aggiungere la manutenzione preventiva: ',
         woCreated: 'Ordine di lavoro aggiunto con successo.',
         woCreateError: 'Impossibile aggiungere l’ordine di lavoro: ',
         woStatusUpdated: 'Stato dell’ordine aggiornato.',
@@ -882,6 +1029,17 @@
         lblNameAr: 'Name (AR)',
         assetCreated: 'Anlage erfolgreich hinzugefügt.',
         assetCreateError: 'Anlage konnte nicht hinzugefügt werden: ',
+        formPmTitle: 'Neue vorbeugende Wartung',
+        btnPmSubmit: 'PM hinzufügen',
+        lblPmFrequency: 'Intervall',
+        lblPmTech: 'Techniker',
+        phPmTitle: 'Z. B.: Vierteljährliche Filterprüfung',
+        phPmSite: 'Z. B.: Logistikzentrum',
+        phPmFrequency: 'Z. B.: Vierteljährlich',
+        phPmTech: 'Z. B.: Daniel Levi',
+        pmTransHint: 'Optionale EN / AR Übersetzungen für Titel & Standort:',
+        pmCreated: 'Vorbeugende Wartung erfolgreich hinzugefügt.',
+        pmCreateError: 'Vorbeugende Wartung konnte nicht hinzugefügt werden: ',
         woCreated: 'Arbeitsauftrag erfolgreich hinzugefügt.',
         woCreateError: 'Arbeitsauftrag konnte nicht hinzugefügt werden: ',
         woStatusUpdated: 'Status des Arbeitsauftrags aktualisiert.',
@@ -1117,6 +1275,20 @@
       }
     }
 
+    function copyPmFieldsToTranslations() {
+      const title = document.getElementById('pmTitleInput').value.trim();
+      const site = document.getElementById('pmSiteInput').value.trim();
+
+      if (title) {
+        document.getElementById('pmTitleEnInput').value = title;
+        document.getElementById('pmTitleArInput').value = title;
+      }
+      if (site) {
+        document.getElementById('pmSiteEnInput').value = site;
+        document.getElementById('pmSiteArInput').value = site;
+      }
+    }
+
     let currentLang = 'en';
     let cachedWorkOrders = [];
     let cachedAssets = [];
@@ -1177,6 +1349,25 @@
       document.getElementById('lbl-ast-site-en').textContent = t.lblSiteEn;
       document.getElementById('lbl-ast-name-ar').textContent = t.lblNameAr;
       document.getElementById('lbl-ast-site-ar').textContent = t.lblSiteAr;
+
+      document.getElementById('t-form-pm-title').textContent = t.formPmTitle;
+      document.getElementById('lbl-pm-code').textContent = t.thCode;
+      document.getElementById('lbl-pm-title').textContent = t.thTitle;
+      document.getElementById('lbl-pm-site').textContent = t.thSite;
+      document.getElementById('lbl-pm-freq').textContent = t.lblPmFrequency;
+      document.getElementById('lbl-pm-tech').textContent = t.lblPmTech;
+      document.getElementById('btn-pm-submit').textContent = t.btnPmSubmit;
+      document.getElementById('pmTitleInput').placeholder = t.phPmTitle;
+      document.getElementById('pmSiteInput').placeholder = t.phPmSite;
+      document.getElementById('pmFrequencyInput').placeholder = t.phPmFrequency;
+      document.getElementById('pmTechInput').placeholder = t.phPmTech;
+
+      document.getElementById('t-pm-trans-hint').textContent = t.pmTransHint;
+      document.getElementById('btn-pm-copy-to-langs').textContent = t.btnCopyToLangs;
+      document.getElementById('lbl-pm-title-en').textContent = t.lblTitleEn;
+      document.getElementById('lbl-pm-site-en').textContent = t.lblSiteEn;
+      document.getElementById('lbl-pm-title-ar').textContent = t.lblTitleAr;
+      document.getElementById('lbl-pm-site-ar').textContent = t.lblSiteAr;
 
       document.getElementById('opt-prio-low').textContent = translateDbValue('נמוך', PRIORITY_MAP, currentLang);
       document.getElementById('opt-prio-med').textContent = translateDbValue('בינוני', PRIORITY_MAP, currentLang);
@@ -1416,6 +1607,86 @@
           <span class="text-xs text-slate-600">${getLocalizedField(pm, 'assigned_technician', currentLang)}</span>
         </li>
       `).join('');
+    }
+
+    async function createPm(event) {
+      event.preventDefault();
+      const t = TRANSLATIONS[currentLang];
+      const banner = document.getElementById('statusBanner');
+
+      if (!SUPABASE_KEY || SUPABASE_KEY === 'YOUR_PUBLISHABLE_KEY_HERE') {
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-amber-50 text-amber-800 border border-amber-200';
+        banner.textContent = t.keyMissing;
+        return;
+      }
+
+      const pm_code = document.getElementById('pmCodeInput').value.trim();
+      const title = document.getElementById('pmTitleInput').value.trim();
+      const site_name = document.getElementById('pmSiteInput').value.trim();
+      const frequency = document.getElementById('pmFrequencyInput').value.trim();
+      const assigned_technician = document.getElementById('pmTechInput').value.trim();
+
+      const titleEnInput = document.getElementById('pmTitleEnInput').value.trim();
+      const siteEnInput = document.getElementById('pmSiteEnInput').value.trim();
+      const titleArInput = document.getElementById('pmTitleArInput').value.trim();
+      const siteArInput = document.getElementById('pmSiteArInput').value.trim();
+
+      if (!pm_code || !title || !site_name || !frequency || !assigned_technician) return;
+
+      const nextDueDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString();
+      const payload = {
+        pm_code,
+        title,
+        site_name,
+        frequency,
+        assigned_technician,
+        next_due_at: nextDueDate
+      };
+
+      if (titleEnInput) {
+        payload.title_en = titleEnInput;
+      } else if (currentLang === 'en') {
+        payload.title_en = title;
+      }
+
+      if (siteEnInput) {
+        payload.site_name_en = siteEnInput;
+      } else if (currentLang === 'en') {
+        payload.site_name_en = site_name;
+      }
+
+      if (titleArInput) {
+        payload.title_ar = titleArInput;
+      } else if (currentLang === 'ar') {
+        payload.title_ar = title;
+      }
+
+      if (siteArInput) {
+        payload.site_name_ar = siteArInput;
+      } else if (currentLang === 'ar') {
+        payload.site_name_ar = site_name;
+      }
+
+      if (currentLang !== 'he' && currentLang !== 'en' && currentLang !== 'ar' && TRANSLATIONS[currentLang]) {
+        payload[`title_${currentLang}`] = title;
+        payload[`site_name_${currentLang}`] = site_name;
+      }
+
+      const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+      try {
+        const { error } = await client.from('preventive_maintenance').insert([payload]);
+        if (error) throw error;
+
+        document.getElementById('pmForm').reset();
+        await loadAllData();
+
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-emerald-50 text-emerald-800 border border-emerald-200';
+        banner.textContent = t.pmCreated;
+      } catch (err) {
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-red-50 text-red-800 border border-red-200';
+        banner.textContent = t.pmCreateError + (err.message || err);
+      }
     }
 
     async function createAsset(event) {
