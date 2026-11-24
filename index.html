@@ -394,6 +394,16 @@
       return entry[lang] || entry.en || raw;
     }
 
+    function getLocalizedField(record, field, lang) {
+      if (!record) return '';
+      const localizedKey = `${field}_${lang}`;
+      const localizedVal = record[localizedKey];
+      if (typeof localizedVal === 'string' && localizedVal.trim() !== '') {
+        return localizedVal;
+      }
+      return record[field] || '';
+    }
+
     let currentLang = 'en';
 
     function applyLanguage(lang) {
@@ -462,8 +472,8 @@
         woBody.innerHTML = workOrders.map(wo => `
           <tr>
             <td class="py-2.5 px-3 font-medium">${wo.wo_number || ''}</td>
-            <td class="py-2.5 px-3">${wo.title || ''}</td>
-            <td class="py-2.5 px-3">${wo.site_name || ''}</td>
+            <td class="py-2.5 px-3">${getLocalizedField(wo, 'title', currentLang)}</td>
+            <td class="py-2.5 px-3">${getLocalizedField(wo, 'site_name', currentLang)}</td>
             <td class="py-2.5 px-3">${translateDbValue(wo.priority, PRIORITY_MAP, currentLang)}</td>
             <td class="py-2.5 px-3"><span class="px-2 py-1 rounded-full text-xs bg-slate-100">${translateDbValue(wo.status, STATUS_MAP, currentLang)}</span></td>
           </tr>
@@ -473,8 +483,8 @@
         assetsListEl.innerHTML = assets.map(a => `
           <li class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between gap-2">
             <div>
-              <div class="font-semibold">${a.name || ''} <span class="text-xs text-slate-500">(${a.asset_code || ''})</span></div>
-              <div class="text-xs text-slate-500">${a.site_name || ''} • ${a.category || ''}</div>
+              <div class="font-semibold">${getLocalizedField(a, 'name', currentLang)} <span class="text-xs text-slate-500">(${a.asset_code || ''})</span></div>
+              <div class="text-xs text-slate-500">${getLocalizedField(a, 'site_name', currentLang)} • ${getLocalizedField(a, 'category', currentLang)}</div>
             </div>
             <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">${translateDbValue(a.status, STATUS_MAP, currentLang)}</span>
           </li>
@@ -484,10 +494,10 @@
         pmListEl.innerHTML = pmListData.map(pm => `
           <li class="p-3 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between gap-2">
             <div>
-              <div class="font-semibold">${pm.title || ''} <span class="text-xs text-slate-500">(${pm.pm_code || ''})</span></div>
-              <div class="text-xs text-slate-500">${pm.site_name || ''} • ${pm.frequency || ''}</div>
+              <div class="font-semibold">${getLocalizedField(pm, 'title', currentLang)} <span class="text-xs text-slate-500">(${pm.pm_code || ''})</span></div>
+              <div class="text-xs text-slate-500">${getLocalizedField(pm, 'site_name', currentLang)} • ${getLocalizedField(pm, 'frequency', currentLang)}</div>
             </div>
-            <span class="text-xs text-slate-600">${pm.assigned_technician || ''}</span>
+            <span class="text-xs text-slate-600">${getLocalizedField(pm, 'assigned_technician', currentLang)}</span>
           </li>
         `).join('');
 
