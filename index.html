@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
@@ -58,6 +59,51 @@
       </div>
     </section>
 
+    <!-- New Work Order Form -->
+    <section class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm mb-6">
+      <h2 id="t-form-wo-title" class="text-lg font-bold mb-4">New Work Order</h2>
+      <form id="woForm" onsubmit="createWorkOrder(event)" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-3 items-end">
+        <div>
+          <label id="lbl-wo-code" for="woCodeInput" class="block text-xs font-semibold text-slate-600 mb-1">Code</label>
+          <input id="woCodeInput" type="text" required placeholder="WO-2483" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+        </div>
+
+        <div class="lg:col-span-2">
+          <label id="lbl-wo-title" for="woTitleInput" class="block text-xs font-semibold text-slate-600 mb-1">Title</label>
+          <input id="woTitleInput" type="text" required class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+        </div>
+
+        <div>
+          <label id="lbl-wo-site" for="woSiteInput" class="block text-xs font-semibold text-slate-600 mb-1">Site</label>
+          <input id="woSiteInput" type="text" required class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+        </div>
+
+        <div>
+          <label id="lbl-wo-prio" for="woPrioritySelect" class="block text-xs font-semibold text-slate-600 mb-1">Priority</label>
+          <select id="woPrioritySelect" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option id="opt-prio-low" value="נמוך">Low</option>
+            <option id="opt-prio-med" value="בינוני" selected>Medium</option>
+            <option id="opt-prio-high" value="גבוה">High</option>
+          </select>
+        </div>
+
+        <div>
+          <label id="lbl-wo-status" for="woStatusSelect" class="block text-xs font-semibold text-slate-600 mb-1">Status</label>
+          <select id="woStatusSelect" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option id="opt-st-prog" value="בטיפול" selected>In Progress</option>
+            <option id="opt-st-insp" value="דורש בדיקה">Needs Inspection</option>
+            <option id="opt-st-ok" value="תקין">Operational</option>
+          </select>
+        </div>
+
+        <div class="lg:col-span-6 flex justify-end mt-1">
+          <button id="btn-wo-submit" type="submit" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium transition">
+            Add Work Order
+          </button>
+        </div>
+      </form>
+    </section>
+
     <!-- Work Orders Section -->
     <section class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm mb-6">
       <h2 id="t-sec-wo" class="text-lg font-bold mb-4">Work Orders</h2>
@@ -106,6 +152,12 @@
         cardAssets: 'Assets',
         cardWo: 'Work Orders',
         cardPm: 'Preventive Maintenance',
+        formWoTitle: 'New Work Order',
+        btnWoSubmit: 'Add Work Order',
+        phWoTitle: 'e.g. Replace circuit breaker',
+        phWoSite: 'e.g. Logistics Center - Modiin',
+        woCreated: 'Work order added successfully.',
+        woCreateError: 'Could not add work order: ',
         secWo: 'Work Orders',
         secAssets: 'Assets & Systems',
         secPm: 'Preventive Maintenance',
@@ -126,6 +178,12 @@
         cardAssets: 'נכסים ומערכות',
         cardWo: 'קריאות שירות',
         cardPm: 'תחזוקה מונעת',
+        formWoTitle: 'קריאת שירות חדשה',
+        btnWoSubmit: 'הוסף קריאת שירות',
+        phWoTitle: 'למשל: החלפת מפסק ראשי',
+        phWoSite: 'למשל: מרכז לוגיסטי - מודיעין',
+        woCreated: 'קריאת השירות נוספה בהצלחה.',
+        woCreateError: 'שגיאה בהוספת קריאת השירות: ',
         secWo: 'קריאות שירות',
         secAssets: 'נכסים ומערכות',
         secPm: 'תחזוקה מונעת',
@@ -146,6 +204,12 @@
         cardAssets: 'الأصول والمعدات',
         cardWo: 'أوامر العمل',
         cardPm: 'الصيانة الوقائية',
+        formWoTitle: 'إضافة أمر عمل جديد',
+        btnWoSubmit: 'إضافة أمر العمل',
+        phWoTitle: 'مثال: استبدال قاطع كهربائي',
+        phWoSite: 'مثال: المركز اللوجستي - موديعين',
+        woCreated: 'تمت إضافة أمر العمل بنجاح.',
+        woCreateError: 'تعذر إضافة أمر العمل: ',
         secWo: 'أوامر العمل',
         secAssets: 'الأصول والمعدات',
         secPm: 'الصيانة الوقائية',
@@ -166,6 +230,12 @@
         cardAssets: 'Активы',
         cardWo: 'Заявки на работы',
         cardPm: 'Плановое ТО',
+        formWoTitle: 'Новая заявка на работы',
+        btnWoSubmit: 'Добавить заявку',
+        phWoTitle: 'Например: Замена автомата защиты',
+        phWoSite: 'Например: Логистический центр',
+        woCreated: 'Заявка успешно добавлена.',
+        woCreateError: 'Ошибка добавления заявки: ',
         secWo: 'Заявки на работы',
         secAssets: 'Активы и системы',
         secPm: 'Плановое ТО',
@@ -186,6 +256,12 @@
         cardAssets: 'Activos',
         cardWo: 'Órdenes de trabajo',
         cardPm: 'Mantenimiento preventivo',
+        formWoTitle: 'Nueva orden de trabajo',
+        btnWoSubmit: 'Agregar orden',
+        phWoTitle: 'Ej.: Reemplazar interruptor',
+        phWoSite: 'Ej.: Centro Logístico',
+        woCreated: 'Orden de trabajo agregada correctamente.',
+        woCreateError: 'Error al agregar la orden de trabajo: ',
         secWo: 'Órdenes de trabajo',
         secAssets: 'Activos y sistemas',
         secPm: 'Mantenimiento preventivo',
@@ -206,6 +282,12 @@
         cardAssets: 'Équipements',
         cardWo: 'Ordres de travail',
         cardPm: 'Maintenance préventive',
+        formWoTitle: 'Nouvel ordre de travail',
+        btnWoSubmit: 'Ajouter un ordre',
+        phWoTitle: 'Ex. : Remplacer le disjoncteur',
+        phWoSite: 'Ex. : Centre logistique',
+        woCreated: 'Ordre de travail ajouté avec succès.',
+        woCreateError: 'Impossible d’ajouter l’ordre de travail : ',
         secWo: 'Ordres de travail',
         secAssets: 'Équipements et systèmes',
         secPm: 'Maintenance préventive',
@@ -226,6 +308,12 @@
         cardAssets: 'Asset',
         cardWo: 'Ordini di lavoro',
         cardPm: 'Manutenzione preventiva',
+        formWoTitle: 'Nuovo ordine di lavoro',
+        btnWoSubmit: 'Aggiungi ordine',
+        phWoTitle: 'Es.: Sostituzione interruttore',
+        phWoSite: 'Es.: Centro logistico',
+        woCreated: 'Ordine di lavoro aggiunto con successo.',
+        woCreateError: 'Impossibile aggiungere l’ordine di lavoro: ',
         secWo: 'Ordini di lavoro',
         secAssets: 'Asset e sistemi',
         secPm: 'Manutenzione preventiva',
@@ -246,6 +334,12 @@
         cardAssets: 'Anlagen',
         cardWo: 'Arbeitsaufträge',
         cardPm: 'Vorbeugende Wartung',
+        formWoTitle: 'Neuer Arbeitsauftrag',
+        btnWoSubmit: 'Auftrag hinzufügen',
+        phWoTitle: 'Z. B.: Schutzschalter tauschen',
+        phWoSite: 'Z. B.: Logistikzentrum',
+        woCreated: 'Arbeitsauftrag erfolgreich hinzugefügt.',
+        woCreateError: 'Arbeitsauftrag konnte nicht hinzugefügt werden: ',
         secWo: 'Arbeitsaufträge',
         secAssets: 'Anlagen & Systeme',
         secPm: 'Vorbeugende Wartung',
@@ -422,6 +516,25 @@
       document.getElementById('t-card-assets').textContent = t.cardAssets;
       document.getElementById('t-card-wo').textContent = t.cardWo;
       document.getElementById('t-card-pm').textContent = t.cardPm;
+
+      document.getElementById('t-form-wo-title').textContent = t.formWoTitle;
+      document.getElementById('lbl-wo-code').textContent = t.thCode;
+      document.getElementById('lbl-wo-title').textContent = t.thTitle;
+      document.getElementById('lbl-wo-site').textContent = t.thSite;
+      document.getElementById('lbl-wo-prio').textContent = t.thPriority;
+      document.getElementById('lbl-wo-status').textContent = t.thStatus;
+      document.getElementById('btn-wo-submit').textContent = t.btnWoSubmit;
+      document.getElementById('woTitleInput').placeholder = t.phWoTitle;
+      document.getElementById('woSiteInput').placeholder = t.phWoSite;
+
+      document.getElementById('opt-prio-low').textContent = translateDbValue('נמוך', PRIORITY_MAP, currentLang);
+      document.getElementById('opt-prio-med').textContent = translateDbValue('בינוני', PRIORITY_MAP, currentLang);
+      document.getElementById('opt-prio-high').textContent = translateDbValue('גבוה', PRIORITY_MAP, currentLang);
+
+      document.getElementById('opt-st-prog').textContent = translateDbValue('בטיפול', STATUS_MAP, currentLang);
+      document.getElementById('opt-st-insp').textContent = translateDbValue('דורש בדיקה', STATUS_MAP, currentLang);
+      document.getElementById('opt-st-ok').textContent = translateDbValue('תקין', STATUS_MAP, currentLang);
+
       document.getElementById('t-sec-wo').textContent = t.secWo;
       document.getElementById('t-sec-assets').textContent = t.secAssets;
       document.getElementById('t-sec-pm').textContent = t.secPm;
@@ -436,6 +549,45 @@
       applyLanguage(e.target.value);
       loadAllData();
     });
+
+    async function createWorkOrder(event) {
+      event.preventDefault();
+      const t = TRANSLATIONS[currentLang];
+      const banner = document.getElementById('statusBanner');
+
+      if (!SUPABASE_KEY || SUPABASE_KEY === 'YOUR_PUBLISHABLE_KEY_HERE') {
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-amber-50 text-amber-800 border border-amber-200';
+        banner.textContent = t.keyMissing;
+        return;
+      }
+
+      const wo_number = document.getElementById('woCodeInput').value.trim();
+      const title = document.getElementById('woTitleInput').value.trim();
+      const site_name = document.getElementById('woSiteInput').value.trim();
+      const priority = document.getElementById('woPrioritySelect').value;
+      const status = document.getElementById('woStatusSelect').value;
+
+      if (!wo_number || !title || !site_name) return;
+
+      const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+      try {
+        const { error } = await client.from('work_orders').insert([
+          { wo_number, title, site_name, priority, status }
+        ]);
+
+        if (error) throw error;
+
+        document.getElementById('woForm').reset();
+        await loadAllData();
+
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-emerald-50 text-emerald-800 border border-emerald-200';
+        banner.textContent = t.woCreated;
+      } catch (err) {
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-red-50 text-red-800 border border-red-200';
+        banner.textContent = t.woCreateError + (err.message || err);
+      }
+    }
 
     async function loadAllData() {
       const t = TRANSLATIONS[currentLang];
