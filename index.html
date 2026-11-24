@@ -136,6 +136,80 @@
       </form>
     </section>
 
+    <!-- New Asset Form -->
+    <section class="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm mb-6">
+      <h2 id="t-form-asset-title" class="text-lg font-bold mb-4">New Asset</h2>
+      <form id="assetForm" onsubmit="createAsset(event)" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-3 items-end">
+        <div>
+          <label id="lbl-ast-code" for="assetCodeInput" class="block text-xs font-semibold text-slate-600 mb-1">Code</label>
+          <input id="assetCodeInput" type="text" required placeholder="AST-104" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+        </div>
+
+        <div class="lg:col-span-2">
+          <label id="lbl-ast-name" for="assetNameInput" class="block text-xs font-semibold text-slate-600 mb-1">Name</label>
+          <input id="assetNameInput" type="text" required class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+        </div>
+
+        <div>
+          <label id="lbl-ast-site" for="assetSiteInput" class="block text-xs font-semibold text-slate-600 mb-1">Site</label>
+          <input id="assetSiteInput" type="text" required class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+        </div>
+
+        <div>
+          <label id="lbl-ast-cat" for="assetCategoryInput" class="block text-xs font-semibold text-slate-600 mb-1">Category</label>
+          <input id="assetCategoryInput" type="text" required class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+        </div>
+
+        <div>
+          <label id="lbl-ast-status" for="assetStatusSelect" class="block text-xs font-semibold text-slate-600 mb-1">Status</label>
+          <select id="assetStatusSelect" class="w-full border border-slate-300 rounded-xl px-3 py-2 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option id="ast-opt-st-ok" value="תקין" selected>Operational</option>
+            <option id="ast-opt-st-insp" value="דורש בדיקה">Needs Inspection</option>
+            <option id="ast-opt-st-prog" value="בטיפול">In Progress</option>
+          </select>
+        </div>
+
+        <!-- Optional Translated Columns for Asset (EN / AR) -->
+        <div class="lg:col-span-6 pt-2 border-t border-slate-100">
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+            <span id="t-ast-trans-hint" class="text-xs font-medium text-slate-500">Optional EN / AR translations for name & site (auto-filled for active language if left blank):</span>
+            <button
+              id="btn-ast-copy-to-langs"
+              type="button"
+              onclick="copyAssetFieldsToTranslations()"
+              class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 text-xs font-medium transition"
+            >
+              Copy to EN & AR
+            </button>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+            <div>
+              <label id="lbl-ast-name-en" for="assetNameEnInput" class="block text-xs text-slate-500 mb-1">Name (EN)</label>
+              <input id="assetNameEnInput" type="text" class="w-full border border-slate-200 rounded-xl px-3 py-1.5 text-sm bg-slate-50/60 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            </div>
+            <div>
+              <label id="lbl-ast-site-en" for="assetSiteEnInput" class="block text-xs text-slate-500 mb-1">Site (EN)</label>
+              <input id="assetSiteEnInput" type="text" class="w-full border border-slate-200 rounded-xl px-3 py-1.5 text-sm bg-slate-50/60 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            </div>
+            <div>
+              <label id="lbl-ast-name-ar" for="assetNameArInput" class="block text-xs text-slate-500 mb-1">Name (AR)</label>
+              <input id="assetNameArInput" type="text" dir="rtl" class="w-full border border-slate-200 rounded-xl px-3 py-1.5 text-sm bg-slate-50/60 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            </div>
+            <div>
+              <label id="lbl-ast-site-ar" for="assetSiteArInput" class="block text-xs text-slate-500 mb-1">Site (AR)</label>
+              <input id="assetSiteArInput" type="text" dir="rtl" class="w-full border border-slate-200 rounded-xl px-3 py-1.5 text-sm bg-slate-50/60 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:col-span-6 flex justify-end mt-1">
+          <button id="btn-ast-submit" type="submit" class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium transition">
+            Add Asset
+          </button>
+        </div>
+      </form>
+    </section>
+
     <!-- Edit Work Order Panel (Hidden by default) -->
     <section id="editWoSection" class="hidden bg-amber-50/60 border border-amber-300 rounded-2xl p-5 shadow-sm mb-6">
       <h2 id="t-edit-wo-title" class="text-lg font-bold mb-4 text-amber-950">Edit Work Order</h2>
@@ -327,6 +401,18 @@
         lblSiteEn: 'Site (EN)',
         lblTitleAr: 'Title (AR)',
         lblSiteAr: 'Site (AR)',
+        formAssetTitle: 'New Asset',
+        btnAssetSubmit: 'Add Asset',
+        lblAssetName: 'Name',
+        lblAssetCategory: 'Category',
+        phAssetName: 'e.g. Backup Generator 500kVA',
+        phAssetSite: 'e.g. Logistics Center - Modiin',
+        phAssetCategory: 'e.g. Power & Generators',
+        astTransHint: 'Optional EN / AR translations for name & site (auto-filled for active language if left blank):',
+        lblNameEn: 'Name (EN)',
+        lblNameAr: 'Name (AR)',
+        assetCreated: 'Asset added successfully.',
+        assetCreateError: 'Could not add asset: ',
         woCreated: 'Work order added successfully.',
         woCreateError: 'Could not add work order: ',
         woStatusUpdated: 'Work order status updated successfully.',
@@ -382,6 +468,18 @@
         lblSiteEn: 'אתר (EN)',
         lblTitleAr: 'כותרת (AR)',
         lblSiteAr: 'אתר (AR)',
+        formAssetTitle: 'הוספת נכס / מערכת חדשה',
+        btnAssetSubmit: 'הוסף נכס',
+        lblAssetName: 'שם הנכס',
+        lblAssetCategory: 'קטגוריה',
+        phAssetName: 'למשל: גנרטור גיבוי 500kVA',
+        phAssetSite: 'למשל: מרכז לוגיסטי - מודיעין',
+        phAssetCategory: 'למשל: חשמל וגנרטורים',
+        astTransHint: 'תרגומים אופציונליים ל-EN / AR עבור שם ואתר (מושלמים אוטומטית לשפה הפעילה):',
+        lblNameEn: 'שם (EN)',
+        lblNameAr: 'שם (AR)',
+        assetCreated: 'הנכס נוסף בהצלחה.',
+        assetCreateError: 'שגיאה בהוספת הנכס: ',
         woCreated: 'קריאת השירות נוספה בהצלחה.',
         woCreateError: 'שגיאה בהוספת קריאת השירות: ',
         woStatusUpdated: 'סטטוס קריאת השירות עודכן בהצלחה.',
@@ -437,6 +535,18 @@
         lblSiteEn: 'الموقع (EN)',
         lblTitleAr: 'العنوان (AR)',
         lblSiteAr: 'الموقع (AR)',
+        formAssetTitle: 'إضافة أصل أو نظام جديد',
+        btnAssetSubmit: 'إضافة أصل',
+        lblAssetName: 'اسم الأصل',
+        lblAssetCategory: 'الفئة',
+        phAssetName: 'مثال: مولد احتياطي 500kVA',
+        phAssetSite: 'مثال: المركز اللوجستي - موديعين',
+        phAssetCategory: 'مثال: طاقة ومولدات',
+        astTransHint: 'ترجمات اختيارية لـ EN / AR للاسم والموقع (تُملأ تلقائياً للغة الحالية):',
+        lblNameEn: 'الاسم (EN)',
+        lblNameAr: 'الاسم (AR)',
+        assetCreated: 'تمت إضافة الأصل بنجاح.',
+        assetCreateError: 'تعذر إضافة الأصل: ',
         woCreated: 'تمت إضافة أمر العمل بنجاح.',
         woCreateError: 'تعذر إضافة أمر العمل: ',
         woStatusUpdated: 'تم تحديث حالة أمر العمل بنجاح.',
@@ -492,6 +602,18 @@
         lblSiteEn: 'Объект (EN)',
         lblTitleAr: 'Название (AR)',
         lblSiteAr: 'Объект (AR)',
+        formAssetTitle: 'Новый актив',
+        btnAssetSubmit: 'Добавить актив',
+        lblAssetName: 'Название',
+        lblAssetCategory: 'Категория',
+        phAssetName: 'Например: Генератор 500kVA',
+        phAssetSite: 'Например: Логистический центр',
+        phAssetCategory: 'Например: Электроснабжение',
+        astTransHint: 'Необязательные переводы EN / AR для названия и объекта:',
+        lblNameEn: 'Название (EN)',
+        lblNameAr: 'Название (AR)',
+        assetCreated: 'Актив успешно добавлен.',
+        assetCreateError: 'Ошибка добавления актива: ',
         woCreated: 'Заявка успешно добавлена.',
         woCreateError: 'Ошибка добавления заявки: ',
         woStatusUpdated: 'Статус заявки обновлён.',
@@ -547,6 +669,18 @@
         lblSiteEn: 'Sitio (EN)',
         lblTitleAr: 'Título (AR)',
         lblSiteAr: 'Sitio (AR)',
+        formAssetTitle: 'Nuevo activo',
+        btnAssetSubmit: 'Agregar activo',
+        lblAssetName: 'Nombre',
+        lblAssetCategory: 'Categoría',
+        phAssetName: 'Ej.: Generador 500kVA',
+        phAssetSite: 'Ej.: Centro Logístico',
+        phAssetCategory: 'Ej.: Energía',
+        astTransHint: 'Traducciones EN / AR opcionales para nombre y sitio:',
+        lblNameEn: 'Nombre (EN)',
+        lblNameAr: 'Nombre (AR)',
+        assetCreated: 'Activo agregado correctamente.',
+        assetCreateError: 'Error al agregar el activo: ',
         woCreated: 'Orden de trabajo agregada correctamente.',
         woCreateError: 'Error al agregar la orden de trabajo: ',
         woStatusUpdated: 'Estado de la orden actualizado.',
@@ -602,6 +736,18 @@
         lblSiteEn: 'Site (EN)',
         lblTitleAr: 'Titre (AR)',
         lblSiteAr: 'Site (AR)',
+        formAssetTitle: 'Nouvel équipement',
+        btnAssetSubmit: 'Ajouter un équipement',
+        lblAssetName: 'Nom',
+        lblAssetCategory: 'Catégorie',
+        phAssetName: 'Ex. : Groupe électrogène 500kVA',
+        phAssetSite: 'Ex. : Centre logistique',
+        phAssetCategory: 'Ex. : Énergie',
+        astTransHint: 'Traductions EN / AR optionnelles pour le nom et le site :',
+        lblNameEn: 'Nom (EN)',
+        lblNameAr: 'Nom (AR)',
+        assetCreated: 'Équipement ajouté avec succès.',
+        assetCreateError: 'Impossible d’ajouter l’équipement : ',
         woCreated: 'Ordre de travail ajouté avec succès.',
         woCreateError: 'Impossible d’ajouter l’ordre de travail : ',
         woStatusUpdated: 'Statut de l’ordre mis à jour.',
@@ -657,6 +803,18 @@
         lblSiteEn: 'Sito (EN)',
         lblTitleAr: 'Titolo (AR)',
         lblSiteAr: 'Sito (AR)',
+        formAssetTitle: 'Nuovo asset',
+        btnAssetSubmit: 'Aggiungi asset',
+        lblAssetName: 'Nome',
+        lblAssetCategory: 'Categoria',
+        phAssetName: 'Es.: Generatore 500kVA',
+        phAssetSite: 'Es.: Centro logistico',
+        phAssetCategory: 'Es.: Energia',
+        astTransHint: 'Traduzioni EN / AR opzionali per nome e sito:',
+        lblNameEn: 'Nome (EN)',
+        lblNameAr: 'Nome (AR)',
+        assetCreated: 'Asset aggiunto con successo.',
+        assetCreateError: 'Impossibile aggiungere l’asset: ',
         woCreated: 'Ordine di lavoro aggiunto con successo.',
         woCreateError: 'Impossibile aggiungere l’ordine di lavoro: ',
         woStatusUpdated: 'Stato dell’ordine aggiornato.',
@@ -712,6 +870,18 @@
         lblSiteEn: 'Standort (EN)',
         lblTitleAr: 'Titel (AR)',
         lblSiteAr: 'Standort (AR)',
+        formAssetTitle: 'Neue Anlage',
+        btnAssetSubmit: 'Anlage hinzufügen',
+        lblAssetName: 'Name',
+        lblAssetCategory: 'Kategorie',
+        phAssetName: 'Z. B.: Generator 500kVA',
+        phAssetSite: 'Z. B.: Logistikzentrum',
+        phAssetCategory: 'Z. B.: Stromversorgung',
+        astTransHint: 'Optionale EN / AR Übersetzungen für Name & Standort:',
+        lblNameEn: 'Name (EN)',
+        lblNameAr: 'Name (AR)',
+        assetCreated: 'Anlage erfolgreich hinzugefügt.',
+        assetCreateError: 'Anlage konnte nicht hinzugefügt werden: ',
         woCreated: 'Arbeitsauftrag erfolgreich hinzugefügt.',
         woCreateError: 'Arbeitsauftrag konnte nicht hinzugefügt werden: ',
         woStatusUpdated: 'Status des Arbeitsauftrags aktualisiert.',
@@ -933,6 +1103,20 @@
       }
     }
 
+    function copyAssetFieldsToTranslations() {
+      const name = document.getElementById('assetNameInput').value.trim();
+      const site = document.getElementById('assetSiteInput').value.trim();
+
+      if (name) {
+        document.getElementById('assetNameEnInput').value = name;
+        document.getElementById('assetNameArInput').value = name;
+      }
+      if (site) {
+        document.getElementById('assetSiteEnInput').value = site;
+        document.getElementById('assetSiteArInput').value = site;
+      }
+    }
+
     let currentLang = 'en';
     let cachedWorkOrders = [];
     let cachedAssets = [];
@@ -971,6 +1155,28 @@
       document.getElementById('lbl-wo-site-en').textContent = t.lblSiteEn;
       document.getElementById('lbl-wo-title-ar').textContent = t.lblTitleAr;
       document.getElementById('lbl-wo-site-ar').textContent = t.lblSiteAr;
+
+      document.getElementById('t-form-asset-title').textContent = t.formAssetTitle;
+      document.getElementById('lbl-ast-code').textContent = t.thCode;
+      document.getElementById('lbl-ast-name').textContent = t.lblAssetName;
+      document.getElementById('lbl-ast-site').textContent = t.thSite;
+      document.getElementById('lbl-ast-cat').textContent = t.lblAssetCategory;
+      document.getElementById('lbl-ast-status').textContent = t.thStatus;
+      document.getElementById('btn-ast-submit').textContent = t.btnAssetSubmit;
+      document.getElementById('assetNameInput').placeholder = t.phAssetName;
+      document.getElementById('assetSiteInput').placeholder = t.phAssetSite;
+      document.getElementById('assetCategoryInput').placeholder = t.phAssetCategory;
+
+      document.getElementById('ast-opt-st-ok').textContent = translateDbValue('תקין', STATUS_MAP, currentLang);
+      document.getElementById('ast-opt-st-insp').textContent = translateDbValue('דורש בדיקה', STATUS_MAP, currentLang);
+      document.getElementById('ast-opt-st-prog').textContent = translateDbValue('בטיפול', STATUS_MAP, currentLang);
+
+      document.getElementById('t-ast-trans-hint').textContent = t.astTransHint;
+      document.getElementById('btn-ast-copy-to-langs').textContent = t.btnCopyToLangs;
+      document.getElementById('lbl-ast-name-en').textContent = t.lblNameEn;
+      document.getElementById('lbl-ast-site-en').textContent = t.lblSiteEn;
+      document.getElementById('lbl-ast-name-ar').textContent = t.lblNameAr;
+      document.getElementById('lbl-ast-site-ar').textContent = t.lblSiteAr;
 
       document.getElementById('opt-prio-low').textContent = translateDbValue('נמוך', PRIORITY_MAP, currentLang);
       document.getElementById('opt-prio-med').textContent = translateDbValue('בינוני', PRIORITY_MAP, currentLang);
@@ -1210,6 +1416,78 @@
           <span class="text-xs text-slate-600">${getLocalizedField(pm, 'assigned_technician', currentLang)}</span>
         </li>
       `).join('');
+    }
+
+    async function createAsset(event) {
+      event.preventDefault();
+      const t = TRANSLATIONS[currentLang];
+      const banner = document.getElementById('statusBanner');
+
+      if (!SUPABASE_KEY || SUPABASE_KEY === 'YOUR_PUBLISHABLE_KEY_HERE') {
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-amber-50 text-amber-800 border border-amber-200';
+        banner.textContent = t.keyMissing;
+        return;
+      }
+
+      const asset_code = document.getElementById('assetCodeInput').value.trim();
+      const name = document.getElementById('assetNameInput').value.trim();
+      const site_name = document.getElementById('assetSiteInput').value.trim();
+      const category = document.getElementById('assetCategoryInput').value.trim();
+      const status = document.getElementById('assetStatusSelect').value;
+
+      const nameEnInput = document.getElementById('assetNameEnInput').value.trim();
+      const siteEnInput = document.getElementById('assetSiteEnInput').value.trim();
+      const nameArInput = document.getElementById('assetNameArInput').value.trim();
+      const siteArInput = document.getElementById('assetSiteArInput').value.trim();
+
+      if (!asset_code || !name || !site_name || !category) return;
+
+      const payload = { asset_code, name, site_name, category, status };
+
+      if (nameEnInput) {
+        payload.name_en = nameEnInput;
+      } else if (currentLang === 'en') {
+        payload.name_en = name;
+      }
+
+      if (siteEnInput) {
+        payload.site_name_en = siteEnInput;
+      } else if (currentLang === 'en') {
+        payload.site_name_en = site_name;
+      }
+
+      if (nameArInput) {
+        payload.name_ar = nameArInput;
+      } else if (currentLang === 'ar') {
+        payload.name_ar = name;
+      }
+
+      if (siteArInput) {
+        payload.site_name_ar = siteArInput;
+      } else if (currentLang === 'ar') {
+        payload.site_name_ar = site_name;
+      }
+
+      if (currentLang !== 'he' && currentLang !== 'en' && currentLang !== 'ar' && TRANSLATIONS[currentLang]) {
+        payload[`name_${currentLang}`] = name;
+        payload[`site_name_${currentLang}`] = site_name;
+      }
+
+      const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+      try {
+        const { error } = await client.from('assets').insert([payload]);
+        if (error) throw error;
+
+        document.getElementById('assetForm').reset();
+        await loadAllData();
+
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-emerald-50 text-emerald-800 border border-emerald-200';
+        banner.textContent = t.assetCreated;
+      } catch (err) {
+        banner.className = 'mb-6 text-sm rounded-xl px-4 py-3 bg-red-50 text-red-800 border border-red-200';
+        banner.textContent = t.assetCreateError + (err.message || err);
+      }
     }
 
     function openEditWorkOrder(woNumber) {
