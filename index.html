@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
@@ -94,7 +93,7 @@
 
   <script>
     const SUPABASE_URL = 'https://hwceiwauyukjzmawluvp.supabase.co';
-    const SUPABASE_KEY = 'sb_publishable__DTqJhrL96laE3R7Y-nNYg_Gxl_yrL4'; 
+    const SUPABASE_KEY = 'sb_publishable__DTqJhrL96laE3R7Y-nNYg_Gxl_yrL4';
 
     const RTL_LANGS = ['he', 'ar'];
 
@@ -261,6 +260,140 @@
       }
     };
 
+    const STATUS_MAP = {
+      'תקין': {
+        he: 'תקין',
+        ar: 'سليم',
+        en: 'Operational',
+        ru: 'Исправно',
+        es: 'Operativo',
+        fr: 'Opérationnel',
+        it: 'Operativo',
+        de: 'Betriebsbereit'
+      },
+      'operational': {
+        he: 'תקין',
+        ar: 'سليم',
+        en: 'Operational',
+        ru: 'Исправно',
+        es: 'Operativo',
+        fr: 'Opérationnel',
+        it: 'Operativo',
+        de: 'Betriebsbereit'
+      },
+      'בטיפול': {
+        he: 'בטיפול',
+        ar: 'قيد المعالجة',
+        en: 'In Progress',
+        ru: 'В работе',
+        es: 'En curso',
+        fr: 'En cours',
+        it: 'In corso',
+        de: 'In Bearbeitung'
+      },
+      'in progress': {
+        he: 'בטיפול',
+        ar: 'قيد المعالجة',
+        en: 'In Progress',
+        ru: 'В работе',
+        es: 'En curso',
+        fr: 'En cours',
+        it: 'In corso',
+        de: 'In Bearbeitung'
+      },
+      'דורש בדיקה': {
+        he: 'דורש בדיקה',
+        ar: 'يتطلب فحصًا',
+        en: 'Needs Inspection',
+        ru: 'Требует проверки',
+        es: 'Requiere inspección',
+        fr: 'Inspection requise',
+        it: 'Richiede ispezione',
+        de: 'Prüfung erforderlich'
+      },
+      'needs inspection': {
+        he: 'דורש בדיקה',
+        ar: 'يتطلب فحصًا',
+        en: 'Needs Inspection',
+        ru: 'Требует проверки',
+        es: 'Requiere inspección',
+        fr: 'Inspection requise',
+        it: 'Richiede ispezione',
+        de: 'Prüfung erforderlich'
+      }
+    };
+
+    const PRIORITY_MAP = {
+      'גבוה': {
+        he: 'גבוה',
+        ar: 'عالية',
+        en: 'High',
+        ru: 'Высокий',
+        es: 'Alta',
+        fr: 'Élevée',
+        it: 'Alta',
+        de: 'Hoch'
+      },
+      'high': {
+        he: 'גבוה',
+        ar: 'عالية',
+        en: 'High',
+        ru: 'Высокий',
+        es: 'Alta',
+        fr: 'Élevée',
+        it: 'Alta',
+        de: 'Hoch'
+      },
+      'בינוני': {
+        he: 'בינוני',
+        ar: 'متوسطة',
+        en: 'Medium',
+        ru: 'Средний',
+        es: 'Media',
+        fr: 'Moyenne',
+        it: 'Media',
+        de: 'Mittel'
+      },
+      'medium': {
+        he: 'בינוני',
+        ar: 'متوسطة',
+        en: 'Medium',
+        ru: 'Средний',
+        es: 'Media',
+        fr: 'Moyenne',
+        it: 'Media',
+        de: 'Mittel'
+      },
+      'נמוך': {
+        he: 'נמוך',
+        ar: 'منخفضة',
+        en: 'Low',
+        ru: 'Низкий',
+        es: 'Baja',
+        fr: 'Faible',
+        it: 'Bassa',
+        de: 'Niedrig'
+      },
+      'low': {
+        he: 'נמוך',
+        ar: 'منخفضة',
+        en: 'Low',
+        ru: 'Низкий',
+        es: 'Baja',
+        fr: 'Faible',
+        it: 'Bassa',
+        de: 'Niedrig'
+      }
+    };
+
+    function translateDbValue(value, map, lang) {
+      if (!value) return '';
+      const raw = String(value).trim();
+      const entry = map[raw] || map[raw.toLowerCase()];
+      if (!entry) return raw;
+      return entry[lang] || entry.en || raw;
+    }
+
     let currentLang = 'en';
 
     function applyLanguage(lang) {
@@ -291,6 +424,7 @@
 
     document.getElementById('langSelect').addEventListener('change', (e) => {
       applyLanguage(e.target.value);
+      loadAllData();
     });
 
     async function loadAllData() {
@@ -330,8 +464,8 @@
             <td class="py-2.5 px-3 font-medium">${wo.wo_number || ''}</td>
             <td class="py-2.5 px-3">${wo.title || ''}</td>
             <td class="py-2.5 px-3">${wo.site_name || ''}</td>
-            <td class="py-2.5 px-3">${wo.priority || ''}</td>
-            <td class="py-2.5 px-3"><span class="px-2 py-1 rounded-full text-xs bg-slate-100">${wo.status || ''}</span></td>
+            <td class="py-2.5 px-3">${translateDbValue(wo.priority, PRIORITY_MAP, currentLang)}</td>
+            <td class="py-2.5 px-3"><span class="px-2 py-1 rounded-full text-xs bg-slate-100">${translateDbValue(wo.status, STATUS_MAP, currentLang)}</span></td>
           </tr>
         `).join('');
 
@@ -342,7 +476,7 @@
               <div class="font-semibold">${a.name || ''} <span class="text-xs text-slate-500">(${a.asset_code || ''})</span></div>
               <div class="text-xs text-slate-500">${a.site_name || ''} • ${a.category || ''}</div>
             </div>
-            <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">${a.status || ''}</span>
+            <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">${translateDbValue(a.status, STATUS_MAP, currentLang)}</span>
           </li>
         `).join('');
 
